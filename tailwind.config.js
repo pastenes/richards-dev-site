@@ -9,6 +9,14 @@ module.exports = {
         'pt-serif': ["PT Serif", "serif"],
       }
     },
+    colors: {
+      'neutral': '#c4c4c4',
+      'dark': '#222222',
+    }
+    ,container: {
+      padding: '2rem',
+      center: true,
+    },
   },
   plugins: [],
 }
