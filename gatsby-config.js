@@ -4,6 +4,7 @@ module.exports = {
     title: "Richard's Dev Landing",
   },
   plugins: [
+    'gatsby-plugin-postcss',
     {
       resolve: "gatsby-source-sanity",
       options: {
