@@ -48,7 +48,7 @@ const Header = () => {
               <a className="text-white text-4xl pr-2" href='https://github.com/pastenes' target='_blank' rel="noreferrer">
                 <FaGithub className='hover:drop-shadow-lg'/>
               </a>
-              <a className="text-white text-4xl pr-2" href='https://github.com/pastenes' target='_blank' rel="noreferrer">
+              <a className="text-white text-4xl pr-2" href='https://twitter.com/RichardPastenes' target='_blank' rel="noreferrer">
                 <FaTwitter className='hover:drop-shadow-lg'/>
               </a>
             </div>
