@@ -3,15 +3,16 @@
 @tailwind utilities;
 
 body {
-  @apply font-pt-serif;
+  @apply font-pt-serif h-screen w-screen;
 }
-
+section {
+  @apply px-2 lg:px-20;
+}
 h1, h2, h3, h4, h5, h6 {
   @apply font-poppins;
 }
 h1 {
-  @apply text-3xl;
-  @apply mb-4;
+  @apply text-3xl mb-4;
 }
 p {
   @apply mb-4;
