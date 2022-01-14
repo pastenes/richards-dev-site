@@ -1,15 +1,11 @@
-import React from "react"
+import React from 'react';
 
-const Layout = ({ children }) => {
-  return (
-    <div >
-      {/* <Header siteTitle={title} /> */}
-      <main>
-        {children}
-      </main>
-      {/* <Footer /> */}
-    </div>
-  )
-}
+const Layout = ({ children }) => (
+  <div>
+    {/* <Header siteTitle={title} /> */}
+    <main>{children}</main>
+    {/* <Footer /> */}
+  </div>
+);
 
-export default Layout
+export default Layout;
