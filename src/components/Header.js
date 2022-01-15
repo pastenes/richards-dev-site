@@ -62,9 +62,10 @@ export default function Header() {
     };
   }, [vantaEffect]);
   return (
-    <section ref={myRef} className="bg-neutral h-screen w-screen flex flex-col lg:flex-row">
+    <section ref={myRef} className="bg-neutral h-screen w-screen py-0 flex flex-col lg:flex-row">
       <div className="flex-auto justify-items-center self-center w-3/4 lg:w-1/2 pt-14 px-0 pb-14 lg:p-14 ">
         <div className="max-w-md">
+          <p className="font-fira-code">Hi, I'm</p>
           <h1 className="text-5xl">{hero.title}</h1>
           <p>{hero.intro[0].children[0].text}</p>
 
@@ -96,7 +97,7 @@ export default function Header() {
           </div>
         </div>
       </div>
-      <div className="max-w-xs self-end w-1/2 lg:justify-self-end">
+      <div className="max-w-xs w-1/2 absolute bottom-0 self-end lg:justify-self-end lg:relative">
         <GatsbyImage
           image={hero.headshot.image.asset.gatsbyImageData}
           alt={hero.headshot.alt}

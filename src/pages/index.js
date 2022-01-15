@@ -4,16 +4,20 @@ import Layout from '../components/Layout';
 // import Seo from '../components/Seo'
 // import { Helmet } from 'react-helmet'
 import Header from '../components/Header';
+import Work from '../components/Work';
 
 const Page = () => (
-        <Layout>
-                {/* <Seo description={pageData.seo.metaDesc} title={pageData.seo.title} canonical={pageData.seo.canonical}/> */}
-                {/* <Helmet bodyAttributes={{ class: `page ${bodyTag}` }} /> */}
-                <FullPage controls={false} scrollMode="normal">
-                        <Slide>
-                                <Header />
-                        </Slide>
-                </FullPage>
-        </Layout>
+  <Layout>
+    {/* <Seo description={pageData.seo.metaDesc} title={pageData.seo.title} canonical={pageData.seo.canonical}/> */}
+    {/* <Helmet bodyAttributes={{ class: `page ${bodyTag}` }} /> */}
+    <FullPage controls={false} scrollMode="normal">
+      <Slide>
+        <Header />
+      </Slide>
+      <Slide>
+        <Work />
+      </Slide>
+    </FullPage>
+  </Layout>
 );
 export default Page;

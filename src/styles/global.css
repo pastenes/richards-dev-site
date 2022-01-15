@@ -6,7 +6,7 @@ body {
   @apply font-pt-serif h-screen w-screen;
 }
 section {
-  @apply px-2 lg:px-20;
+  @apply px-2 py-32 lg:px-32;
 }
 h1, h2, h3, h4, h5, h6 {
   @apply font-poppins;
