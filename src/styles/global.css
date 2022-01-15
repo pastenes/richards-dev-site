@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  @apply font-pt-serif h-screen w-screen;
+  @apply font-pt-serif h-screen w-screen bg-dark;
 }
 section {
   @apply px-2 py-32 lg:px-32;
