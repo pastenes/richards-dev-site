@@ -49,7 +49,7 @@ export default function Work() {
                   />
                 </a>
               </div>
-              <div className="h-full w-full px-10 flex flex-col justify-center bg-dark bg-opacity-75 z-10 absolute lg:w-1/2 lg:relative lg:h-auto lg:bg-dark/0 lg:p-0 lg:block border-2 border-light">
+              <div className="h-full w-full px-10 flex flex-col justify-center bg-dark bg-opacity-75 border-light border-2 border-opacity-50 z-10 absolute lg:w-1/2 lg:relative lg:h-auto lg:bg-dark/0 lg:p-0 lg:block lg:border-0">
                 <h3 className={`text-light text-left ${side ? 'lg:text-right' : 'lg:text-left'} mb-0 lg:mb-4`}>{project.title}</h3>
                 <div className={`bg-transparent lg:bg-dark ${side ? 'lg:-ml-20 mr-0' : 'lg:-mr-20 ml-0'} lg:drop-shadow-lg`}>
                   <div className={`text-muted px-0 lg:px-8 py-6 text-left ${side ? 'lg:text-right' : 'lg:text-left'}`}>
