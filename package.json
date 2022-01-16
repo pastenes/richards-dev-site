@@ -19,6 +19,7 @@
     "@fontsource/poppins": "^4.5.0",
     "@fontsource/pt-serif": "^4.5.0",
     "@react-icons/all-files": "^4.1.0",
+    "@sanity/block-content-to-react": "^3.0.0",
     "dotenv": "^11.0.0",
     "gatsby": "^4.4.0",
     "gatsby-plugin-google-analytics": "^4.4.0",

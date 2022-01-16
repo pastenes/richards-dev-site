@@ -14,6 +14,7 @@ module.exports = {
       darker: '#141414',
       light: '#fafafa',
       muted: '#a8b2d1',
+      green: '#64ffda',
     },
     container: {
       center: true,
