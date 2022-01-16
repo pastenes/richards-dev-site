@@ -7,6 +7,10 @@ module.exports = {
         'pt-serif': ['PT Serif', 'serif'],
         'fira-code': ['Fira Code', 'monospace'],
       },
+      spacing: {
+        '480': '480px',
+        '600': '600px',
+      }
     },
     colors: {
       neutral: '#c4c4c4',

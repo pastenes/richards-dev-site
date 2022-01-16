@@ -36,8 +36,8 @@ export default function Work() {
         {projects.map((project, index) => {
           let side = index % 2 === 0 ? true : false;
           return (  
-            <div className={`flex flex-col items-center mt-20 relative ${side ? 'lg:flex-row' : 'lg:flex-row-reverse'}`} key={project.id}>
-              <div className="w-full lg:w-1/2">
+            <div className={`flex flex-col items-center h-480 mt-20 relative lg:h-auto ${side ? 'lg:flex-row' : 'lg:flex-row-reverse'}`} key={project.id}>
+              <div className="w-full h-full lg:w-1/2">
                 <a href={project.projectUrl} target="_blank" rel="noreferrer">
                 <GatsbyImage
                     image={project.screenshot.asset.gatsbyImageData}
@@ -45,11 +45,11 @@ export default function Work() {
                     layout="constrained"
                     width={1000}
                     loading="lazy"
-                    className="grayscale hover:grayscale-0 brightness-75 hover:brightness-100 transition ease-in-out duration-250"
+                    className="h-full grayscale hover:grayscale-0 brightness-75 hover:brightness-100 transition ease-in-out duration-250"
                   />
                 </a>
               </div>
-              <div className="h-full w-full px-10 flex flex-col justify-center bg-dark bg-opacity-75 z-10 absolute lg:w-1/2 lg:relative lg:h-auto lg:bg-dark/0 lg:p-0 lg:block">
+              <div className="h-full w-full px-10 flex flex-col justify-center bg-dark bg-opacity-75 z-10 absolute lg:w-1/2 lg:relative lg:h-auto lg:bg-dark/0 lg:p-0 lg:block border-2 border-light">
                 <h3 className={`text-light text-left ${side ? 'lg:text-right' : 'lg:text-left'} mb-0 lg:mb-4`}>{project.title}</h3>
                 <div className={`bg-transparent lg:bg-dark ${side ? 'lg:-ml-20 mr-0' : 'lg:-mr-20 ml-0'} lg:drop-shadow-lg`}>
                   <div className={`text-muted px-0 lg:px-8 py-6 text-left ${side ? 'lg:text-right' : 'lg:text-left'}`}>
