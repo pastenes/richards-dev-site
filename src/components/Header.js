@@ -24,7 +24,7 @@ export default function Header() {
         headshot {
           alt
           asset {
-            gatsbyImageData(width: 380, placeholder: DOMINANT_COLOR, formats: [AUTO, WEBP, AVIF])
+            gatsbyImageData(width: 380, placeholder: DOMINANT_COLOR, formats: [AUTO, AVIF])
           }
         }
       }

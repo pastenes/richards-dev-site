@@ -36,7 +36,7 @@ export default function Work() {
         {projects.map((project, index) => {
           let side = index % 2 === 0 ? true : false;
           return (  
-            <div className={`flex flex-col items-center py-14 mt-10 relative ${side ? 'lg:flex-row' : 'lg:flex-row-reverse'}`} key={project.id}>
+            <div className={`flex flex-col items-center mt-20 relative ${side ? 'lg:flex-row' : 'lg:flex-row-reverse'}`} key={project.id}>
               <div className="w-full lg:w-1/2">
                 <a href={project.projectUrl} target="_blank" rel="noreferrer">
                 <GatsbyImage
@@ -49,14 +49,14 @@ export default function Work() {
                   />
                 </a>
               </div>
-              <div className="h-full w-full p-10 flex flex-col justify-center bg-dark bg-opacity-75 z-10 absolute lg:w-1/2 lg:relative lg:h-auto lg:bg-dark/0 lg:p-0 lg:block">
+              <div className="h-full w-full px-10 flex flex-col justify-center bg-dark bg-opacity-75 z-10 absolute lg:w-1/2 lg:relative lg:h-auto lg:bg-dark/0 lg:p-0 lg:block">
                 <h3 className={`text-light text-left ${side ? 'lg:text-right' : 'lg:text-left'} mb-0 lg:mb-4`}>{project.title}</h3>
                 <div className={`bg-transparent lg:bg-dark ${side ? 'lg:-ml-20 mr-0' : 'lg:-mr-20 ml-0'} lg:drop-shadow-lg`}>
                   <div className={`text-muted px-0 lg:px-8 py-6 text-left ${side ? 'lg:text-right' : 'lg:text-left'}`}>
                     <BlockContent blocks={project._rawDescription} />
                   </div>
                 </div>
-                <ul className="text-light font-fira-code flex">
+                <ul className="text-light font-fira-code flex flex-wrap">
                   {project.tags.map(tag => (
                     <li className={`text-green mr-auto ${side ? 'lg:ml-auto lg:mr-0' : 'lg:mr-auto lg:ml-0'} lg:mt-4`} key={tag.label}>{tag.label}</li>
                   ))}
