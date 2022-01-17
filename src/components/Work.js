@@ -29,7 +29,7 @@ export default function Work() {
 
   return (
     <section className="bg-darker h-screen w-screen">
-      <div className="container">
+      <div className="container pb-36">
         <h2 className="text-3xl text-right text-light">Work</h2>
         <p className="text-light text-right">Some thigs I've built</p>
 
