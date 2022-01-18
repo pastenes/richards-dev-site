@@ -1,6 +1,7 @@
 import React from 'react';
 import { useStaticQuery, graphql } from 'gatsby';
 import BlockContent from './BlockContent';
+import TagsCloud from './TagsCloud';
 
 
 export default function About() {
@@ -17,16 +18,9 @@ export default function About() {
   const about = data.sanityAbout;
   const tags = about.tags.map(tag => tag.value);
   const isSSR = typeof window === "undefined";
-  if (!isSSR) {
-    const TagCloud = require('TagCloud')
-    const options = {
-      radius: 150,
-      maxSpedd: 0.1,
-      direction: 135,
-      keep: true
-    };
-    TagCloud('.mytagcloud', tags, options);
-  }
+  const ClientSideOnlyLazy = React.lazy(() =>
+    import("./TagsCloud")
+  )
   return (
     <section className="bg-darker h-screen w-screen">
       <div className="container max-w-4xl h-full pb-36">
@@ -37,7 +31,9 @@ export default function About() {
             <BlockContent blocks={about._rawContent} />
           </div>
           {!isSSR && (
-            <div className="mytagcloud text-green font-fira-code basis-1/4 max-h-72"></div>
+            <React.Suspense fallback={<div />}>
+              <ClientSideOnlyLazy tags={tags}/>
+            </React.Suspense>
           )}
         </div>
       </div>
