@@ -25,7 +25,7 @@ export default function About() {
           <div className="text-muted py-14 basis-1/2">
             <BlockContent blocks={about._rawContent} />
           </div>
-          <div className="basis-1/2 lg:basis-1/4">
+          <div className="hidden basis-1/2 lg:basis-1/4 lg:block">
             <h3 className='text-light mb-6'>A few technologies I'm familiar with:</h3>
             <ul className='text-green font-fira-code text-center lg:text-left'>
               {tags.map(tag => <li key={tag}>{tag}</li>)}

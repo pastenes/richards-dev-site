@@ -61,7 +61,7 @@ export default function Header() {
   }, [vantaEffect]);
   return (
     <section ref={myRef} className="bg-neutral h-screen w-screen py-0 flex flex-col lg:flex-row">
-      <div className="flex-auto justify-items-center self-center w-3/4 lg:w-1/2 pt-14 px-0 pb-14 lg:p-14 ">
+      <div className="flex-auto w-3/4 lg:w-1/2 pt-14 px-0 pb-14 lg:p-14 lg:self-center">
         <div className="max-w-md">
           <p className="font-fira-code mb-1 ml-1">Hi, I'm</p>
           <h1 className="text-5xl mb-1">{hero.title}</h1>
