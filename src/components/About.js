@@ -1,8 +1,6 @@
 import React from 'react';
 import { useStaticQuery, graphql } from 'gatsby';
 import BlockContent from './BlockContent';
-import TagsCloud from './TagsCloud';
-
 
 export default function About() {
   const data = useStaticQuery(graphql`
@@ -17,10 +15,7 @@ export default function About() {
   `);
   const about = data.sanityAbout;
   const tags = about.tags.map(tag => tag.value);
-  const isSSR = typeof window === "undefined";
-  const ClientSideOnlyLazy = React.lazy(() =>
-    import("./TagsCloud")
-  )
+
   return (
     <section className="bg-darker h-screen w-screen">
       <div className="container max-w-4xl h-full pb-36">
@@ -30,11 +25,12 @@ export default function About() {
           <div className="text-muted py-14 basis-1/2">
             <BlockContent blocks={about._rawContent} />
           </div>
-          {!isSSR && (
-            <React.Suspense fallback={<div />}>
-              <ClientSideOnlyLazy tags={tags}/>
-            </React.Suspense>
-          )}
+          <div className="basis-1/2 lg:basis-1/4">
+            <h3 className='text-light mb-6'>A few technologies I'm familiar with:</h3>
+            <ul className='text-green font-fira-code text-center lg:text-left'>
+              {tags.map(tag => <li key={tag}>{tag}</li>)}
+            </ul>
+          </div>
         </div>
       </div>
     </section>
