@@ -14,7 +14,7 @@ module.exports = {
       options: {
         projectId: 'lpvkp4xx',
         dataset: 'production',
-        watchMode: true,
+        watchMode: false,
         token: process.env.SANITY_TOKEN,
       },
     },
