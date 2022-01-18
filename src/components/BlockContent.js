@@ -16,7 +16,7 @@ const serializers = {
         case "blockquote":
           return <blockquote>{props.children}</blockquote>
         default:
-          return <p className="inspirationText">{props.children}</p>
+          return <p>{props.children}</p>
       }
     },
   },
