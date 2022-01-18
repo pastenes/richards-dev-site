@@ -24,7 +24,7 @@ export default function Header() {
         headshot {
           alt
           asset {
-            gatsbyImageData(width: 380, placeholder: DOMINANT_COLOR, formats: [AUTO, AVIF])
+            gatsbyImageData(width: 380, placeholder: NONE, formats: [AUTO, AVIF])
           }
         }
       }
@@ -63,13 +63,13 @@ export default function Header() {
     <section ref={myRef} className="bg-neutral h-screen w-screen py-0 flex flex-col lg:flex-row">
       <div className="flex-auto justify-items-center self-center w-3/4 lg:w-1/2 pt-14 px-0 pb-14 lg:p-14 ">
         <div className="max-w-md">
-          <p className="font-fira-code mb-1">Hi, I'm</p>
-          <h1 className="text-5xl">{hero.title}</h1>
+          <p className="font-fira-code mb-1 ml-1">Hi, I'm</p>
+          <h1 className="text-5xl mb-1">{hero.title}</h1>
           <p>{hero.intro[0].children[0].text}</p>
 
           <div className="flex justify-start my-8">
             <a
-              className="text-white text-4xl pr-2"
+              className="text-white text-2xl pr-2"
               href={`https://www.linkedin.com/in/${hero.links.linkedin}`}
               target="_blank"
               rel="noreferrer"
@@ -77,7 +77,7 @@ export default function Header() {
               <FaLinkedin className="hover:drop-shadow-lg" />
             </a>
             <a
-              className="text-white text-4xl pr-2"
+              className="text-white text-2xl pr-2"
               href={`https://github.com/${hero.links.github}`}
               target="_blank"
               rel="noreferrer"
@@ -85,7 +85,7 @@ export default function Header() {
               <FaGithub className="hover:drop-shadow-lg" />
             </a>
             <a
-              className="text-white text-4xl pr-2"
+              className="text-white text-2xl pr-2"
               href={`https://twitter.com/${hero.links.twitter}`}
               target="_blank"
               rel="noreferrer"
