@@ -23,7 +23,7 @@ export default function About() {
       <section id='about' className="relative">
         <div className="container max-w-4xl h-full">
           <h2 className="text-3xl text-right text-light">About Me</h2>
-          {/* <p className="text-light text-right">Some thigs I've built</p> */}
+          <p className="text-light text-right">And the tech I use</p>
           <div className="flex flex-col justify-between items-center h-full lg:flex-row">
             <div className="text-muted py-14 basis-1/2">
               <BlockContent blocks={about._rawContent} />
