@@ -4,18 +4,20 @@ require('dotenv').config({
 
 module.exports = {
   siteMetadata: {
-    siteUrl: 'https://www.yourdomain.tld',
+    siteUrl: 'https://richard.pastenes.dev',
     title: "Richard's Dev Landing",
+    description: "Richard Pastenes' personal web development website",
+    metaImage: 'src/images/meta.png',
   },
   plugins: [
     'gatsby-plugin-postcss',
     {
       resolve: 'gatsby-source-sanity',
       options: {
-        projectId: 'lpvkp4xx',
-        dataset: 'production',
-        watchMode: false,
-        token: process.env.SANITY_TOKEN,
+        projectId: process.env.GATSBY_SANITY_PROJECT_ID,
+        dataset: process.env.GATSBY_SANITY_DATASET_ID,
+        token: process.env.GATSBY_SANITY_TOKEN,
+        watchMode: process.env.GATSBY_SANITY_WATCH_MODE,
       },
     },
     'gatsby-plugin-sass',
