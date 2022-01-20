@@ -7,9 +7,13 @@ module.exports = {
         'pt-serif': ['PT Serif', 'serif'],
         'fira-code': ['Fira Code', 'monospace'],
       },
+      fontSize: {
+        'tiny': '.775rem',
+      },
       spacing: {
         '480': '480px',
         '600': '600px',
+        'nav': '11.5rem',
       }
     },
     colors: {

@@ -9,7 +9,7 @@ section {
   @apply px-14 py-32 lg:px-32;
 }
 h1, h2, h3, h4, h5, h6 {
-  @apply font-poppins;
+  @apply font-poppins font-bold;
 }
 h1 {
   @apply text-3xl mb-4;

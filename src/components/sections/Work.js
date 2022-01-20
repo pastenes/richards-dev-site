@@ -1,7 +1,7 @@
 import React from 'react';
 import { useStaticQuery, graphql } from 'gatsby';
 import { GatsbyImage } from 'gatsby-plugin-image';
-import BlockContent from './BlockContent';
+import BlockContent from '../common/BlockContent';
 
 export default function Work() {
   const data = useStaticQuery(graphql`
@@ -28,8 +28,8 @@ export default function Work() {
   const projects = data.allSanityProject.nodes;
 
   return (
-    <section className="bg-darker h-screen w-screen">
-      <div className="container pb-36">
+    <section id='work' className="">
+      <div className="container">
         <h2 className="text-3xl text-right text-light">Work</h2>
         <p className="text-light text-right">Some thigs I've built</p>
 
@@ -39,7 +39,7 @@ export default function Work() {
             <div className={`flex flex-col items-center h-600 mt-20 relative lg:h-auto ${side ? 'lg:flex-row' : 'lg:flex-row-reverse'}`} key={project.id}>
               <div className="w-full h-full lg:w-1/2">
                 <a href={project.projectUrl} target="_blank" rel="noreferrer">
-                <GatsbyImage
+                  <GatsbyImage
                     image={project.screenshot.asset.gatsbyImageData}
                     alt={project.screenshot.alt}
                     layout="constrained"
@@ -49,16 +49,18 @@ export default function Work() {
                   />
                 </a>
               </div>
-              <div className="h-full w-full px-6 flex flex-col justify-center bg-dark bg-opacity-75 border-light border-2 border-opacity-50 z-10 absolute lg:w-1/2 lg:relative lg:h-auto lg:bg-dark/0 lg:p-0 lg:block lg:border-0 lg:px-10">
+              <div className="h-full w-full px-6 flex flex-col justify-center bg-dark bg-opacity-75 border-light border-2 border-opacity-50 z-10 absolute lg:w-1/2 lg:relative lg:h-auto lg:bg-dark/0 lg:p-0 lg:block lg:border-0">
                 <h3 className={`text-light text-left ${side ? 'lg:text-right' : 'lg:text-left'} mb-0 lg:mb-4`}>{project.title}</h3>
                 <div className={`bg-transparent lg:bg-dark ${side ? 'lg:-ml-20 mr-0' : 'lg:-mr-20 ml-0'} lg:drop-shadow-lg`}>
                   <div className={`text-muted px-0 lg:px-8 py-6 text-left ${side ? 'lg:text-right' : 'lg:text-left'}`}>
                     <BlockContent blocks={project._rawDescription} />
                   </div>
                 </div>
-                <ul className="text-light font-fira-code flex flex-wrap">
+                <ul className={`text-light font-fira-code flex flex-wrap justify-start ${side ? 'lg:justify-end' :'lg:justify-start'}`}>
                   {project.tags.map(tag => (
-                    <li className={`text-green mr-auto ${side ? 'lg:ml-auto lg:mr-0' : 'lg:mr-auto lg:ml-0'} lg:mt-4`} key={tag.label}>{tag.label}</li>
+                    <li 
+                      className={`text-green text-tiny mt-2 pr-4 ${side ? 'lg:justify-end lg:pl-4 lg:pr-0' :'lg:justify-start lg:pr-4 lg:pl-0'}`} 
+                      key={tag.label}>{tag.label}</li>
                   ))}
                 </ul>
               </div>
