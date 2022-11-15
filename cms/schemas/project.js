@@ -1,8 +1,17 @@
+import { AiFillCode } from 'react-icons/ai'
+import {
+  orderRankField,
+  orderRankOrdering,
+} from '@sanity/orderable-document-list';
+
 export default {
   name: 'project',
   title: 'Project',
   type: 'document',
+  icon: AiFillCode,
+  orderings: [orderRankOrdering],
   fields: [
+    orderRankField({ type: 'title' }),
     {
       name: "order",
       title: "Order",
@@ -71,13 +80,6 @@ export default {
         // Closes menu after tag selected (defaults to true)
         closeMenuOnSelect: true,
       },
-    },
-  ],
-  orderings: [
-    {
-      title: "Manual order",
-      name: "manualOrder",
-      by: [{ field: "order", direction: "asc" }],
     },
   ],
 };
