@@ -1,7 +1,10 @@
+import { SiAboutdotme } from 'react-icons/si'
+
 export default {
   name: 'about',
   title: 'About Section',
   type: 'document',
+  icon: SiAboutdotme,
   fields: [
     {
       name: 'content',

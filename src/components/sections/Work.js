@@ -28,7 +28,7 @@ export default function Work() {
   const projects = data.allSanityProject.nodes;
 
   return (
-    <section id='work' className="">
+    <section id='work'>
       <div className="container">
         <h2 className="text-3xl text-right text-light">Work</h2>
         <p className="text-light text-right">Some thigs I've built</p>
@@ -36,7 +36,7 @@ export default function Work() {
         {projects.map((project, index) => {
           let side = index % 2 === 0 ? true : false;
           return (  
-            <div className={`flex flex-col items-center h-600 mt-20 relative lg:h-auto ${side ? 'lg:flex-row' : 'lg:flex-row-reverse'}`} key={project.id}>
+            <div className={`flex flex-col items-center h-600 my-24 lg:my-48 relative lg:h-auto ${side ? 'lg:flex-row' : 'lg:flex-row-reverse'}`} key={project.id}>
               <div className="w-full h-full lg:w-1/2">
                 <a href={project.projectUrl} target="_blank" rel="noreferrer">
                   <GatsbyImage

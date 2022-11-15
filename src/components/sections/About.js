@@ -15,7 +15,7 @@ export default function About() {
   }
   `);
   const about = data.sanityAbout;
-  const tags = about.tags.map(tag => tag.value);
+  const tags = (about.tags.map(tag => tag.value)).sort();
 
   return (
     <>

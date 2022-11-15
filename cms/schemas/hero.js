@@ -1,7 +1,9 @@
+import { GiHummingbird } from 'react-icons/gi'
 export default {
   name: 'hero',
   title: 'Hero Section',
   type: 'document',
+  icon: GiHummingbird,
   fields: [
     {
       name: 'title',
