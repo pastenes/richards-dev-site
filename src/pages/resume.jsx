@@ -51,7 +51,9 @@ export default function Resume() {
                 <h5 className="rh5">Matter Supply Co.</h5>
                 <ul>
                   <li>Implemented web apps using modern technologies such as React, Next.js, GraphQl, Shopify Hydrogen, TypeScript</li>
-                  <li>Stuff</li>
+                  <li>Provided maintenance to existing client's modern web apps</li>
+                  <li>Took part on presenting and selecting the new API first CMS iof choice for the agency</li>
+                  <li>Worked efficiently with a large team of PMs, Strategists & Technical Architectures, providing implementation estimates and maintaining fluid communication with the main goal of delivering a quality web application to the client within deadlines</li>
                 </ul>
               </li>
               <li>
@@ -64,7 +66,6 @@ export default function Resume() {
                   <li>Implemented heavily customized Drupal and WordPress sites</li>
                   <li>Introduced the concept of headless WordPress sites to the agency</li>
                   <li>Built & deployed the agency’s first Headless WordPress site with WPGraphQL, ACF, Gatsby/React & Gatsby Cloud</li>
-                  <li>Worked efficiently with a large team of PMs, Strategists & Technical Architectures, providing implementation estimates and maintaining fluid communication with the main goal of delivering a quality web application to the client within deadlines</li>
                   <li>Provided code reviews to peers, insight on new Front-End related technologies to adopt</li>
                   <li>Collaborated on all React related projects, providing insight, code/code reviews, and implementing API’s</li>
                   <li>Worked on new site implementations as well as maintaining existing projects</li>
@@ -79,7 +80,7 @@ export default function Resume() {
                 <ul>
                   <li>Implemented headless WordPress sites using the WordPress REST API & GatsbyJS</li>
                   <li>Built several custom WordPress sites</li>
-                  <li>Collaborated with third-party web designers </li>
+                  <li>Collaborated with third-party web designers</li>
                   <li>Worked with Account and Project Mangers to estimate development timelines, while collaborating with the SEO and PPC teams to ensure a seamless user experience</li>
                   <li>Analyzing code and configurations for bugs and inefficiencies</li>
                   <li>Managing and providing training to junior developers </li>
@@ -87,6 +88,30 @@ export default function Resume() {
                   <li>Improved client's sites maintenance processes and systems</li>
                   <li>Purchased and re-vamped web team’s staging hosting provider</li>
                   <li>Interfaced with clients to provide maintenance support</li>
+                </ul>
+              </li>
+              <li>
+                <div className="flex justify-between">
+                  <h4 className="rh4">Web Developer</h4>
+                  <span className='rdate'>June 2014 - August 2015</span>
+                </div>
+                <h5 className="rh5">Nia</h5>
+                <ul>
+                  <li>Implementedcustom WordPress sites</li>
+                  <li>Added full responsiveness to existing legacy Drupal6 companysite</li>
+                  <li>Collaborated with Sr. developer on existin Drupal site</li>
+                </ul>
+              </li>
+              <li>
+                <div className="flex justify-between">
+                  <h4 className="rh4">Junior Web Developer</h4>
+                  <span className='rdate'>July 2013 - March 2014</span>
+                </div>
+                <h5 className="rh5">Spot Color Marketing</h5>
+                <ul>
+                  <li>Developed custom WordPress sites</li>
+                  <li>Collaborated with in-house web designer</li>
+                  <li>Revamped agency client hosting services</li>
                 </ul>
               </li>
             </ul>
