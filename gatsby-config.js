@@ -20,7 +20,7 @@ module.exports = {
         watchMode: process.env.GATSBY_SANITY_WATCH_MODE,
       },
     },
-    'gatsby-plugin-sass',
+    // 'gatsby-plugin-sass',
     'gatsby-plugin-image',
     {
       resolve: 'gatsby-plugin-google-analytics',

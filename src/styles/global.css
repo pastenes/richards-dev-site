@@ -17,3 +17,79 @@ h1 {
 p {
   @apply mb-4;
 }
+
+/* Resume only styles */
+.rh1 {
+  @apply font-montserrat font-thin tracking-widest uppercase;
+}
+.rh2 {
+  @apply font-montserrat font-thin text-xs uppercase;
+}
+.rh3 {
+  @apply inline-block font-mono font-bold relative lowercase my-4 text-lg text-blue;
+  &:before {
+    content: "";
+    position: absolute;
+    width: 30px;
+    height: 1px;
+    bottom: 0;
+    left: 0;
+    border-bottom: 1px solid black;
+  }
+}
+.rh4 {
+  @apply tracking-wider;
+}
+.rh5 {
+  @apply font-opensans font-light text-xs;
+}
+.rdate {
+  @apply text-xs text-neutral
+}
+.rexperience {
+  @apply list-none m-0 p-0 relative;
+  &:before {
+    @apply bg-muted;
+    content:"";
+    display: inline-block;
+    width: 1px;
+    position: absolute;
+    left:3px;
+    top:5px;
+    height: calc(100% - 10px );
+  }
+  >li {
+    position: relative;
+    padding-left: 15px;
+    margin-bottom:15px;
+    &:before{
+      @apply bg-dark;
+      content:"";
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      position: absolute;
+      left:0;
+      top:5px;
+      border-radius: 10px;
+    }
+  }
+  ul {
+    @apply my-2;
+    li {
+      position: relative;
+      padding-left: 10px;
+      &:before{
+        @apply bg-muted;
+        content:"";
+        display: inline-block;
+        width: 4px;
+        height: 4px;
+        position: absolute;
+        left:0;
+        top:7px;
+        border-radius: 10px;
+      }
+    }
+  }
+}

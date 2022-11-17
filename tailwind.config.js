@@ -6,6 +6,8 @@ module.exports = {
         poppins: ['Poppins', 'sans-serif'],
         'pt-serif': ['PT Serif', 'serif'],
         'fira-code': ['Fira Code', 'monospace'],
+        montserrat: ['Montserrat, sans-serif'],
+        opensans: ['Open Sans, sans-serif'],
       },
       fontSize: {
         'tiny': '.775rem',
@@ -17,12 +19,16 @@ module.exports = {
       }
     },
     colors: {
+      black: '#000000',
       neutral: '#c4c4c4',
       dark: '#222222',
       darker: '#141414',
       light: '#fafafa',
       muted: '#a8b2d1',
       green: '#64ffda',
+      white: '#ffffff',
+      gray: '#EBEBEB',
+      blue: '#3CB1E4',
     },
     container: {
       center: true,
