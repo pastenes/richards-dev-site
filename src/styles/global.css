@@ -2,6 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
+@media print {
+  html, body {
+    font-size: 71%;
+    background-color: white !important;
+  }
+  * {
+    -webkit-print-color-adjust: exact !important;   /* Chrome, Safari 6 – 15.3, Edge */
+    color-adjust: exact !important;                 /* Firefox 48 – 96 */
+    print-color-adjust: exact !important;           /* Firefox 97+, Safari 15.4+ */
+  }
+  .pdf-button {
+    display: none;
+  }
+  @page {
+    size: 210mm 297mm;
+    margin-top: 0;
+    margin-bottom: -20px;
+    &:footer {
+      display: none;
+    }
+  }
+}
+
 body {
   @apply font-pt-serif h-screen w-screen bg-darker;
 }
@@ -20,7 +43,7 @@ p {
 
 /* Resume only styles */
 .rh1 {
-  @apply font-montserrat font-thin tracking-widest uppercase;
+  @apply font-montserrat font-thin text-lg tracking-widest uppercase md:text-5xl;
 }
 .rh2 {
   @apply font-montserrat font-thin text-xs uppercase;

@@ -33,7 +33,7 @@ module.exports = {
     {
       resolve: 'gatsby-plugin-manifest',
       options: {
-        icon: 'src/images/icon.png',
+        icon: 'src/files/icon.png',
       },
     },
     'gatsby-plugin-sharp',
@@ -41,10 +41,10 @@ module.exports = {
     {
       resolve: 'gatsby-source-filesystem',
       options: {
-        name: 'images',
-        path: './src/images/',
+        name: 'files',
+        path: `${__dirname}/src/files`,
       },
-      __key: 'images',
+      __key: 'files',
     },
   ],
 };

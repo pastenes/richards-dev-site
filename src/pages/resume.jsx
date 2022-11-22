@@ -1,7 +1,25 @@
+import { graphql, useStaticQuery } from 'gatsby';
 import React from 'react'
+// import resumeFile from '../images/Re'
 
 export default function Resume() {
+  const { allFile } = useStaticQuery(graphql`
+    query Resume {
+    allFile(filter: {name: {eq: "Resume-Richard-Pastenes"}}) {
+      nodes {
+        name
+        publicURL
+    }
+  }
+}
+`);
+
   return (
+    <>
+      <nav className="pdf-button text-green text-center fixed top-20 -mt-20 ml-14 lg:ml-nav z-20 bg-dark inline-flex flex-col p-3 font-fira-code">
+        <a className='py-2' href={allFile.nodes[0].publicURL}>PDF</a>
+      </nav>
+
     <div className='flex flex-col font-opensans font-light text-sm w-full h-full bg-white'>
       <header className='bg-gray flex flex-col pt-12 pb-8 items-center'>
         <h1 className='rh1 mb-0'>Richard Pastenes</h1>
@@ -13,7 +31,7 @@ export default function Resume() {
         </ul>
       </header>
       <main className='container py-8'>
-        <div className="grid grid-cols-3 gap-8">
+          <div className="md:grid md:gap-8 mx-6 md:grid-cols-3 md:mx-0">
           <div className="summary">
             <h3 className='rh3'>Summary</h3>
             <p className='mb-0'>I am an experienced front-end web developer with over a decade of experience. A born problem-solver, I have honed my troubleshooting skills and I’m passionate about learning and keeping up with dev related concepts and technologies. I highly respect and appreciate great design and there is nothing more rewarding to me than developing beautiful and functional web apps. I’m seeking to bring these strengths to a team developing cutting-edge web applications.</p>
@@ -51,7 +69,7 @@ export default function Resume() {
                 <h5 className="rh5">Matter Supply Co.</h5>
                 <ul>
                   <li>Implemented web apps using modern technologies such as React, Next.js, GraphQl, Shopify Hydrogen, TypeScript</li>
-                  <li>Provided maintenance to existing client's modern web apps</li>
+                    <li>Provided maintenance for existing client's modern web apps</li>
                   <li>Took part on presenting and selecting the new API first CMS iof choice for the agency</li>
                   <li>Worked efficiently with a large team of PMs, Strategists & Technical Architectures, providing implementation estimates and maintaining fluid communication with the main goal of delivering a quality web application to the client within deadlines</li>
                 </ul>
@@ -117,9 +135,9 @@ export default function Resume() {
             </ul>
           </div>
         </div>
-        <div className="skills">
+          <div className="mx-6 md:mx-0">
           <h3 className="rh3">Skills</h3>
-          <ul className='grid grid-cols-4'>
+            <ul className='grid grid-cols-2 md:grid-cols-4'>
             <li>ES6</li>
             <li>React</li>
             <li>GatsbyJS</li>
@@ -152,5 +170,6 @@ export default function Resume() {
       </main>
       <footer className='bg-gray py-8'></footer>
     </div>
+    </>
   )
 }
