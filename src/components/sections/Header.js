@@ -69,7 +69,7 @@ export default function Header() {
 
           <div className="flex justify-start my-8">
             <a
-              className="text-white text-2xl pr-2"
+              className="text-black text-2xl pr-2"
               href={`https://www.linkedin.com/in/${hero.links.linkedin}`}
               target="_blank"
               rel="noreferrer"
@@ -77,7 +77,7 @@ export default function Header() {
               <FaLinkedin className="hover:drop-shadow-lg" />
             </a>
             <a
-              className="text-white text-2xl pr-2"
+              className="text-black text-2xl pr-2"
               href={`https://github.com/${hero.links.github}`}
               target="_blank"
               rel="noreferrer"
@@ -85,7 +85,7 @@ export default function Header() {
               <FaGithub className="hover:drop-shadow-lg" />
             </a>
             <a
-              className="text-white text-2xl pr-2"
+              className="text-black text-2xl pr-2"
               href={`https://twitter.com/${hero.links.twitter}`}
               target="_blank"
               rel="noreferrer"
