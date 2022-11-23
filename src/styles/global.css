@@ -43,7 +43,7 @@ p {
 
 /* Resume only styles */
 .rh1 {
-  @apply font-montserrat font-thin text-lg tracking-widest uppercase md:text-5xl;
+  @apply font-montserrat font-thin text-lg tracking-widest uppercase print:text-5xl md:text-5xl;
 }
 .rh2 {
   @apply font-montserrat font-thin text-xs uppercase;

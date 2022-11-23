@@ -31,7 +31,7 @@ export default function Resume() {
         </ul>
       </header>
       <main className='container py-8'>
-          <div className="md:grid md:gap-8 mx-6 md:grid-cols-3 md:mx-0">
+          <div className="print:grid print:gap-8 print:grid-cols-3 print:mx-0 md:grid md:gap-8 mx-6 md:grid-cols-3 md:mx-0">
           <div className="summary">
             <h3 className='rh3'>Summary</h3>
             <p className='mb-0'>I am an experienced front-end web developer with over a decade of experience. A born problem-solver, I have honed my troubleshooting skills and I’m passionate about learning and keeping up with dev related concepts and technologies. I highly respect and appreciate great design and there is nothing more rewarding to me than developing beautiful and functional web apps. I’m seeking to bring these strengths to a team developing cutting-edge web applications.</p>
@@ -137,34 +137,36 @@ export default function Resume() {
         </div>
           <div className="mx-6 md:mx-0">
           <h3 className="rh3">Skills</h3>
-            <ul className='grid grid-cols-2 md:grid-cols-4'>
-            <li>ES6</li>
-            <li>React</li>
-            <li>GatsbyJS</li>
-            <li>WordPress REST API</li>
-            <li>GraphQL</li>
-            <li>CSS/SASS</li>
-            <li>CSS Grid/Flexbox</li>
-            <li>Gatsby Cloud</li>
-            <li>PHP</li>
-            <li>MySQL/MariaDB</li>
-            <li>JavaScript</li>
-            <li>JSON</li>
-            <li>Alpine.js</li>
-            <li>Netlify</li>
-            <li>Vercel</li>
-            <li>Tailwind CSS</li>
-            <li>Command Line</li>
-            <li>Sanity.io</li>
-            <li>SEO</li>
-            <li>AWS</li>
-            <li>Timber</li>
-            <li>Node</li>
-            <li>Git/Github</li>
-            <li>Git Flow</li>
-            <li>Timeline Management</li>
-            <li>Client Communication</li>
-            <li>Team Management</li>
+            <ul className='grid grid-cols-2 print:grid-cols-4 md:grid-cols-4'>
+              <li>Alpine.js</li>
+              <li>AWS</li>
+              <li>Client Communication</li>
+              <li>Command Line</li>
+              <li>CSS Grid/Flexbox</li>
+              <li>ES6</li>
+              <li>Figma</li>
+              <li>Framer Motion</li>
+              <li>Gatsby Cloud</li>
+              <li>GatsbyJS</li>
+              <li>Git Flow</li>
+              <li>Git/Github</li>
+              <li>GraphQL</li>
+              <li>JavaScript</li>
+              <li>Modern CSS</li>
+              <li>Netlify</li>
+              <li>Node</li>
+              <li>PHP</li>
+              <li>React</li>
+              <li>Redis</li>
+              <li>Sanity.io</li>
+              <li>SEO</li>
+              <li>Storybook</li>
+              <li>Tailwind CSS</li>
+              <li>Team Management</li>
+              <li>Timber</li>
+              <li>Timeline Management</li>
+              <li>Vercel</li>
+              <li>WordPress REST API</li>
           </ul>
         </div>
       </main>
