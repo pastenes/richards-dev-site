@@ -161,6 +161,7 @@ export default function Resume() {
               <li>Sanity.io</li>
               <li>SEO</li>
               <li>Storybook</li>
+              <li>Styled Components</li>
               <li>Tailwind CSS</li>
               <li>Team Management</li>
               <li>Timber</li>
