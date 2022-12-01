@@ -138,33 +138,34 @@ export default function Resume() {
           <div className="mx-6 md:mx-0">
           <h3 className="rh3">Skills</h3>
             <ul className='grid grid-cols-2 md:grid-cols-4'>
+              <li>Alpine.js</li>
+              <li>AWS</li>
+              <li>Client Communication</li>
+              <li>Command Line</li>
+              <li>CSS Grid/Flexbox</li>
+              <li>CSS/SASS</li>
             <li>ES6</li>
-            <li>React</li>
+              <li>Gatsby Cloud</li>
             <li>GatsbyJS</li>
-            <li>WordPress REST API</li>
-            <li>GraphQL</li>
-            <li>CSS/SASS</li>
-            <li>CSS Grid/Flexbox</li>
-            <li>Gatsby Cloud</li>
-            <li>PHP</li>
-            <li>MySQL/MariaDB</li>
+              <li>Git Flow</li>
+              <li>Git/Github</li>
+              <li>GraphQL</li>
             <li>JavaScript</li>
             <li>JSON</li>
-            <li>Alpine.js</li>
+              <li>MySQL/MariaDB</li>
             <li>Netlify</li>
-            <li>Vercel</li>
-            <li>Tailwind CSS</li>
-            <li>Command Line</li>
+              <li>Node</li>
+              <li>PHP</li>
+              <li>React</li>
             <li>Sanity.io</li>
             <li>SEO</li>
-            <li>AWS</li>
-            <li>Timber</li>
-            <li>Node</li>
-            <li>Git/Github</li>
-            <li>Git Flow</li>
+              <li>Styled Components</li>
+              <li>Tailwind CSS</li>
+              <li>Team Management</li>
+              <li>Timber</li>
             <li>Timeline Management</li>
-            <li>Client Communication</li>
-            <li>Team Management</li>
+              <li>Vercel</li>
+              <li>WordPress REST API</li>
           </ul>
         </div>
       </main>
