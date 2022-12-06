@@ -33,6 +33,19 @@ export default {
       title: 'Achievment',
       type: 'array',
       of: [{ type: 'achievment' }],
-    }
+    },
   ],
+  preview: {
+    select: {
+      title: 'role',
+      employer: 'employer',
+    },
+    prepare(selection) {
+      const { title, employer } = selection
+      return {
+        title: title,
+        subtitle: employer,
+      }
+    }
+  }
 };
