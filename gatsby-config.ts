@@ -2,7 +2,9 @@ require('dotenv').config({
   path: `.env.${process.env.NODE_ENV}`,
 });
 
-module.exports = {
+import type { GatsbyConfig } from "gatsby"
+
+const config: GatsbyConfig = {
   siteMetadata: {
     siteUrl: 'https://richard.pastenes.dev',
     title: "Richard's Dev Landing",
@@ -20,7 +22,6 @@ module.exports = {
         watchMode: process.env.GATSBY_SANITY_WATCH_MODE,
       },
     },
-    // 'gatsby-plugin-sass',
     'gatsby-plugin-image',
     {
       resolve: 'gatsby-plugin-google-analytics',
@@ -48,3 +49,5 @@ module.exports = {
     },
   ],
 };
+
+export default config

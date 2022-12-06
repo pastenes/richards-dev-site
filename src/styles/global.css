@@ -40,6 +40,14 @@ h1 {
 p {
   @apply mb-4;
 }
+.blink {
+  animation: blinker 1s step-end infinite;
+}
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
 
 /* Resume only styles */
 .rh1 {
