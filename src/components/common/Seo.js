@@ -1,7 +1,7 @@
-import React from "react"
-import PropTypes from "prop-types"
-import { Helmet } from "react-helmet"
-import { useStaticQuery, graphql } from "gatsby"
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
+import { useStaticQuery, graphql } from 'gatsby';
 
 function SEO({ description, meta, title, cannonical, lang }) {
   const { site } = useStaticQuery(
@@ -17,10 +17,10 @@ function SEO({ description, meta, title, cannonical, lang }) {
         }
       }
     `
-  )
+  );
 
-  const metaDescription = description || site.siteMetadata.description
-  const image = site.siteMetadata.siteUrl + site.siteMetadata.metaImage
+  const metaDescription = description || site.siteMetadata.description;
+  const image = site.siteMetadata.siteUrl + site.siteMetadata.metaImage;
 
   return (
     <Helmet
@@ -87,24 +87,24 @@ function SEO({ description, meta, title, cannonical, lang }) {
         },
         {
           name: `twitter:site`,
-          content: "@richardpastenes",
+          content: '@richardpastenes',
         },
       ].concat(meta)}
     />
-  )
+  );
 }
 
 SEO.defaultProps = {
   lang: `en`,
   meta: [],
   description: ``,
-}
+};
 
 SEO.propTypes = {
   description: PropTypes.string,
   lang: PropTypes.string,
   meta: PropTypes.arrayOf(PropTypes.object),
   title: PropTypes.string.isRequired,
-}
+};
 
-export default SEO
+export default SEO;

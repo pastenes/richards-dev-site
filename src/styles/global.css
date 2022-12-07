@@ -3,14 +3,15 @@
 @tailwind utilities;
 
 @media print {
-  html, body {
+  html,
+  body {
     font-size: 71%;
     background-color: white !important;
   }
   * {
-    -webkit-print-color-adjust: exact !important;   /* Chrome, Safari 6 – 15.3, Edge */
-    color-adjust: exact !important;                 /* Firefox 48 – 96 */
-    print-color-adjust: exact !important;           /* Firefox 97+, Safari 15.4+ */
+    -webkit-print-color-adjust: exact !important; /* Chrome, Safari 6 – 15.3, Edge */
+    color-adjust: exact !important; /* Firefox 48 – 96 */
+    print-color-adjust: exact !important; /* Firefox 97+, Safari 15.4+ */
   }
   .pdf-button {
     display: none;
@@ -26,16 +27,21 @@
 }
 
 body {
-  @apply font-pt-serif h-screen w-screen bg-darker;
+  @apply h-screen w-screen bg-darker font-pt-serif;
 }
 section {
   @apply px-14 py-32 lg:px-32;
 }
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   @apply font-poppins font-bold;
 }
 h1 {
-  @apply text-3xl mb-4;
+  @apply mb-4 text-3xl;
 }
 p {
   @apply mb-4;
@@ -51,13 +57,13 @@ p {
 
 /* Resume only styles */
 .rh1 {
-  @apply font-montserrat font-thin text-lg tracking-widest uppercase print:text-5xl md:text-5xl;
+  @apply font-montserrat text-lg font-thin uppercase tracking-widest print:text-5xl md:text-5xl;
 }
 .rh2 {
-  @apply font-montserrat font-thin text-xs uppercase;
+  @apply font-montserrat text-xs font-thin uppercase;
 }
 .rh3 {
-  @apply inline-block font-mono font-bold relative lowercase my-4 text-lg text-blue;
+  @apply relative my-4 inline-block font-mono text-lg font-bold lowercase text-blue;
   &:before {
     content: "";
     position: absolute;
@@ -72,36 +78,36 @@ p {
   @apply tracking-wider;
 }
 .rh5 {
-  @apply font-opensans font-light text-xs;
+  @apply font-opensans text-xs font-light;
 }
 .rdate {
-  @apply text-xs text-neutral
+  @apply text-xs text-neutral;
 }
 .rexperience {
-  @apply list-none m-0 p-0 relative;
+  @apply relative m-0 list-none p-0;
   &:before {
     @apply bg-muted;
-    content:"";
+    content: "";
     display: inline-block;
     width: 1px;
     position: absolute;
-    left:3px;
-    top:5px;
-    height: calc(100% - 10px );
+    left: 3px;
+    top: 5px;
+    height: calc(100% - 10px);
   }
-  >li {
+  > li {
     position: relative;
     padding-left: 15px;
-    margin-bottom:15px;
-    &:before{
+    margin-bottom: 15px;
+    &:before {
       @apply bg-dark;
-      content:"";
+      content: "";
       display: inline-block;
       width: 8px;
       height: 8px;
       position: absolute;
-      left:0;
-      top:5px;
+      left: 0;
+      top: 5px;
       border-radius: 10px;
     }
   }
@@ -110,15 +116,15 @@ p {
     li {
       position: relative;
       padding-left: 10px;
-      &:before{
+      &:before {
         @apply bg-muted;
-        content:"";
+        content: "";
         display: inline-block;
         width: 4px;
         height: 4px;
         position: absolute;
-        left:0;
-        top:7px;
+        left: 0;
+        top: 7px;
         border-radius: 10px;
       }
     }

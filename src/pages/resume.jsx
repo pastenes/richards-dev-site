@@ -58,31 +58,31 @@ export default function Resume() {
         <a className='py-2' href={allFile.nodes[0].publicURL}>PDF</a>
       </nav>
 
-    <div className='flex flex-col font-opensans font-light text-sm w-full h-full bg-white'>
-      <header className='bg-gray flex flex-col pt-12 pb-8 items-center'>
+      <div className='flex flex-col font-opensans font-light text-sm w-full h-full bg-white'>
+        <header className='bg-gray flex flex-col pt-12 pb-8 items-center'>
           <h1 className='rh1 mb-0'>{sanityResume.name}</h1>
           <h2 className='rh2'>{sanityResume.jobTitle}</h2>
-        <ul className='flex gap-4 text-xs'>
+          <ul className='flex gap-4 text-xs'>
             <li><span className='font-mono font-semibold'>p.</span>{sanityResume.phone}</li>
             <li><span className='font-mono font-semibold'>e.</span>{sanityResume.email}</li>
             <li><span className='font-mono font-semibold'>w.</span>{sanityResume.portfolioUrl.replace(/^https?:\/\//, '')}</li>
-        </ul>
-      </header>
-      <main className='container py-8'>
+          </ul>
+        </header>
+        <main className='container py-8'>
           <div className="print:grid print:gap-8 print:grid-cols-3 print:mx-0 md:grid md:gap-8 mx-6 md:grid-cols-3 md:mx-0">
-          <div className="summary">
-            <h3 className='rh3'>Summary</h3>
+            <div className="summary">
+              <h3 className='rh3'>Summary</h3>
               <p className='mb-0'>{sanityResume.summary}</p>
 
-            <h3 className='rh3'>Interests</h3>
-            <ul>
+              <h3 className='rh3'>Interests</h3>
+              <ul>
                 {sanityResume.interests.map(interest => (
                   <li key={interest}>{interest}</li>
                 ))}
-            </ul>
+              </ul>
 
-            <h3 className="rh3">Education</h3>
-            <ul>
+              <h3 className="rh3">Education</h3>
+              <ul>
                 {sanityResume.education.map(item => (
                   <li key={item._key}>
                     <h4 className="rh4">{item.degree}</h4>
@@ -90,11 +90,11 @@ export default function Resume() {
                     <p>{item.school}</p>
                   </li>
                 ))}
-            </ul>
-          </div>
-          <div className="experience col-span-2">
-            <h3 className="rh3">Experience</h3>
-            <ul className='rexperience'>
+              </ul>
+            </div>
+            <div className="experience col-span-2">
+              <h3 className="rh3">Experience</h3>
+              <ul className='rexperience'>
                 {sanityResume.experience.map(item => (
                   <li key={item._key}>
                     <div className="flex justify-between">
@@ -109,20 +109,20 @@ export default function Resume() {
                     </ul>
                   </li>
                 ))}
-            </ul>
+              </ul>
+            </div>
           </div>
-        </div>
           <div className="mx-6 md:mx-0">
-          <h3 className="rh3">Skills</h3>
+            <h3 className="rh3">Skills</h3>
             <ul className='grid grid-cols-2 print:grid-cols-4 md:grid-cols-4'>
               {skills.map(skill => (
                 <li key={skill}>{skill}</li>
               ))}
-          </ul>
-        </div>
-      </main>
-      <footer className='bg-gray py-8'></footer>
-    </div>
+            </ul>
+          </div>
+        </main>
+        <footer className='bg-gray py-8'></footer>
+      </div>
     </>
   )
 }
