@@ -60,16 +60,16 @@ export default function Header() {
     };
   }, [vantaEffect]);
   return (
-    <section ref={myRef} className="bg-neutral h-screen w-screen py-0 flex flex-col lg:flex-row">
-      <div className="flex-auto w-3/4 lg:w-1/2 pt-14 px-0 pb-14 lg:p-14 lg:self-center">
+    <section ref={myRef} className="flex h-screen w-screen flex-col bg-neutral py-0 lg:flex-row">
+      <div className="w-3/4 flex-auto px-0 pt-14 pb-14 lg:w-1/2 lg:self-center lg:p-14">
         <div className="max-w-md">
-          <p className="font-fira-code mb-1 ml-1">Hi, I'm</p>
-          <h1 className="text-5xl mb-1">{hero.title}</h1>
+          <p className="mb-1 ml-1 font-fira-code">Hi, I'm</p>
+          <h1 className="mb-1 text-5xl">{hero.title}</h1>
           <p>{hero.intro[0].children[0].text}</p>
 
-          <div className="flex justify-start my-8">
+          <div className="my-8 flex justify-start">
             <a
-              className="text-black text-2xl pr-2"
+              className="pr-2 text-2xl text-black"
               href={`https://www.linkedin.com/in/${hero.links.linkedin}`}
               target="_blank"
               rel="noreferrer"
@@ -77,7 +77,7 @@ export default function Header() {
               <FaLinkedin className="hover:drop-shadow-lg" />
             </a>
             <a
-              className="text-black text-2xl pr-2"
+              className="pr-2 text-2xl text-black"
               href={`https://github.com/${hero.links.github}`}
               target="_blank"
               rel="noreferrer"
@@ -85,7 +85,7 @@ export default function Header() {
               <FaGithub className="hover:drop-shadow-lg" />
             </a>
             <a
-              className="text-black text-2xl pr-2"
+              className="pr-2 text-2xl text-black"
               href={`https://twitter.com/${hero.links.twitter}`}
               target="_blank"
               rel="noreferrer"
@@ -95,7 +95,7 @@ export default function Header() {
           </div>
         </div>
       </div>
-      <div className="max-w-xs w-1/2 absolute bottom-0 self-end lg:justify-self-end lg:relative">
+      <div className="absolute bottom-0 w-1/2 max-w-xs self-end lg:relative lg:justify-self-end">
         <GatsbyImage
           image={hero.headshot.asset.gatsbyImageData}
           alt={hero.headshot.alt}

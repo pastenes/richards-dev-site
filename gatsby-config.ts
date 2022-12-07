@@ -1,8 +1,8 @@
+import type { GatsbyConfig } from 'gatsby';
+
 require('dotenv').config({
   path: `.env.${process.env.NODE_ENV}`,
 });
-
-import type { GatsbyConfig } from "gatsby"
 
 const config: GatsbyConfig = {
   siteMetadata: {
@@ -50,4 +50,4 @@ const config: GatsbyConfig = {
   ],
 };
 
-export default config
+export default config;
