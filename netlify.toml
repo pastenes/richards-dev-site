@@ -6,6 +6,8 @@
   NODE_VERSION = "18"
   # Ensure we're in production mode for Netlify builds
   NODE_ENV = "production"
+  # Force npm usage (no yarn)
+  NPM_CONFIG_PRODUCTION = "false"
 
 # Disable the Netlify Gatsby plugin to avoid cache issues
 # The plugin is causing issues with msgpackr binary files
@@ -16,4 +18,4 @@
   GATSBY_SANITY_PROJECT_ID = "Sanity Project ID"
   GATSBY_SANITY_DATASET_ID = "Sanity Dataset ID"  
   GATSBY_SANITY_TOKEN = "Sanity Token"
-  # NOTE: GATSBY_SANITY_WATCH_MODE is no longer needed - remove from Netlify dashboard
+  # IMPORTANT: Remove GATSBY_SANITY_WATCH_MODE from Netlify dashboard - it's no longer needed!
