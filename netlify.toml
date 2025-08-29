@@ -1,11 +1,15 @@
 [build]
-  command = "npm ci && npm run build:netlify"
+  command = "./scripts/netlify-build.sh"
   publish = "public"
 
 [build.environment]
   NODE_VERSION = "18"
   # Ensure we're in production mode for Netlify builds
   NODE_ENV = "production"
+  # Force npm to install platform-specific binaries
+  NPM_CONFIG_TARGET_PLATFORM = "linux"
+  NPM_CONFIG_TARGET_ARCH = "x64"
+  NPM_CONFIG_CACHE = "/tmp/.npm"
   # Install all dependencies including optional ones for platform-specific binaries
   NPM_CONFIG_OPTIONAL = "true"
   # Don't skip optional dependencies
