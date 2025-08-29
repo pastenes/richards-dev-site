@@ -15,6 +15,7 @@ const config: GatsbyConfig = {
   },
   plugins: [
     'gatsby-plugin-postcss',
+    'gatsby-plugin-netlify', // Required for SSR/DSG and Netlify optimizations
     {
       resolve: 'gatsby-source-sanity',
       options: {

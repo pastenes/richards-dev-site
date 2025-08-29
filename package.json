@@ -58,6 +58,7 @@
     "@babel/core": "^7.16.7",
     "@babel/eslint-parser": "^7.16.5",
     "@babel/preset-react": "^7.16.7",
+    "@netlify/plugin-gatsby": "^3.8.4",
     "@storybook/addon-actions": "^6.5.16",
     "@storybook/addon-essentials": "^6.5.16",
     "@storybook/addon-interactions": "^6.5.16",
@@ -82,6 +83,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0",
+    "gatsby-plugin-netlify": "^5.1.1",
     "prettier": "^2.8.8",
     "prettier-plugin-tailwindcss": "^0.1.13",
     "typescript": "^5.0.4"

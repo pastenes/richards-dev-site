@@ -10,12 +10,11 @@
   NPM_CONFIG_OPTIONAL = "true"
   # Don't skip optional dependencies
   NPM_CONFIG_PRODUCTION = "false"
-  # Disable Netlify's automatic Gatsby plugin to avoid cache issues with binary files
-  NETLIFY_SKIP_GATSBY_CACHE = "true"
 
-# Disable the Netlify Gatsby plugin to avoid cache issues
-# The plugin is causing issues with msgpackr binary files and @parcel/watcher
-# Using NETLIFY_SKIP_GATSBY_CACHE environment variable to disable auto-detection
+# Configure the Essential Gatsby plugin properly
+# This plugin is required for modern Gatsby sites on Netlify
+[[plugins]]
+  package = "@netlify/plugin-gatsby"
 
 [template.environment]
   GATSBY_SANITY_PROJECT_ID = "Sanity Project ID"
