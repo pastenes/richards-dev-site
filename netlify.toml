@@ -1,18 +1,26 @@
 [build]
-  command = "npm run build:netlify"
+  command = "npm ci && npm run build:netlify"
   publish = "public"
 
 [build.environment]
   NODE_VERSION = "18"
   # Ensure we're in production mode for Netlify builds
   NODE_ENV = "production"
-  # Force npm usage (no yarn)
+  # Install all dependencies including optional ones for platform-specific binaries
+  NPM_CONFIG_OPTIONAL = "true"
+  # Don't skip optional dependencies
   NPM_CONFIG_PRODUCTION = "false"
 
 # Disable the Netlify Gatsby plugin to avoid cache issues
-# The plugin is causing issues with msgpackr binary files
+# The plugin is causing issues with msgpackr binary files and @parcel/watcher
 # [[plugins]]
 #   package = "@netlify/plugin-gatsby"
+
+# Explicitly disable all Gatsby-related plugins
+[[plugins]]
+  package = "@netlify/plugin-gatsby"
+  [plugins.inputs]
+    enabled = false
 
 [template.environment]
   GATSBY_SANITY_PROJECT_ID = "Sanity Project ID"
