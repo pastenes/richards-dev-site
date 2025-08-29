@@ -28,7 +28,7 @@
     "sanity-plugin-autocomplete-tags": "^1.0.2",
     "styled-components": "^5.2.0"
   },
-  "resolutions": {
+  "overrides": {
     "sha.js": "2.4.12"
   },
   "devDependencies": {
