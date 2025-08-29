@@ -1,7 +1,8 @@
-import React from 'react';
-import { useStaticQuery, graphql } from 'gatsby';
-import Jumplinks from '../common/Jumplinks';
-import BlockContent from '../common/BlockContent';
+import React from "react";
+import { useStaticQuery, graphql } from "gatsby";
+import Jumplinks from "../common/Jumplinks";
+import BlockContent from "../common/BlockContent";
+import TechTags from "../common/TechTags";
 
 export default function About() {
   const data = useStaticQuery(graphql`
@@ -28,14 +29,7 @@ export default function About() {
             <div className="basis-1/2 py-14 text-muted">
               <BlockContent blocks={about._rawContent} />
             </div>
-            <div className="basis-1/2 lg:basis-1/4">
-              <h3 className="mb-6 text-light">A few technologies I'm familiar with:</h3>
-              <ul className="grid grid-cols-2 font-fira-code text-tiny text-green">
-                {tags.map((tag) => (
-                  <li key={tag}>{tag}</li>
-                ))}
-              </ul>
-            </div>
+            <TechTags tags={tags} />
           </div>
         </div>
       </section>

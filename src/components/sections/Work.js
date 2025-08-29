@@ -1,7 +1,7 @@
-import React from 'react';
-import { useStaticQuery, graphql } from 'gatsby';
-import { GatsbyImage } from 'gatsby-plugin-image';
-import BlockContent from '../common/BlockContent';
+import React from "react";
+import { useStaticQuery, graphql } from "gatsby";
+import { GatsbyImage } from "gatsby-plugin-image";
+import BlockContent from "../common/BlockContent";
 
 export default function Work() {
   const data = useStaticQuery(graphql`
@@ -18,7 +18,11 @@ export default function Work() {
           _rawDescription(resolveReferences: { maxDepth: 5 })
           screenshot {
             asset {
-              gatsbyImageData(width: 1000, placeholder: DOMINANT_COLOR, formats: [AUTO, WEBP, AVIF])
+              gatsbyImageData(
+                width: 1000
+                placeholder: DOMINANT_COLOR
+                formats: [AUTO, WEBP, AVIF]
+              )
             }
             alt
           }
@@ -39,7 +43,7 @@ export default function Work() {
           return (
             <div
               className={`relative my-24 flex h-600 flex-col items-center first-of-type:mt-8 lg:my-48 lg:h-auto ${
-                side ? 'lg:flex-row' : 'lg:flex-row-reverse'
+                side ? "lg:flex-row" : "lg:flex-row-reverse"
               }`}
               key={project.id}
             >
@@ -56,27 +60,37 @@ export default function Work() {
                 </a>
               </div>
               <div className="absolute z-10 flex h-full w-full flex-col justify-center border-2 border-light border-opacity-50 bg-dark bg-opacity-75 px-6 lg:relative lg:block lg:h-auto lg:w-1/2 lg:border-0 lg:bg-dark/0 lg:p-0">
-                <h3 className={`text-left text-light ${side ? 'lg:text-right' : 'lg:text-left'} mb-0 lg:mb-4`}>
+                <h3
+                  className={`text-left text-light ${
+                    side ? "lg:text-right" : "lg:text-left"
+                  } mb-0 lg:mb-4`}
+                >
                   {project.title}
                 </h3>
                 <div
                   className={`bg-transparent lg:bg-dark ${
-                    side ? 'mr-0 lg:-ml-20' : 'ml-0 lg:-mr-20'
+                    side ? "mr-0 lg:-ml-20" : "ml-0 lg:-mr-20"
                   } lg:drop-shadow-lg`}
                 >
-                  <div className={`px-0 py-6 text-left text-muted lg:px-8 ${side ? 'lg:text-right' : 'lg:text-left'}`}>
+                  <div
+                    className={`px-0 py-6 text-left text-muted lg:px-8 ${
+                      side ? "lg:text-right" : "lg:text-left"
+                    }`}
+                  >
                     <BlockContent blocks={project._rawDescription} />
                   </div>
                 </div>
                 <ul
                   className={`flex flex-wrap justify-start font-fira-code text-light ${
-                    side ? 'lg:justify-end' : 'lg:justify-start'
+                    side ? "lg:justify-end" : "lg:justify-start"
                   }`}
                 >
                   {project.tags.map((tag) => (
                     <li
                       className={`mt-2 pr-4 text-tiny text-green ${
-                        side ? 'lg:justify-end lg:pl-4 lg:pr-0' : 'lg:justify-start lg:pr-4 lg:pl-0'
+                        side
+                          ? "lg:justify-end lg:pl-4 lg:pr-0"
+                          : "lg:justify-start lg:pr-4 lg:pl-0"
                       }`}
                       key={tag.label}
                     >
