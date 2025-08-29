@@ -1,0 +1,19 @@
+[build]
+  command = "npm run build:netlify"
+  publish = "public"
+
+[build.environment]
+  NODE_VERSION = "18"
+  # Ensure we're in production mode for Netlify builds
+  NODE_ENV = "production"
+
+# Disable the Netlify Gatsby plugin to avoid cache issues
+# The plugin is causing issues with msgpackr binary files
+# [[plugins]]
+#   package = "@netlify/plugin-gatsby"
+
+[template.environment]
+  GATSBY_SANITY_PROJECT_ID = "Sanity Project ID"
+  GATSBY_SANITY_DATASET_ID = "Sanity Dataset ID"  
+  GATSBY_SANITY_TOKEN = "Sanity Token"
+  # NOTE: GATSBY_SANITY_WATCH_MODE is no longer needed - remove from Netlify dashboard
