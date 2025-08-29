@@ -13,14 +13,8 @@
 
 # Disable the Netlify Gatsby plugin to avoid cache issues
 # The plugin is causing issues with msgpackr binary files and @parcel/watcher
-[[plugins]]
-  package = "@netlify/plugin-gatsby"
-  [plugins.inputs]
-    enabled = false
-
-# Alternative: exclude problematic cache directories
-[build.processing]
-  skip_processing = false
+# We completely remove the plugin configuration to disable it
+# since the plugin doesn't accept an "enabled" input parameter
 
 [template.environment]
   GATSBY_SANITY_PROJECT_ID = "Sanity Project ID"
