@@ -1,7 +1,9 @@
 import type { GatsbyConfig } from 'gatsby';
+import dotenv from 'dotenv';
+import path from 'path';
 
-require('dotenv').config({
-  path: `.env.${process.env.NODE_ENV}`,
+dotenv.config({
+  path: `.env.${process.env.NODE_ENV || 'development'}`,
 });
 
 const config: GatsbyConfig = {
@@ -19,7 +21,7 @@ const config: GatsbyConfig = {
         projectId: process.env.GATSBY_SANITY_PROJECT_ID,
         dataset: process.env.GATSBY_SANITY_DATASET_ID,
         token: process.env.GATSBY_SANITY_TOKEN,
-        watchMode: process.env.GATSBY_SANITY_WATCH_MODE,
+        watchMode: process.env.NODE_ENV === 'development',
       },
     },
     'gatsby-plugin-image',
@@ -43,7 +45,7 @@ const config: GatsbyConfig = {
       resolve: 'gatsby-source-filesystem',
       options: {
         name: 'files',
-        path: `${__dirname}/src/files`,
+        path: path.resolve('./src/files'),
       },
       __key: 'files',
     },
