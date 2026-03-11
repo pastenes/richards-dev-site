@@ -1,79 +1,153 @@
 <p align="center">
   <a href="https://richard.pastenes.dev">
-    <img alt="Gatsby" src="src/images/icon.png" width="60" />
+    <img alt="Richard's Dev Site" src="src/images/icon.png" width="60" />
   </a>
 </p>
 <h1 align="center">
-  Richard's Dev Site
+  🚀 Richard's Dev Site
 </h1>
 
-This is the repo for my portfolio/landing page at [https://richard.pastenes.dev](https://richard.pastenes.dev).
+<p align="center">
+  My personal portfolio & landing page — built with modern web tech, powered by a headless CMS, and deployed on the edge.
+</p>
 
-The site is built with Gatsby using the [Gatsby minimal starter](https://github.com/gatsbyjs/gatsby-starter-minimal), styled with [Tailwind CSS](https://tailwindcss.com/docs/guides/gatsby) and the data sourced from [Sanity.io](https://www.sanity.io/).
+<p align="center">
+  <a href="https://richard.pastenes.dev">🌐 Live Site</a> ·
+  <a href="https://richard.pastenes.dev/resume">📄 Resume</a>
+</p>
 
-The birds animation is done with [Vanta.js](https://github.com/tengbao/vanta).
+---
 
-## Development
+## ✨ Features
+
+- ⚡ **Server-side rendered** with SvelteKit for fast initial loads and SEO
+- 🎨 **Utility-first styling** with Tailwind CSS
+- 📝 **Headless CMS** powered by Sanity with real-time content updates
+- 🐦 **Interactive hero animation** using Vanta.js (Three.js birds)
+- 🖨️ **Print-friendly resume** page with dedicated print styles
+- 📱 **Fully responsive** across all devices
+- ♿ **Accessible** with semantic HTML and ARIA labels
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| ⚙️ Framework | [SvelteKit 2](https://kit.svelte.dev/) + [Svelte 5](https://svelte.dev/) |
+| 🎨 Styling | [Tailwind CSS 3](https://tailwindcss.com/) |
+| 📦 CMS | [Sanity v5](https://www.sanity.io/) (Studio + Content Lake) |
+| 🔍 Queries | [GROQ](https://www.sanity.io/docs/groq) via [@sanity/client](https://www.npmjs.com/package/@sanity/client) |
+| 📝 Rich Text | [@portabletext/svelte](https://github.com/portabletext/svelte-portabletext) |
+| 🖼️ Images | [@sanity/image-url](https://www.npmjs.com/package/@sanity/image-url) |
+| 🐦 Animation | [Vanta.js](https://github.com/tengbao/vanta) (Three.js) |
+| 🔤 Fonts | [Fontsource](https://fontsource.org/) (Fira Code, Montserrat, Open Sans, Poppins, PT Serif) |
+| 🚀 Hosting | [Netlify](https://www.netlify.com/) (SSR via adapter-netlify) |
+
+---
+
+## 🏗️ Project Structure
+
+```
+├── src/
+│   ├── routes/            # SvelteKit pages (+page.svelte, +page.server.ts)
+│   ├── lib/
+│   │   ├── sections/      # Page sections (Header, About, Work)
+│   │   ├── components/    # Reusable components (Footer, Jumplinks, TechTags)
+│   │   └── sanity.ts      # Sanity client & image URL builder
+│   ├── app.html           # HTML shell
+│   └── app.css            # Global styles & Tailwind directives
+├── cms/
+│   ├── sanity.config.ts   # Sanity Studio v5 configuration
+│   ├── sanity.cli.ts      # CLI config with deployment settings
+│   └── schemas/           # Document & object type definitions
+├── tailwind.config.js
+├── svelte.config.js
+├── netlify.toml
+└── package.json
+```
+
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
 
-- Node.js (v18+)
+- Node.js v24+
 - npm
 
-### Getting Started
+### 1. Clone & install
 
-1. **Install dependencies:**
+```bash
+git clone https://github.com/pastenes/richards-dev-site.git
+cd richards-dev-site
+npm install
+```
 
-   ```bash
-   npm install
-   ```
+### 2. Set up environment variables
 
-2. **Start the Gatsby development server:**
+Create a `.env` file in the root:
 
-   ```bash
-   npm run develop
-   ```
+```env
+SANITY_PROJECT_ID=your_project_id
+SANITY_DATASET=production
+SANITY_TOKEN=your_read_token
+```
 
-3. **Start Storybook (optional):**
-   ```bash
-   npm run storybook
-   ```
+### 3. Start developing
 
-### Sanity CMS
+```bash
+npm run dev
+```
 
-The content is managed through Sanity CMS. To run the Sanity Studio locally:
+The site will be available at [http://localhost:5173](http://localhost:5173).
 
-1. **Navigate to the CMS directory:**
+---
 
-   ```bash
-   cd cms
-   ```
+## 📦 Sanity Studio
 
-2. **Install dependencies:**
+The CMS lives in the `cms/` directory and is deployed separately.
 
-   ```bash
-   npm install
-   ```
+```bash
+cd cms
+npm install
+npm run dev
+```
 
-3. **Start the Sanity Studio:**
-   ```bash
-   npm start
-   ```
+Studio runs at [http://localhost:3333](http://localhost:3333).
 
-The Sanity Studio will be available at [http://localhost:3333](http://localhost:3333).
+### Studio scripts
 
-### Available Scripts
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start local development server |
+| `npm run build` | Build studio for production |
+| `npm run deploy` | Deploy studio to Sanity hosting |
 
-**Main Project:**
+---
 
-- `npm run develop` - Start Gatsby development server
-- `npm run build` - Build the project for production
-- `npm run serve` - Serve the production build
-- `npm run clean` - Clean Gatsby cache
-- `npm run storybook` - Start Storybook development server
-- `npm run build-storybook` - Build Storybook for production
+## 📋 Available Scripts
 
-**Sanity CMS:**
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start SvelteKit dev server |
+| `npm run build` | Build for production |
+| `npm run preview` | Preview production build locally |
 
-- `npm start` - Start Sanity Studio development server
-- `npm run build` - Build Sanity Studio for production
+---
+
+## 🌐 Deployment
+
+The site deploys automatically to **Netlify** on push to `main`.
+
+- **Build command:** `npm ci && npm run build`
+- **Publish directory:** `build`
+- **Runtime:** Node.js 24
+
+Environment variables (`SANITY_PROJECT_ID`, `SANITY_DATASET`, `SANITY_TOKEN`) must be set in the Netlify dashboard.
+
+---
+
+## 📄 License
+
+Private — all rights reserved.
