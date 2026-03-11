@@ -1,0 +1,122 @@
+---
+description: Project context and tech stack for Richard's Dev Landing
+globs:
+alwaysApply: true
+---
+
+# Richard's Dev Landing - Project Context
+
+## Overview
+Personal portfolio/landing page for Richard Pastenes, a web developer. The site showcases projects, experience, education, and provides a printable resume page.
+
+**Live URL:** https://richard.pastenes.dev
+
+## Tech Stack
+
+| Layer | Technology | Version | Notes |
+|-------|-----------|---------|-------|
+| Framework | SvelteKit | 2.x | Vite-powered, Svelte 5 |
+| UI Library | Svelte | 5.x | Runes API ($props, $derived, $state) |
+| CMS | Sanity.io | v2.36.6 | Headless CMS, studio in `cms/` directory |
+| CMS Client | @sanity/client | 6.x | GROQ queries, server-side fetching |
+| Portable Text | @portabletext/svelte | 3.x | Rich text rendering |
+| Image URLs | @sanity/image-url | 1.x | Sanity image URL builder |
+| Styling | Tailwind CSS | 3.4.x | Utility-first CSS with PostCSS |
+| Language | TypeScript | 5.5+ | Strict mode |
+| Deployment | Netlify | - | @sveltejs/adapter-netlify |
+| Node.js | v20.11.0 | - | Specified in .nvmrc |
+| Package Manager | npm | - | ESM ("type": "module") |
+
+## Sanity CMS Configuration
+- **Project ID:** lpvkp4xx
+- **Dataset:** production
+- **Studio location:** `cms/` directory (runs on localhost:3333)
+- **Sanity version:** v2.36.6 (legacy, v2 is EOL - upgrade planned in Phase 2)
+- **Config file:** `cms/sanity.json` (JSON-based, pre-v3)
+
+### Content Types (Sanity Schemas)
+Located in `cms/schemas/`:
+- `hero` — Hero section (title, intro text, social links, headshot image)
+- `about` — About section (block content, technology tags)
+- `project` — Portfolio projects (title, description, image, tags, links)
+- `experience` — Work experience entries
+- `education` — Education entries
+- `achievment` — Achievement entries (note: typo in original schema name)
+- `resume` — Resume/CV data
+- `links` — Social/external links
+
+## Project Structure
+
+```
+/
+├── cms/                            # Sanity Studio v2
+│   ├── schemas/                    # Content type definitions
+│   ├── sanity.json                 # Sanity config
+│   └── package.json                # Separate deps (React 17)
+├── src/
+│   ├── lib/
+│   │   ├── sanity.ts               # Sanity client + image URL builder
+│   │   ├── components/             # Shared components
+│   │   │   ├── BlockContent.svelte # Portable text renderer
+│   │   │   ├── Footer.svelte       # Site footer with social links
+│   │   │   ├── Jumplinks.svelte    # Sticky sidebar navigation
+│   │   │   └── TechTags.svelte     # Technology tag grid
+│   │   └── sections/               # Page sections
+│   │       ├── Header.svelte       # Hero with Vanta.js birds animation
+│   │       ├── About.svelte        # About section + tech stack
+│   │       └── Work.svelte         # Portfolio project cards
+│   ├── routes/
+│   │   ├── +layout.svelte          # Root layout (CSS + font imports)
+│   │   ├── +page.svelte            # Main landing page
+│   │   ├── +page.server.ts         # Server load: hero, about, projects
+│   │   ├── +error.svelte           # 404/error page
+│   │   └── resume/
+│   │       ├── +page.svelte        # Printable resume page
+│   │       └── +page.server.ts     # Server load: resume data
+│   ├── app.html                    # HTML shell (Three.js script)
+│   └── app.css                     # Tailwind directives + custom styles
+├── static/                         # Static assets
+│   ├── three.min.js                # Three.js for Vanta.js
+│   ├── icon.png                    # Favicon
+│   ├── meta.png                    # OG image
+│   └── Resume-Richard-Pastenes.pdf # Downloadable resume
+├── svelte.config.js                # SvelteKit config (Netlify adapter)
+├── vite.config.ts                  # Vite config
+├── tailwind.config.js              # Custom theme (colors, fonts, spacing)
+├── postcss.config.js               # PostCSS plugins
+├── tsconfig.json                   # TypeScript config (extends SvelteKit)
+├── netlify.toml                    # Netlify build config
+└── .nvmrc                          # Node version (20.11.0)
+```
+
+## Key Configuration Details
+
+### Tailwind Custom Theme
+- **Fonts:** poppins, pt-serif, fira-code, montserrat, opensans
+- **Colors:** green (#64ffda), blue (#3CB1E4), dark (#222222), darker (#141414), light (#fafafa), muted (#a8b2d1)
+- **Spacing:** nav (11.5rem), 480px, 600px
+
+### Environment Variables (in .env.development / .env.production)
+- `SANITY_PROJECT_ID` — Sanity project ID
+- `SANITY_DATASET` — Sanity dataset name
+- `SANITY_TOKEN` — Sanity API token
+- Accessed via `$env/static/private` in SvelteKit
+
+### Data Fetching
+- All data fetched server-side via **GROQ queries** in `+page.server.ts` load functions
+- Sanity client configured in `src/lib/sanity.ts`
+- Block content rendered with @portabletext/svelte
+- Images served via @sanity/image-url builder
+
+### Interactive Effects
+- **Vanta.js Birds** animation on hero section (requires Three.js)
+- Three.js loaded via script tag in `app.html`
+- Hover transitions on project images (brightness, grayscale)
+- Blink cursor animation on error page
+
+### Font Libraries (@fontsource)
+- @fontsource/poppins (primary headings, weight 700)
+- @fontsource/pt-serif (body/accent)
+- @fontsource/fira-code (code blocks)
+- @fontsource/montserrat (resume)
+- @fontsource/open-sans (resume)

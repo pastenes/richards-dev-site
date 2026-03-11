@@ -1,0 +1,132 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@media print {
+  html,
+  body {
+    font-size: 71%;
+    background-color: white !important;
+  }
+  * {
+    -webkit-print-color-adjust: exact !important;
+    color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  .pdf-button {
+    display: none;
+  }
+  @page {
+    size: 210mm 297mm;
+    margin-top: 0;
+    margin-bottom: -20px;
+    &:footer {
+      display: none;
+    }
+  }
+}
+
+body {
+  @apply h-screen w-screen bg-darker font-pt-serif;
+}
+section {
+  @apply px-14 py-32 lg:px-32;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply font-poppins font-bold;
+}
+h1 {
+  @apply mb-4 text-3xl;
+}
+p {
+  @apply mb-4;
+}
+.blink {
+  animation: blinker 1s step-end infinite;
+}
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Resume only styles */
+.rh1 {
+  @apply font-montserrat text-lg font-thin uppercase tracking-widest print:text-5xl md:text-5xl;
+}
+.rh2 {
+  @apply font-montserrat text-xs font-thin uppercase;
+}
+.rh3 {
+  @apply relative my-4 inline-block font-mono text-lg font-bold lowercase text-blue;
+  &:before {
+    content: "";
+    position: absolute;
+    width: 30px;
+    height: 1px;
+    bottom: 0;
+    left: 0;
+    border-bottom: 1px solid black;
+  }
+}
+.rh4 {
+  @apply tracking-wider;
+}
+.rh5 {
+  @apply font-opensans text-xs font-light;
+}
+.rdate {
+  @apply text-xs text-neutral;
+}
+.rexperience {
+  @apply relative m-0 list-none p-0;
+  &:before {
+    @apply bg-muted;
+    content: "";
+    display: inline-block;
+    width: 1px;
+    position: absolute;
+    left: 3px;
+    top: 5px;
+    height: calc(100% - 10px);
+  }
+  > li {
+    position: relative;
+    padding-left: 15px;
+    margin-bottom: 15px;
+    &:before {
+      @apply bg-dark;
+      content: "";
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      position: absolute;
+      left: 0;
+      top: 5px;
+      border-radius: 10px;
+    }
+  }
+  ul {
+    @apply my-2;
+    li {
+      position: relative;
+      padding-left: 10px;
+      &:before {
+        @apply bg-muted;
+        content: "";
+        display: inline-block;
+        width: 4px;
+        height: 4px;
+        position: absolute;
+        left: 0;
+        top: 7px;
+        border-radius: 10px;
+      }
+    }
+  }
+}

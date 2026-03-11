@@ -1,4 +1,7 @@
 node_modules/
+.svelte-kit/
+.netlify/
+build/
 .cache/
 public
 .DS_Store

@@ -1,5 +1,6 @@
-module.exports = {
-  content: ['./src/**/*.{js,jsx,ts,tsx}'],
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ['./src/**/*.{html,js,svelte,ts}'],
   theme: {
     extend: {
       fontFamily: {
@@ -29,6 +30,7 @@ module.exports = {
       white: '#ffffff',
       gray: '#EBEBEB',
       blue: '#3CB1E4',
+      transparent: 'transparent',
     },
     container: {
       center: true,
