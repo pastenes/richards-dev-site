@@ -1,55 +1,24 @@
 {
   "name": "devlanding",
   "private": true,
-  "version": "1.0.0",
-  "description": "",
-  "main": "package.json",
-  "author": "Richard Pastenes <richard@pastenes.com>",
-  "license": "UNLICENSED",
+  "version": "2.0.0",
+  "type": "module",
   "scripts": {
-    "start": "sanity start",
-    "build": "sanity build"
+    "dev": "sanity dev",
+    "build": "sanity build",
+    "deploy": "sanity deploy"
   },
-  "keywords": [
-    "sanity"
-  ],
   "dependencies": {
-    "@sanity/base": "^2.36.6",
-    "@sanity/core": "^2.36.6",
-    "@sanity/default-layout": "^2.36.6",
-    "@sanity/default-login": "^2.36.6",
-    "@sanity/desk-tool": "^2.36.6",
-    "@sanity/orderable-document-list": "^0.0.10",
-    "@sanity/vision": "^2.36.6",
-    "prop-types": "^15.7",
-    "react": "^17.0",
-    "react-dom": "^17.0",
-    "react-icons": "^4.6.0",
-    "sanity-plugin-autocomplete-tags": "^1.0.2",
-    "styled-components": "^5.2.0"
-  },
-  "overrides": {
-    "sha.js": "2.4.12"
+    "@sanity/orderable-document-list": "^1.4.0",
+    "@sanity/vision": "^3.0.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-icons": "^5.0.0",
+    "sanity": "^5.0.0",
+    "sanity-plugin-tags-v4": "^1.0.10",
+    "styled-components": "^6.1.15"
   },
   "devDependencies": {
-    "@babel/core": "^7.16.0",
-    "@babel/eslint-parser": "^7.16.3",
-    "@babel/preset-react": "^7.16.0",
-    "@types/node": "^16.11.12",
-    "@typescript-eslint/eslint-plugin": "^5.6.0",
-    "@typescript-eslint/parser": "^5.6.0",
-    "eslint": "^8.4.1",
-    "eslint-config-airbnb": "^19.0.2",
-    "eslint-config-airbnb-typescript": "^16.1.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-config-wesbos": "3.0.2",
-    "eslint-plugin-html": "^6.2.0",
-    "eslint-plugin-import": "^2.25.3",
-    "eslint-plugin-jsx-a11y": "^6.5.1",
-    "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-react": "^7.27.1",
-    "eslint-plugin-react-hooks": "^4.3.0",
-    "prettier": "^2.5.1",
-    "typescript": "^4.5.2"
+    "typescript": "^5.5.0"
   }
 }

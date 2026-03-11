@@ -6,7 +6,7 @@ alwaysApply: true
 
 # Richard's Dev Landing - Migration Roadmap & Progress
 
-## Phase 1: Migrate from Gatsby to SvelteKit `STATUS: IN PROGRESS`
+## Phase 1: Migrate from Gatsby to SvelteKit `STATUS: COMPLETE`
 
 Replace Gatsby 5 + React 18 with SvelteKit 2 + Svelte 5. This is the primary architectural migration.
 
@@ -36,7 +36,7 @@ Replace Gatsby 5 + React 18 with SvelteKit 2 + Svelte 5. This is the primary arc
 - [x] Remove all Gatsby files, React deps, and Storybook
 - [x] Update .nvmrc to Node 20 LTS
 - [x] Test full build (vite build succeeds)
-- [ ] Test with live Sanity data (npm run dev)
+- [x] Test with live Sanity data (npm run dev)
 - [ ] Deploy to Netlify and verify live site
 
 ### Key Decisions
@@ -47,29 +47,36 @@ Replace Gatsby 5 + React 18 with SvelteKit 2 + Svelte 5. This is the primary arc
 
 ---
 
-## Phase 2: Upgrade Sanity CMS v2 → v3 `STATUS: TODO`
+## Phase 2: Upgrade Sanity CMS v2 → v5 `STATUS: COMPLETE`
 
-Sanity v2 is end-of-life. Migrate to v3 for continued support and modern features.
+Sanity v2 was end-of-life. Migrated directly to v5 (React 19, modern plugin API).
 
 ### Goals
-- Migrate Sanity Studio from v2 (sanity.json) to v3 (sanity.config.js)
-- Update all Sanity packages to v3
-- Update frontend Sanity client integration
-- Optionally embed Sanity Studio in SvelteKit app
+- Migrate Sanity Studio from v2 (sanity.json) to v5 (sanity.config.ts)
+- Update all Sanity packages to v5
+- Migrate schemas to TypeScript with defineType/defineField
+- Update plugins for v5 compatibility
 
 ### Tasks
-- [ ] Create `sanity.config.ts` and `sanity.cli.ts` (replace sanity.json)
-- [ ] Migrate all schemas to v3 format
-- [ ] Update @sanity/client to latest v3
-- [ ] Update desk structure and plugins
-- [ ] Replace deprecated packages (@sanity/base, @sanity/core, etc.)
-- [ ] Test content fetching end-to-end
-- [ ] Consider Visual Editing with @sanity/sveltekit
-- [ ] Verify no data loss in Content Lake
+- [x] Create `sanity.config.ts` with defineConfig, structureTool, visionTool, custom desk structure
+- [x] Create `sanity.cli.ts` with deployment appId
+- [x] Replace `cms/package.json` — all v2 deps replaced with sanity@^5, react@^19.2, styled-components@^6
+- [x] Update `cms/tsconfig.json` for v5 (bundler moduleResolution, react-jsx)
+- [x] Migrate all 10 schema files from .js to .ts with defineType/defineField/defineArrayMember
+- [x] Remove old v2 files (sanity.json, schema.js, tags.js, desk/index.js, .eslintrc, config/)
+- [x] Replace sanity-plugin-autocomplete-tags (v2) with sanity-plugin-tags-v4 (React 19 compatible fork)
+- [x] Update @sanity/orderable-document-list to v1.4+ with context parameter
+- [x] Add .sanity to cms/.gitignore (auto-generated runtime files)
+- [x] Deploy studio with `npx sanity deploy`
+- [x] Fix missing _key warnings on existing tag data (one-time Content Lake fix via studio UI)
+- [x] Verify all document types, tags, ordering, and vision tool work correctly
 
 ### Key Decisions
-- Content Lake data is safe across studio versions
-- May embed studio in SvelteKit app or keep separate
+- Went directly from v2 to v5 (skipping v3/v4) since all are compatible
+- Used sanity-plugin-tags-v4 fork (original sanity-plugin-tags bundles React 18 internals, crashes with React 19)
+- Desk structure callback updated to pass `context` for orderable-document-list v3+ API
+- Content Lake data unchanged — only studio configuration migrated
+- Used --legacy-peer-deps during install (no longer needed after switching to tags-v4 fork)
 
 ---
 

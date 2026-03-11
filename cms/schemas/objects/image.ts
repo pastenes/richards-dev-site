@@ -1,13 +1,14 @@
-export default {
+import {defineType, defineField} from 'sanity'
+
+export default defineType({
   title: 'Image',
   name: 'imageFile',
   type: 'image',
   fields: [
-    {
-      // Editing this field will be hidden behind an "Edit"-button
+    defineField({
       name: 'alt',
       type: 'string',
       title: 'Alt Text',
-    },
+    }),
   ],
-};
+})

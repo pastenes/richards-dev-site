@@ -1,4 +1,6 @@
-export default {
+import {defineType, defineField} from 'sanity'
+
+export default defineType({
   name: 'resume',
   title: 'Resume',
   type: 'document',
@@ -21,31 +23,28 @@ export default {
       title: 'Skills',
     },
   ],
-  fieldsets: [
-    { name: 'contact', title: 'Contact Info' }
-  ],
+  fieldsets: [{name: 'contact', title: 'Contact Info'}],
   fields: [
-    // Header section
-    {
+    defineField({
       name: 'name',
       title: 'Name',
       type: 'string',
       group: 'header',
-    },
-    {
+    }),
+    defineField({
       name: 'jobTitle',
       title: 'Job Title',
       type: 'string',
       group: 'header',
-    },
-    {
+    }),
+    defineField({
       name: 'phone',
       title: 'Phone',
       type: 'string',
       fieldset: 'contact',
       group: 'header',
-    },
-    {
+    }),
+    defineField({
       name: 'email',
       title: 'Email',
       type: 'string',
@@ -55,53 +54,50 @@ export default {
         Rule.regex(
           /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
           {
-            name: "email", // Error message is "Does not match email-pattern"
-            invert: false, // Boolean to allow any value that does NOT match pattern
+            name: 'email',
+            invert: false,
           }
         ),
-    },
-    {
+    }),
+    defineField({
       name: 'portfolioUrl',
       title: 'Portfolio URL',
       type: 'url',
       fieldset: 'contact',
       group: 'header',
-    },
-    // Summary section
-    {
+    }),
+    defineField({
       name: 'summary',
       title: 'Summary',
       type: 'text',
       group: 'summary',
-    },
-    {
+    }),
+    defineField({
       name: 'interests',
       title: 'Interests',
       type: 'array',
-      of: [{ type: 'string' }],
+      of: [{type: 'string'}],
       group: 'summary',
-    },
-    {
+    }),
+    defineField({
       name: 'education',
       title: 'Education',
       type: 'array',
-      of: [{ type: 'education' }],
+      of: [{type: 'education'}],
       group: 'summary',
-    },
-    // Experience section
-    {
+    }),
+    defineField({
       name: 'experience',
       title: 'Experience',
       type: 'array',
-      of: [{ type: 'experience' }],
+      of: [{type: 'experience'}],
       group: 'experience',
-    },
-    // Skills section
-    {
+    }),
+    defineField({
       name: 'skills',
       title: 'Skills',
       type: 'tags',
       group: 'skills',
-    }
+    }),
   ],
-};
+})
