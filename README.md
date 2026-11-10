@@ -57,7 +57,7 @@
 │   │   └── sanity.ts      # Sanity client & image URL builder
 │   ├── app.html           # HTML shell
 │   └── app.css            # Global styles & Tailwind directives
-├── cms/
+├── studio/
 │   ├── sanity.config.ts   # Sanity Studio v5 configuration
 │   ├── sanity.cli.ts      # CLI config with deployment settings
 │   └── schemas/           # Document & object type definitions
@@ -106,10 +106,10 @@ The site will be available at [http://localhost:5173](http://localhost:5173).
 
 ## 📦 Sanity Studio
 
-The CMS lives in the `cms/` directory and is deployed separately.
+The CMS lives in the `studio/` directory and is deployed separately.
 
 ```bash
-cd cms
+cd studio
 npm install
 npm run dev
 ```

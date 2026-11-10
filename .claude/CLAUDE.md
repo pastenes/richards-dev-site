@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Richard Pastenes' personal portfolio and resume site (https://richard.pastenes.dev). It is a SvelteKit app that renders on the server, pulls its content from a Sanity CMS, and is hosted on Netlify. The repo holds two separate npm projects: the site at the root and the Sanity Studio in `cms/`.
+Richard Pastenes' personal portfolio and resume site (https://richard.pastenes.dev). It is a SvelteKit app that renders on the server, pulls its content from a Sanity CMS, and is hosted on Netlify. The repo holds two separate npm projects: the site at the root and the Sanity Studio in `studio/`.
 
 ## Rules
 
@@ -16,12 +16,12 @@ npm run build     # vite build (adapter-netlify output in build/)
 npm run preview   # preview the production build
 ```
 
-Studio (`cms/`, has its own `package.json` and `node_modules`):
+Studio (`studio/`, has its own `package.json` and `node_modules`):
 
 ```bash
-cd cms && npm run dev      # sanity dev → http://localhost:3333
-cd cms && npm run build    # sanity build
-cd cms && npm run deploy   # sanity deploy (hosted studio, appId in sanity.cli.ts)
+cd studio && npm run dev      # sanity dev → http://localhost:3333
+cd studio && npm run build    # sanity build
+cd studio && npm run deploy   # sanity deploy (hosted studio, appId in sanity.cli.ts)
 ```
 
 There are **no lint, format, typecheck, or test scripts**. To check your work, run `npm run build`. For type checking, `npx svelte-check` also works, but it isn't installed as a dependency.
@@ -44,12 +44,12 @@ There are **no lint, format, typecheck, or test scripts**. To check your work, r
 | @sanity/image-url | ^1 | — |
 | @portabletext/svelte | ^3 | 3.0 |
 | vanta | ^0.5.24 | 0.5.24 |
-| **cms:** sanity | ^5 | 5.14 |
-| **cms:** react / react-dom | ^19.2 | 19.2 |
-| **cms:** @sanity/vision | ^3 | 3.99 (behind the v5 studio, may be worth bumping) |
-| **cms:** @sanity/orderable-document-list | ^1.4 | 1.5 |
-| **cms:** sanity-plugin-tags-v4 | ^1.0.10 | 1.0.10 |
-| **cms:** styled-components | ^6.1 | — |
+| **studio:** sanity | ^5 | 5.14 |
+| **studio:** react / react-dom | ^19.2 | 19.2 |
+| **studio:** @sanity/vision | ^3 | 3.99 (behind the v5 studio, may be worth bumping) |
+| **studio:** @sanity/orderable-document-list | ^1.4 | 1.5 |
+| **studio:** sanity-plugin-tags-v4 | ^1.0.10 | 1.0.10 |
+| **studio:** styled-components | ^6.1 | — |
 
 Fonts come from `@fontsource/*`. Import only the weights you use. A font that's used but not imported silently falls back to a system font.
 
@@ -81,7 +81,7 @@ src/
     resume/+page.svelte    # printable resume (print styles in app.css)
     +error.svelte          # 404 page
 static/                    # three.min.js, icon.png, meta.png (OG), Resume-Richard-Pastenes.pdf
-cms/
+studio/
   sanity.config.ts         # studio config: custom structure, vision, tags plugin
   sanity.cli.ts            # projectId lpvkp4xx, dataset production, deployment appId
   schemas/documents/       # hero, about, project, resume
@@ -110,7 +110,7 @@ cms/
 
 - **Svelte 5 runes only**: `$props()`, `$derived()`, `$state()`, `{@render children()}`. Don't use `export let` or slots.
 - Use TypeScript in `<script lang="ts">`. Prop types are written inline (there's no shared types module). `tsconfig` is strict and extends `.svelte-kit/tsconfig.json`.
-- Formatting: tabs, single quotes, no trailing commas in `src/`. The `cms/` code uses 2 spaces, no semicolons, and `{a}` brace style. Match whichever file you're in.
+- Formatting: tabs, single quotes, no trailing commas in `src/`. The `studio/` code uses 2 spaces, no semicolons, and `{a}` brace style. Match whichever file you're in.
 - Styling is Tailwind utility classes in markup. Shared or global styles go in `src/app.css`, using `@apply` and PostCSS nesting (`tailwindcss/nesting`).
 - External links use `target="_blank" rel="noreferrer"`, and icon-only links get an `aria-label`. Icons are inline SVGs, with no icon library on the site.
 
@@ -123,9 +123,9 @@ cms/
 - The Footer social links are **hardcoded**. The Header social links come from the CMS (`hero.links`).
 - `.claude/progress.md` tracks the roadmap and is current. Phases 1 (Gatsby → SvelteKit) and 2 (Sanity v2 → v5) are done. Phase 3 (Tailwind v3 → v4) and Phase 4 (redesign) are still TODO.
 - The README logo path (`src/images/icon.png`) points to a file that doesn't exist. The icon is at `static/icon.png`.
-- Generated or ignored directories: `.svelte-kit/`, `build/`, `.netlify/`, `cms/.sanity/`, `cms/dist/`. Don't edit them.
+- Generated or ignored directories: `.svelte-kit/`, `build/`, `.netlify/`, `studio/.sanity/`, `studio/dist/`. Don't edit them.
 
 ## Deployment
 
 - **Site:** Netlify builds on every push to `main` with `npm ci && npm run build` and publishes `build/`. It renders on the server through Netlify functions (adapter-netlify). The Sanity env vars are set in the Netlify dashboard.
-- **Studio:** deployed separately to Sanity hosting with `cd cms && npm run deploy`.
+- **Studio:** deployed separately to Sanity hosting with `cd studio && npm run deploy`.
