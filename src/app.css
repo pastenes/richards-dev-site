@@ -1,87 +1,60 @@
 @import 'tailwindcss';
 
-/* Centered container: 640px from sm, 1000px from lg (the v3 container.screens config). */
-@utility container {
-  margin-inline: auto;
-  @media (width >= 640px) {
-    max-width: 640px;
-  }
-  @media (width >= 1000px) {
-    max-width: 1000px;
-  }
-}
-
+/*
+ * Design tokens. Every theme value the site uses is defined here; components use plain
+ * Tailwind classes built from these tokens (no custom utility classes, no arbitrary values).
+ */
 @theme {
+  /* Colors, named by role. The default palette is cleared, so these are the only colors that exist. */
   --color-*: initial;
+  --color-background: #141414; /* page background */
+  --color-surface: #222222; /* nav, project panels, resume timeline dots */
+  --color-foreground: #fafafa; /* headings and borders on dark */
+  --color-muted: #a8b2d1; /* body copy on dark, resume timeline lines */
+  --color-accent: #64ffda; /* links, tags, highlights */
+  --color-subtle: #c4c4c4; /* hero background, de-emphasized text on white */
+  --color-resume-band: #ebebeb; /* resume header and footer */
+  --color-resume-accent: #3cb1e4; /* resume section titles */
   --color-black: #000000;
-  --color-neutral: #c4c4c4;
-  --color-dark: #222222;
-  --color-darker: #141414;
-  --color-light: #fafafa;
-  --color-muted: #a8b2d1;
-  --color-green: #64ffda;
   --color-white: #ffffff;
-  --color-gray: #ebebeb;
-  --color-blue: #3cb1e4;
-  --color-transparent: transparent;
 
-  --font-poppins: Poppins, sans-serif;
-  --font-pt-serif: PT Serif, serif;
-  --font-fira-code: Fira Code, monospace;
-  --font-montserrat: Montserrat, sans-serif;
-  --font-opensans: Open Sans, sans-serif;
+  /* Fonts, named by role. Weights are imported from @fontsource in the routes. */
+  --font-heading: Poppins, sans-serif;
+  --font-body: PT Serif, serif;
+  --font-mono: Fira Code, monospace; /* all monospace text, including code and pre */
+  --font-resume-heading: Montserrat, sans-serif;
+  --font-resume-body: Open Sans, sans-serif;
 
   --text-tiny: 0.775rem;
 
-  --spacing-480: 480px;
-  --spacing-600: 600px;
+  /* Left offset of the floating nav (jump links, resume PDF button) on large screens. */
   --spacing-nav: 11.5rem;
 
-  /* Replaced by the custom drop-shadow-lg utility below. */
-  --drop-shadow-lg: initial;
-}
+  /* Content widths: `sm:max-w-narrow lg:max-w-wide` steps the content column with the viewport. */
+  --container-narrow: 640px;
+  --container-wide: 1000px;
 
-/* v3's two-layer drop-shadow-lg (v4's default is a single, darker shadow). */
-@utility drop-shadow-lg {
-  filter: drop-shadow(0 10px 8px rgb(0 0 0 / 0.04)) drop-shadow(0 4px 3px rgb(0 0 0 / 0.1));
-}
+  --animate-blink: blink 1s step-end infinite;
 
-@media print {
-  html,
-  body {
-    font-size: 71%;
-    background-color: white !important;
-  }
-  * {
-    -webkit-print-color-adjust: exact !important;
-    color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-  .pdf-button {
-    display: none;
-  }
-  @page {
-    size: 210mm 297mm;
-    margin-top: 0;
-    margin-bottom: -20px;
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
   }
 }
 
-/* Element defaults live in the base layer so utility classes on the same element win (as they did in v3). */
+/*
+ * Element defaults. They live in the base layer so utility classes on the same element win.
+ * They also style headings and paragraphs rendered from Sanity rich text, which can't take classes.
+ */
 @layer base {
-  body {
-    @apply h-screen w-screen bg-darker font-pt-serif;
-  }
-  section {
-    @apply px-14 py-32 lg:px-32;
-  }
   h1,
   h2,
   h3,
   h4,
   h5,
   h6 {
-    @apply font-poppins font-bold;
+    @apply font-heading font-bold;
   }
   h1 {
     @apply mb-4 text-3xl;
@@ -89,89 +62,22 @@
   p {
     @apply mb-4;
   }
-}
 
-.blink {
-  animation: blinker 1s step-end infinite;
-}
-@keyframes blinker {
-  50% {
-    opacity: 0;
-  }
-}
-
-/* Resume only styles */
-.rh1 {
-  @apply font-montserrat text-lg font-thin uppercase tracking-widest print:text-5xl md:text-5xl;
-}
-.rh2 {
-  @apply font-montserrat text-xs font-thin uppercase;
-}
-.rh3 {
-  @apply relative my-4 inline-block font-mono text-lg font-bold lowercase text-blue;
-  &:before {
-    content: "";
-    position: absolute;
-    width: 30px;
-    height: 1px;
-    bottom: 0;
-    left: 0;
-    border-bottom: 1px solid black;
-  }
-}
-.rh4 {
-  @apply tracking-wider;
-}
-.rh5 {
-  @apply font-opensans text-xs font-light;
-}
-.rdate {
-  @apply text-xs text-neutral;
-}
-.rexperience {
-  @apply relative m-0 list-none p-0;
-  &:before {
-    @apply bg-muted;
-    content: "";
-    display: inline-block;
-    width: 1px;
-    position: absolute;
-    left: 3px;
-    top: 5px;
-    height: calc(100% - 10px);
-  }
-  > li {
-    position: relative;
-    padding-left: 15px;
-    margin-bottom: 15px;
-    &:before {
-      @apply bg-dark;
-      content: "";
-      display: inline-block;
-      width: 8px;
-      height: 8px;
-      position: absolute;
-      left: 0;
-      top: 5px;
-      border-radius: 10px;
+  /* Resume printing: scale everything down to fit A4 and keep background colors. */
+  @media print {
+    html,
+    body {
+      font-size: 71%;
+    }
+    * {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
     }
   }
-  ul {
-    @apply my-2;
-    li {
-      position: relative;
-      padding-left: 10px;
-      &:before {
-        @apply bg-muted;
-        content: "";
-        display: inline-block;
-        width: 4px;
-        height: 4px;
-        position: absolute;
-        left: 0;
-        top: 7px;
-        border-radius: 10px;
-      }
-    }
-  }
+}
+
+@page {
+  size: 210mm 297mm;
+  margin-top: 0;
+  margin-bottom: -20px;
 }

@@ -55,31 +55,31 @@ Fonts come from `@fontsource/*`. Import only the weights you use. A font that's 
 
 | Font | Tailwind class | Role | Imported in |
 |---|---|---|---|
-| Poppins 700 | `font-poppins` | All headings (global `h1`–`h6` in app.css) | `+layout.svelte` |
-| PT Serif 400 | `font-pt-serif` | Body text (global `body`) | `+layout.svelte` |
-| Fira Code 400 | `font-fira-code` | Code-style UI text: hero "Hi, I'm", jump links, tech tags, resume PDF button | `+layout.svelte` |
-| Montserrat 100 | `font-montserrat` | Resume headings (`.rh1`, `.rh2`, `font-thin`) | `resume/+page.svelte` |
-| Open Sans 300 | `font-opensans` | Resume body (`font-light`) | `resume/+page.svelte` |
+| Poppins 700 | `font-heading` | All headings (base-layer `h1`–`h6` rule in app.css) | `+layout.svelte` |
+| PT Serif 400 | `font-body` | Body text (`<body>` class in `app.html`) | `+layout.svelte` |
+| Fira Code 400 (+600, 700 on the resume) | `font-mono` | All monospace text: hero "Hi, I'm", jump links, tech tags, footer, 404 link, resume PDF button and section titles | 400 in `+layout.svelte`; 600/700 in `resume/+page.svelte` |
+| Montserrat 100 | `font-resume-heading` | Resume name and job title (`font-thin`) | `resume/+page.svelte` |
+| Open Sans 300 | `font-resume-body` | Resume body (`font-light`) | `resume/+page.svelte` |
 
-`font-mono` is Tailwind's default system mono stack, not Fira Code.
+Font tokens are named by role, not typeface. Monospace text always uses Fira Code: `--font-mono` overrides Tailwind's system mono stack, so `font-mono` (and `code`/`pre`) render in Fira Code. Don't add a separate code-font token.
 
 ## Architecture
 
 ```
 src/
-  app.html                 # HTML shell
-  app.css                  # Tailwind import + @theme config, base-layer element styles, print + resume styles
+  app.html                 # HTML shell (body classes: page background, body font, print background)
+  app.css                  # Tailwind import, @theme design tokens, base-layer element + print styles
   env.ts                   # defineEnvVars: declares the Sanity env vars
   lib/
     sanity.ts              # Sanity client + urlFor() image builder (SERVER ONLY)
     sections/              # Header (hero), About, Work
-    components/            # BlockContent (PortableText), Footer, Jumplinks, TechTags
+    components/            # BlockContent (PortableText), Footer, Jumplinks, TechTags, ResumeHeading
   routes/
     +layout.svelte         # imports app.css + base fonts
     +page.server.ts        # GROQ: hero, about, projects (Promise.all)
     +page.svelte           # landing page + SEO/OG meta in <svelte:head>
     resume/+page.server.ts # GROQ: resume singleton; formats experience dates
-    resume/+page.svelte    # printable resume (print styles in app.css)
+    resume/+page.svelte    # printable resume (print: variants in markup, page scaling in app.css)
     +error.svelte          # 404 page
 vite.config.ts             # tailwindcss() plugin + sveltekit({...}) with adapter and preprocess (no svelte.config.js)
 static/                    # icon.png, meta.png (OG), Resume-Richard-Pastenes.pdf
@@ -114,17 +114,21 @@ studio/
 - **SvelteKit 3 specifics:** import from `#lib/...`, not `$lib` (it was removed; the mapping is in `package.json` `imports`). Use the `.ts` extension when importing a TS module through `#lib` (e.g. `#lib/sanity.ts`), or TypeScript can't resolve it. There's no `svelte.config.js`; Kit options go into `sveltekit({...})` in `vite.config.ts`.
 - Use TypeScript in `<script lang="ts">`. Prop types are written inline (there's no shared types module). `tsconfig` is strict and extends `$app/tsconfig` (a package Kit installs).
 - Formatting: tabs, single quotes, no trailing commas in `src/`. The `studio/` code uses 2 spaces, no semicolons, and `{a}` brace style. Match whichever file you're in.
-- Styling is Tailwind utility classes in markup. Shared or global styles go in `src/app.css`, using `@apply` and native CSS nesting. Theme tokens (colors, fonts, spacing) live in the `@theme` block in `app.css`. Custom utilities use `@utility`.
+- Styling is Tailwind utility classes in markup, built only from theme tokens. The `@theme` block in `app.css` is the Tailwind config (there's no `tailwind.config.js`), and it's the only place to add colors, fonts, sizes, widths, or animations.
+  - No custom classes or `@utility` rules, and no arbitrary values (`w-[30px]`, `top-[5px]`). v4's spacing scale accepts any multiple of 0.25 (`w-7.5` is 30px, `top-1.25` is 5px, `h-150` is 600px), so most one-off sizes need neither. If a value repeats or carries meaning, add a token.
+  - To reuse a group of classes, make a component (like `ResumeHeading.svelte`) rather than an `@apply` class.
+  - `app.css` only holds tokens, base-layer element defaults (`h1`–`h6`, `p`, which also style Sanity rich text that can't take classes), and print rules that have no utility (page scaling, `print-color-adjust`, `@page`).
 - External links use `target="_blank" rel="noreferrer"`, and icon-only links get an `aria-label`. Icons are inline SVGs, with no icon library on the site.
 
 ## Gotchas
 
-- **`--color-*: initial` in `@theme` replaces the default palette instead of extending it.** The only colors are `black, neutral, dark, darker, light, muted, green, white, gray, blue, transparent`. Classes like `text-red-500` or `bg-slate-800` won't exist. Fonts, `text-tiny`, and spacing (`480`, `600`, `nav`) extend the defaults. `container` is a custom `@utility`: centered, 640px from 640px wide, 1000px from 1000px wide.
-- **Cascade layers:** Tailwind 4 puts utilities in `@layer utilities`, and CSS outside a layer beats every layer. Global element rules (`body`, `section`, `h1`–`h6`, `p`) must stay inside `@layer base`, or they'll override utility classes like `mb-0` or `text-5xl` on those elements. The resume `.rh*` classes are deliberately outside a layer, so they win over utilities, as they did in v3.
-- `drop-shadow-lg` is a custom `@utility` that keeps v3's two-layer shadow. v4's default was removed with `--drop-shadow-lg: initial`.
+- **`--color-*: initial` in `@theme` replaces the default palette instead of extending it.** Colors are named by role. The only ones are `background` (page), `surface` (nav, panels), `foreground` (headings on dark), `muted` (body copy on dark), `accent` (green highlight), `subtle` (hero background, de-emphasized text on white), `resume-band`, `resume-accent`, `black`, and `white` (`transparent` and `current` are built in). Pick a token by role, not by how it looks. Classes like `text-red-500` or `bg-slate-800` won't exist. Everything else extends the defaults: fonts, `text-tiny`, `spacing-nav`, `animate-blink`, and the content widths `max-w-narrow` (640px) and `max-w-wide` (1000px).
+- There's no `container` class. Content columns use `mx-auto sm:max-w-narrow lg:max-w-wide` (Work, resume) or `mx-auto max-w-4xl` (About, 404). Section padding (`px-14 py-32 lg:px-32`) is written on each `<section>`; there's no global `section` rule.
+- **Cascade layers:** Tailwind 4 puts utilities in `@layer utilities`, and CSS outside a layer beats every layer. Element rules (`h1`–`h6`, `p`) must stay inside `@layer base`, or they'll override utility classes like `mb-0` or `text-5xl` on those elements.
+- Don't define a multi-layer `--drop-shadow-*` token (`a, b`). Tailwind 4.3 wraps it in a single `drop-shadow()`, which is invalid, so the filter silently becomes `none`. `drop-shadow-lg` uses v4's default.
 - There's no hero animation right now. Vanta and Three.js were removed, and a replacement is part of Phase 4 (redesign).
 - **The resume PDF is a static file** (`static/Resume-Richard-Pastenes.pdf`). It isn't generated from CMS data, so it has to be updated by hand when the resume content changes.
-- The resume print styles live in `app.css` under `@media print` (A4 page, `.pdf-button` hidden) plus the `.rh1`–`.rh5`, `.rdate`, and `.rexperience` classes. Check print preview when you edit the resume page.
+- Resume print: `app.css` scales the root font to 71% in print and sets the A4 `@page`. Everything else is `print:` variants in the markup (`print:hidden` on the PDF button, `print:grid` layout, `print:bg-white` on body). Since sizes are rem-based, the timeline dots and rules scale down with the text. Check print preview when you edit the resume page.
 - The Footer social links are **hardcoded**. The Header social links come from the CMS (`hero.links`).
 - `.claude/progress.md` tracks the roadmap and is current. Phases 1 (Gatsby → SvelteKit), 2 (Sanity v2 → v5), and 3 (Tailwind v3 → v4) are done. Phase 4 (redesign) is TODO.
 - The README logo path (`src/images/icon.png`) points to a file that doesn't exist. The icon is at `static/icon.png`.

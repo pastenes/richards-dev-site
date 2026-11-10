@@ -94,13 +94,19 @@ Tailwind v4 is a full rewrite with a new configuration approach and significant 
 
 ### Key Decisions
 - Global element styles moved into `@layer base` so utilities still override them (v4 cascade layers)
-- Kept v3's `drop-shadow-lg` value as a custom `@utility`
+- `drop-shadow-lg` uses v4's default single shadow (a multi-layer token generates invalid CSS in 4.3)
 - Removed the border-color compatibility block the upgrade tool added (v3 already resolved to `currentColor` here)
 - `duration-250` now takes effect (v3 had no 250 step and silently used 150ms)
 
 ### Also done alongside Phase 3
 - Upgraded to SvelteKit 3, Vite 8, TypeScript 6, Sanity 6, and Node 26
 - Removed Vanta.js and the vendored `static/three.min.js` (r135). The hero is a static grey background until the Phase 4 redesign.
+- Design-system cleanup:
+  - All styling is plain Tailwind classes built from `@theme` tokens. Removed every custom class and `@utility` (`container`, `drop-shadow-lg`, `.blink`, `.pdf-button`, `.rh1`–`.rh5`, `.rdate`, `.rexperience`), and there are no arbitrary values.
+  - Fonts are named by role (`font-heading`, `font-body`, `font-mono`, `font-resume-heading`, `font-resume-body`). `font-mono` is Fira Code everywhere; the footer, 404 link and resume used to fall back to the system mono font.
+  - Colors are named by role: `background`, `surface`, `foreground`, `muted`, `accent`, `subtle`, `resume-band`, `resume-accent` (replacing `darker`, `dark`, `light`, `green`, `neutral`, `gray`, `blue`).
+  - Removed the global `body`/`section` rules. Their classes now sit on `<body>` and on each section.
+  - Fixed the resume's white background stopping at the viewport height (`body` was `h-screen` and the wrapper was `h-full`).
 
 ---
 

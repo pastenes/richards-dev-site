@@ -7,16 +7,16 @@
 </svelte:head>
 
 <main>
-	<section class="relative">
-		<div class="container h-full max-w-4xl">
-			<h2 class="text-right text-3xl text-light">Nope</h2>
-			<p class="text-right text-light">You made this up, this page doesn't exist</p>
+	<section class="relative px-14 py-32 lg:px-32">
+		<div class="mx-auto h-full max-w-4xl">
+			<h2 class="text-right text-3xl text-foreground">Nope</h2>
+			<p class="text-right text-foreground">You made this up, this page doesn't exist</p>
 			<div class="flex h-full items-center">
 				<div
-					class="py-20 text-center font-mono text-6xl text-green hover:underline active:underline"
+					class="py-20 text-center font-mono text-6xl text-accent hover:underline active:underline"
 				>
 					<a href="/">
-						&#62; go back home <span class="blink">&#9612;</span>
+						&#62; go back home <span class="animate-blink">&#9612;</span>
 					</a>
 				</div>
 			</div>

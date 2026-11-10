@@ -1,8 +1,8 @@
 <nav
-	class="sticky -top-20 z-20 -mt-20 ml-14 inline-flex flex-col bg-dark p-3 text-center font-fira-code text-green lg:ml-nav"
+	class="sticky -top-20 z-20 -mt-20 ml-14 inline-flex flex-col bg-surface p-3 text-center font-mono text-accent lg:ml-nav"
 >
 	<a class="py-4" href="#about" aria-label="Scroll to about section">
-		<div class="bg-dark text-center text-5xl">
+		<div class="bg-surface text-center text-5xl">
 			<svg
 				class="ml-1 inline-block animate-bounce"
 				xmlns="http://www.w3.org/2000/svg"

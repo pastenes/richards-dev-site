@@ -9,10 +9,10 @@
 	let { hero = {} as HeroData }: { hero: HeroData } = $props();
 </script>
 
-<section class="relative flex h-screen w-screen flex-col bg-neutral py-0 lg:flex-row">
-	<div class="w-3/4 flex-auto px-0 pt-14 pb-14 lg:w-1/2 lg:self-center lg:p-14">
+<section class="relative flex h-screen flex-col bg-subtle px-14 lg:flex-row lg:px-32">
+	<div class="w-3/4 flex-auto py-14 lg:w-1/2 lg:self-center lg:p-14">
 		<div class="max-w-md">
-			<p class="mb-1 ml-1 font-fira-code">Hi, I'm</p>
+			<p class="mb-1 ml-1 font-mono">Hi, I'm</p>
 			<h1 class="mb-1 text-5xl">{hero.title ?? ''}</h1>
 			<p>{hero.intro?.[0]?.children?.[0]?.text ?? ''}</p>
 

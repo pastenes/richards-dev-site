@@ -7,10 +7,10 @@
 </script>
 
 <Jumplinks />
-<section id="about" class="relative">
-	<div class="container h-full max-w-4xl">
-		<h2 class="text-right text-3xl text-light">About Me</h2>
-		<p class="text-right text-light">And the tech I use</p>
+<section id="about" class="relative px-14 py-32 lg:px-32">
+	<div class="mx-auto h-full max-w-4xl">
+		<h2 class="text-right text-3xl text-foreground">About Me</h2>
+		<p class="text-right text-foreground">And the tech I use</p>
 		<div class="flex h-full flex-col items-center justify-between lg:flex-row">
 			<div class="basis-1/2 py-14 text-muted">
 				<BlockContent blocks={content} />
