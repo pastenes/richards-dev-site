@@ -1,4 +1,7 @@
 <script lang="ts">
+	import '@fontsource/montserrat/100.css';
+	import '@fontsource/open-sans/300.css';
+
 	let { data } = $props();
 	let resume = $derived(data.resume);
 </script>

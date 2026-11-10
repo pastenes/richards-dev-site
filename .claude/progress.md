@@ -1,9 +1,3 @@
----
-description: Project migration roadmap and progress tracking
-globs:
-alwaysApply: true
----
-
 # Richard's Dev Landing - Migration Roadmap & Progress
 
 ## Phase 1: Migrate from Gatsby to SvelteKit `STATUS: COMPLETE`
