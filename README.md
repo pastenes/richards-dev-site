@@ -35,12 +35,11 @@
 | Layer | Technology |
 |-------|-----------|
 | ⚙️ Framework | [SvelteKit 3](https://svelte.dev/docs/kit) + [Svelte 5](https://svelte.dev/) |
-| 🎨 Styling | [Tailwind CSS 3](https://tailwindcss.com/) |
+| 🎨 Styling | [Tailwind CSS 4](https://tailwindcss.com/) |
 | 📦 CMS | [Sanity v6](https://www.sanity.io/) (Studio + Content Lake) |
 | 🔍 Queries | [GROQ](https://www.sanity.io/docs/groq) via [@sanity/client](https://www.npmjs.com/package/@sanity/client) |
 | 📝 Rich Text | [@portabletext/svelte](https://github.com/portabletext/svelte-portabletext) |
 | 🖼️ Images | [@sanity/image-url](https://www.npmjs.com/package/@sanity/image-url) |
-| 🐦 Animation | [Vanta.js](https://github.com/tengbao/vanta) (Three.js) |
 | 🔤 Fonts | [Fontsource](https://fontsource.org/) (Fira Code, Montserrat, Open Sans, Poppins, PT Serif) |
 | 🚀 Hosting | [Netlify](https://www.netlify.com/) (SSR via adapter-netlify) |
 
@@ -61,7 +60,6 @@
 │   ├── sanity.config.ts   # Sanity Studio v6 configuration
 │   ├── sanity.cli.ts      # CLI config with deployment settings
 │   └── schemas/           # Document & object type definitions
-├── tailwind.config.js
 ├── vite.config.ts
 ├── netlify.toml
 └── package.json
@@ -73,7 +71,7 @@
 
 ### Prerequisites
 
-- Node.js v24+
+- Node.js v26+
 - npm
 
 ### 1. Clone & install

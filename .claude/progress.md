@@ -74,23 +74,33 @@ Sanity v2 was end-of-life. Migrated directly to v5 (React 19, modern plugin API)
 
 ---
 
-## Phase 3: Migrate Tailwind CSS v3 → v4 `STATUS: TODO`
+## Phase 3: Migrate Tailwind CSS v3 → v4 `STATUS: COMPLETE`
 
 Tailwind v4 is a full rewrite with a new configuration approach and significant performance improvements.
 
 ### Goals
-- Upgrade from Tailwind CSS v3.0.12 to v4.x
+- Upgrade from Tailwind CSS v3 to v4.x
 - Migrate configuration from JS config to CSS-based config
 - Update all utility classes that changed between v3 and v4
 
 ### Tasks
-- [ ] Review Tailwind v4 migration guide
-- [ ] Replace `tailwind.config.js` with CSS-based configuration
-- [ ] Update PostCSS config (v4 has its own PostCSS plugin)
-- [ ] Audit and update any deprecated utility classes
-- [ ] Update custom theme values (colors, fonts, spacing)
-- [ ] Test responsive breakpoints
-- [ ] Verify print styles still work for resume page
+- [x] Review Tailwind v4 migration guide (ran `@tailwindcss/upgrade`, then reviewed by hand)
+- [x] Replace `tailwind.config.js` with CSS-based configuration (`@theme` in `app.css`)
+- [x] Replace PostCSS with the `@tailwindcss/vite` plugin (removed `postcss.config.js`, autoprefixer, `tailwindcss/nesting`)
+- [x] Audit and update deprecated utility classes (`bg-opacity-*` and `border-opacity-*` → `/opacity` modifiers)
+- [x] Update custom theme values (colors, fonts, spacing, container)
+- [x] Test responsive breakpoints (computed-style diff at 390/800/1280px vs v3: identical)
+- [x] Verify print styles still work for resume page (print-media diff vs v3: identical)
+
+### Key Decisions
+- Global element styles moved into `@layer base` so utilities still override them (v4 cascade layers)
+- Kept v3's `drop-shadow-lg` value as a custom `@utility`
+- Removed the border-color compatibility block the upgrade tool added (v3 already resolved to `currentColor` here)
+- `duration-250` now takes effect (v3 had no 250 step and silently used 150ms)
+
+### Also done alongside Phase 3
+- Upgraded to SvelteKit 3, Vite 8, TypeScript 6, Sanity 6, and Node 26
+- Removed Vanta.js and the vendored `static/three.min.js` (r135). The hero is a static grey background until the Phase 4 redesign.
 
 ---
 
@@ -108,7 +118,7 @@ Refresh the visual design of the portfolio site.
 ### Tasks
 - [ ] Design review and mood board
 - [ ] Update color scheme and typography
-- [ ] Redesign hero section
+- [ ] Redesign hero section (including a replacement for the removed Vanta birds animation)
 - [ ] Redesign project cards
 - [ ] Improve responsive layout
 - [ ] Add page transitions

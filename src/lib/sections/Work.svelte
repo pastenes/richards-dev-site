@@ -39,7 +39,7 @@
 					</a>
 				</div>
 				<div
-					class="absolute z-10 flex h-full w-full flex-col justify-center border-2 border-light border-opacity-50 bg-dark bg-opacity-75 px-6 lg:relative lg:block lg:h-auto lg:w-1/2 lg:border-0 lg:bg-dark/0 lg:p-0"
+					class="absolute z-10 flex h-full w-full flex-col justify-center border-2 border-light/50 bg-dark/75 px-6 lg:relative lg:block lg:h-auto lg:w-1/2 lg:border-0 lg:bg-dark/0 lg:p-0"
 				>
 					<h3
 						class="text-left text-light {side ? 'lg:text-right' : 'lg:text-left'} mb-0 lg:mb-4"

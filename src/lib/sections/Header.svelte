@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-
 	type HeroData = {
 		title?: string;
 		intro?: Array<{ children?: Array<{ text?: string }> }>;
@@ -9,51 +7,9 @@
 	};
 
 	let { hero = {} as HeroData }: { hero: HeroData } = $props();
-
-	let vantaRef: HTMLElement;
-	let vantaEffect: unknown = null;
-
-	onMount(() => {
-		let destroyed = false;
-
-		import('vanta/dist/vanta.birds.min').then((BIRDS) => {
-			if (destroyed) return;
-			const THREE = (window as unknown as Record<string, unknown>).THREE;
-			if (!THREE) return;
-
-			const VantaBirds = (BIRDS as Record<string, unknown>).default || BIRDS;
-			vantaEffect = (VantaBirds as Function)({
-				el: vantaRef,
-				THREE,
-				mouseControls: true,
-				touchControls: true,
-				gyroControls: false,
-				minHeight: 200.0,
-				minWidth: 200.0,
-				scale: 1.0,
-				scaleMobile: 1.0,
-				backgroundColor: '#c4c4c4',
-				color1: 0x0,
-				color2: '#ffffff',
-				colorMode: 'lerpGradient',
-				birdSize: 0.6,
-				wingSpan: 34.0,
-				speedLimit: 4.0
-			});
-		}).catch(() => {
-			// Silently fail if Vanta.js cannot be loaded
-		});
-
-		return () => {
-			destroyed = true;
-			if (vantaEffect && typeof (vantaEffect as Record<string, unknown>).destroy === 'function') {
-				(vantaEffect as Record<string, Function>).destroy();
-			}
-		};
-	});
 </script>
 
-<section bind:this={vantaRef} class="flex h-screen w-screen flex-col bg-neutral py-0 lg:flex-row">
+<section class="relative flex h-screen w-screen flex-col bg-neutral py-0 lg:flex-row">
 	<div class="w-3/4 flex-auto px-0 pt-14 pb-14 lg:w-1/2 lg:self-center lg:p-14">
 		<div class="max-w-md">
 			<p class="mb-1 ml-1 font-fira-code">Hi, I'm</p>
