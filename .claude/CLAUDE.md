@@ -44,12 +44,13 @@ There are **no lint, format, typecheck, or test scripts**. To check your work, r
 | @sanity/image-url | ^2 | 2.1 |
 | @portabletext/svelte | ^4 | 4.0 |
 | vanta | ^0.5.24 | 0.5.24 |
-| **studio:** sanity | ^5 | 5.14 |
-| **studio:** react / react-dom | ^19.2 | 19.2 |
-| **studio:** @sanity/vision | ^3 | 3.99 (behind the v5 studio, may be worth bumping) |
-| **studio:** @sanity/orderable-document-list | ^1.4 | 1.5 |
-| **studio:** sanity-plugin-tags-v4 | ^1.0.10 | 1.0.10 |
-| **studio:** styled-components | ^6.1 | — |
+| **studio:** sanity | ^6.23 | 6.23 (needs Node ≥22.12; React strict mode is on in dev) |
+| **studio:** react / react-dom | ^19.3 | 19.3 |
+| **studio:** @sanity/vision | ^6.23 | 6.23 (keep it in step with `sanity`) |
+| **studio:** @sanity/orderable-document-list | ^2 | 2.0 |
+| **studio:** sanity-plugin-tags-v4 | ^1.0.25 | 1.0.25 (requires sanity ^6.18) |
+| **studio:** styled-components | ^6.6 | 6.6 |
+| **studio:** typescript | ^6 | 6.0 |
 
 Fonts come from `@fontsource/*`. Import only the weights you use. A font that's used but not imported silently falls back to a system font.
 

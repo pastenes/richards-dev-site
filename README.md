@@ -36,7 +36,7 @@
 |-------|-----------|
 | ⚙️ Framework | [SvelteKit 3](https://svelte.dev/docs/kit) + [Svelte 5](https://svelte.dev/) |
 | 🎨 Styling | [Tailwind CSS 3](https://tailwindcss.com/) |
-| 📦 CMS | [Sanity v5](https://www.sanity.io/) (Studio + Content Lake) |
+| 📦 CMS | [Sanity v6](https://www.sanity.io/) (Studio + Content Lake) |
 | 🔍 Queries | [GROQ](https://www.sanity.io/docs/groq) via [@sanity/client](https://www.npmjs.com/package/@sanity/client) |
 | 📝 Rich Text | [@portabletext/svelte](https://github.com/portabletext/svelte-portabletext) |
 | 🖼️ Images | [@sanity/image-url](https://www.npmjs.com/package/@sanity/image-url) |
@@ -58,7 +58,7 @@
 │   ├── app.html           # HTML shell
 │   └── app.css            # Global styles & Tailwind directives
 ├── studio/
-│   ├── sanity.config.ts   # Sanity Studio v5 configuration
+│   ├── sanity.config.ts   # Sanity Studio v6 configuration
 │   ├── sanity.cli.ts      # CLI config with deployment settings
 │   └── schemas/           # Document & object type definitions
 ├── tailwind.config.js
