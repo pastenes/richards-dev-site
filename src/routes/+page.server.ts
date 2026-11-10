@@ -1,4 +1,4 @@
-import { client, urlFor } from '$lib/sanity';
+import { client, urlFor } from '#lib/sanity.ts';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {

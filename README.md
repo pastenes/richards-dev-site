@@ -34,7 +34,7 @@
 
 | Layer | Technology |
 |-------|-----------|
-| ⚙️ Framework | [SvelteKit 2](https://kit.svelte.dev/) + [Svelte 5](https://svelte.dev/) |
+| ⚙️ Framework | [SvelteKit 3](https://svelte.dev/docs/kit) + [Svelte 5](https://svelte.dev/) |
 | 🎨 Styling | [Tailwind CSS 3](https://tailwindcss.com/) |
 | 📦 CMS | [Sanity v5](https://www.sanity.io/) (Studio + Content Lake) |
 | 🔍 Queries | [GROQ](https://www.sanity.io/docs/groq) via [@sanity/client](https://www.npmjs.com/package/@sanity/client) |
@@ -62,7 +62,7 @@
 │   ├── sanity.cli.ts      # CLI config with deployment settings
 │   └── schemas/           # Document & object type definitions
 ├── tailwind.config.js
-├── svelte.config.js
+├── vite.config.ts
 ├── netlify.toml
 └── package.json
 ```

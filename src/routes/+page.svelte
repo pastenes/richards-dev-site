@@ -1,8 +1,8 @@
 <script lang="ts">
-	import Header from '$lib/sections/Header.svelte';
-	import About from '$lib/sections/About.svelte';
-	import Work from '$lib/sections/Work.svelte';
-	import Footer from '$lib/components/Footer.svelte';
+	import Header from '#lib/sections/Header.svelte';
+	import About from '#lib/sections/About.svelte';
+	import Work from '#lib/sections/Work.svelte';
+	import Footer from '#lib/components/Footer.svelte';
 
 	let { data } = $props();
 </script>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import BlockContent from '$lib/components/BlockContent.svelte';
+	import BlockContent from '#lib/components/BlockContent.svelte';
 
 	type Project = {
 		_id: string;

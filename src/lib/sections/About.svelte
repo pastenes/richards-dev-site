@@ -1,7 +1,7 @@
 <script lang="ts">
-	import Jumplinks from '$lib/components/Jumplinks.svelte';
-	import BlockContent from '$lib/components/BlockContent.svelte';
-	import TechTags from '$lib/components/TechTags.svelte';
+	import Jumplinks from '#lib/components/Jumplinks.svelte';
+	import BlockContent from '#lib/components/BlockContent.svelte';
+	import TechTags from '#lib/components/TechTags.svelte';
 
 	let { content = [], tags = [] }: { content: unknown[]; tags: string[] } = $props();
 </script>

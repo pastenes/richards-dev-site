@@ -24,7 +24,7 @@ cd studio && npm run build    # sanity build
 cd studio && npm run deploy   # sanity deploy (hosted studio, appId in sanity.cli.ts)
 ```
 
-There are **no lint, format, typecheck, or test scripts**. To check your work, run `npm run build`. For type checking, `npx svelte-check` also works, but it isn't installed as a dependency.
+There are **no lint, format, typecheck, or test scripts**. To check your work, run `npm run build`. For type checking, run `npx svelte-kit sync && npx svelte-check --tsconfig ./tsconfig.json` (svelte-check isn't installed as a dependency). It currently reports 0 errors.
 
 ## Runtime & versions
 
@@ -33,16 +33,16 @@ There are **no lint, format, typecheck, or test scripts**. To check your work, r
 
 | Package | Range | Installed |
 |---|---|---|
-| svelte | ^5 | 5.53 |
-| @sveltejs/kit | ^2 | 2.53 |
-| @sveltejs/adapter-netlify | ^4 | 4.4 |
-| @sveltejs/vite-plugin-svelte | ^5 \|\| ^6 | 6.2 |
-| vite | ^6 | 6.4 |
-| tailwindcss | ^3.4 | 3.4.19 |
-| typescript | ^5.5 | 5.9 |
-| @sanity/client | ^6 | 6.29 |
-| @sanity/image-url | ^1 | — |
-| @portabletext/svelte | ^3 | 3.0 |
+| svelte | ^5.57 | 5.57 |
+| @sveltejs/kit | ^3.2 | 3.2 |
+| @sveltejs/adapter-netlify | ^7 | 7.0 |
+| @sveltejs/vite-plugin-svelte | ^7.3 | 7.3 |
+| vite | ^8.3 | 8.3 (Rolldown bundler, Lightning CSS minifier) |
+| tailwindcss | ^3.4 | 3.4.19 (v4 is Phase 3 on the roadmap) |
+| typescript | ^6 | 6.0 (Kit 3 peer range is ^6; don't move to 7 yet) |
+| @sanity/client | ^8 | 8.15 |
+| @sanity/image-url | ^2 | 2.1 |
+| @portabletext/svelte | ^4 | 4.0 |
 | vanta | ^0.5.24 | 0.5.24 |
 | **studio:** sanity | ^5 | 5.14 |
 | **studio:** react / react-dom | ^19.2 | 19.2 |
@@ -69,6 +69,8 @@ Fonts come from `@fontsource/*`. Import only the weights you use. A font that's 
 src/
   app.html                 # HTML shell; loads /three.min.js globally (needed by Vanta)
   app.css                  # Tailwind directives, global element styles, print + resume styles
+  env.ts                   # defineEnvVars: declares the Sanity env vars
+  vanta.d.ts               # module declaration (vanta has no types)
   lib/
     sanity.ts              # Sanity client + urlFor() image builder (SERVER ONLY)
     sections/              # Header (hero + Vanta birds), About, Work
@@ -80,6 +82,7 @@ src/
     resume/+page.server.ts # GROQ: resume singleton; formats experience dates
     resume/+page.svelte    # printable resume (print styles in app.css)
     +error.svelte          # 404 page
+vite.config.ts             # all SvelteKit config lives in sveltekit({...}): adapter, preprocess
 static/                    # three.min.js, icon.png, meta.png (OG), Resume-Richard-Pastenes.pdf
 studio/
   sanity.config.ts         # studio config: custom structure, vision, tags plugin
@@ -90,7 +93,7 @@ studio/
 
 ### Data flow
 - All content is fetched **on the server** in `+page.server.ts` load functions, using GROQ through `client.fetch`. Nothing is fetched on the client.
-- `src/lib/sanity.ts` reads `SANITY_PROJECT_ID`, `SANITY_DATASET`, and `SANITY_TOKEN` from `$env/static/private`. That means:
+- Env vars are declared in `src/env.ts` with `defineEnvVars` (SvelteKit 3). All three are `static: true`, so they're inlined at build time. To add a variable, declare it there first. `src/lib/sanity.ts` imports `SANITY_PROJECT_ID`, `SANITY_DATASET`, and `SANITY_TOKEN` from `$app/env/private` (`$env/*` is deprecated in Kit 3). That means:
   - It can only be imported from server modules (`*.server.ts`). Importing it from a component will fail the build.
   - The vars have to exist **at build time**: locally in `.env.development` / `.env.production` (both gitignored), and in the Netlify dashboard for deploys.
 - The client uses `useCdn: true` and `apiVersion: '2024-01-01'`.
@@ -109,7 +112,8 @@ studio/
 ## Conventions
 
 - **Svelte 5 runes only**: `$props()`, `$derived()`, `$state()`, `{@render children()}`. Don't use `export let` or slots.
-- Use TypeScript in `<script lang="ts">`. Prop types are written inline (there's no shared types module). `tsconfig` is strict and extends `.svelte-kit/tsconfig.json`.
+- **SvelteKit 3 specifics:** import from `#lib/...`, not `$lib` (it was removed; the mapping is in `package.json` `imports`). Use the `.ts` extension when importing a TS module through `#lib` (e.g. `#lib/sanity.ts`), or TypeScript can't resolve it. There's no `svelte.config.js`; Kit options go into `sveltekit({...})` in `vite.config.ts`.
+- Use TypeScript in `<script lang="ts">`. Prop types are written inline (there's no shared types module). `tsconfig` is strict and extends `$app/tsconfig` (a package Kit installs).
 - Formatting: tabs, single quotes, no trailing commas in `src/`. The `studio/` code uses 2 spaces, no semicolons, and `{a}` brace style. Match whichever file you're in.
 - Styling is Tailwind utility classes in markup. Shared or global styles go in `src/app.css`, using `@apply` and PostCSS nesting (`tailwindcss/nesting`).
 - External links use `target="_blank" rel="noreferrer"`, and icon-only links get an `aria-label`. Icons are inline SVGs, with no icon library on the site.
@@ -123,6 +127,7 @@ studio/
 - The Footer social links are **hardcoded**. The Header social links come from the CMS (`hero.links`).
 - `.claude/progress.md` tracks the roadmap and is current. Phases 1 (Gatsby → SvelteKit) and 2 (Sanity v2 → v5) are done. Phase 3 (Tailwind v3 → v4) and Phase 4 (redesign) are still TODO.
 - The README logo path (`src/images/icon.png`) points to a file that doesn't exist. The icon is at `static/icon.png`.
+- **Vite 8 minifies CSS with Lightning CSS**, which is stricter than esbuild was. Invalid CSS (such as nesting `&` where it isn't allowed) now fails the build instead of passing through.
 - Generated or ignored directories: `.svelte-kit/`, `build/`, `.netlify/`, `studio/.sanity/`, `studio/dist/`. Don't edit them.
 
 ## Deployment
