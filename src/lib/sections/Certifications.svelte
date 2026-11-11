@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Reveal from '#lib/components/Reveal.svelte';
 	import SectionHeading from '#lib/components/SectionHeading.svelte';
 
 	// TODO: Hard-coded for the redesign. Year and credential ID are placeholders until Richard has them.
@@ -20,7 +21,7 @@
 
 		<ul class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 			{#each certifications as cert (cert.title)}
-				<li class="flex flex-col gap-4 rounded-card border border-border bg-surface-raised p-6">
+				<Reveal as="li" class="flex flex-col gap-4 rounded-card border border-border bg-surface-raised p-6">
 					<!-- Seal -->
 					<div
 						class="flex size-12 items-center justify-center rounded-full border-2 border-accent text-accent"
@@ -35,14 +36,16 @@
 					<p class="mt-auto mb-0 font-mono text-tiny text-caption">
 						Credential · {cert.year} · {cert.credentialId}
 					</p>
-				</li>
+				</Reveal>
 			{/each}
-			{#each placeholders as placeholder (placeholder)}
-				<li
+			{#each placeholders as placeholder, index (placeholder)}
+				<Reveal
+					as="li"
+					step={index + 1}
 					class="flex min-h-48 items-center justify-center rounded-card border border-dashed border-border p-6 font-mono text-sm text-caption"
 				>
 					{placeholder}
-				</li>
+				</Reveal>
 			{/each}
 		</ul>
 	</div>

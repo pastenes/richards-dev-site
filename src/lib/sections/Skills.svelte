@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Reveal from '#lib/components/Reveal.svelte';
 	import SectionHeading from '#lib/components/SectionHeading.svelte';
 
 	// TODO: Hard-coded for the redesign (the Sanity `about.tags` field is no longer rendered).
@@ -29,8 +30,8 @@
 		<SectionHeading eyebrow="Skills" title="The tech I" script="use" />
 
 		<div class="grid gap-6 md:grid-cols-2">
-			{#each groups as group (group.label)}
-				<div class="rounded-card border border-border bg-surface-raised p-6">
+			{#each groups as group, index (group.label)}
+				<Reveal step={index % 2} class="rounded-card border border-border bg-surface-raised p-6">
 					<h3 class="mb-4 font-mono text-sm text-caption">{group.label}</h3>
 					<ul class="flex flex-wrap gap-2">
 						{#each group.items as item (item)}
@@ -43,7 +44,7 @@
 							</li>
 						{/each}
 					</ul>
-				</div>
+				</Reveal>
 			{/each}
 		</div>
 	</div>

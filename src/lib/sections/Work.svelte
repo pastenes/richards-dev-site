@@ -1,5 +1,6 @@
 <script lang="ts">
 	import BlockContent from '#lib/components/BlockContent.svelte';
+	import Reveal from '#lib/components/Reveal.svelte';
 	import SectionHeading from '#lib/components/SectionHeading.svelte';
 
 	type Project = {
@@ -21,41 +22,40 @@
 		<!-- Bento grid: the first project is featured and spans two columns. -->
 		<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 			{#each projects as project, index (project._id)}
-				<article
-					class="group flex flex-col overflow-hidden rounded-card border border-border bg-surface-raised transition duration-300 ease-out-expo hover:border-accent hover:shadow-glow {index ===
-					0
-						? 'md:col-span-2'
-						: ''}"
-				>
-					{#if project.screenshot?.url}
-						<a href={project.projectUrl} target="_blank" rel="noreferrer" tabindex="-1">
-							<img
-								src={project.screenshot.url}
-								alt={project.screenshot.alt}
-								width="1000"
-								loading="lazy"
-								class="aspect-video w-full object-cover object-top brightness-90 transition duration-300 group-hover:brightness-100"
-							/>
-						</a>
-					{/if}
-					<div class="flex flex-auto flex-col p-6">
-						<h3 class="mb-3 text-heading-sm text-foreground">
-							<a href={project.projectUrl} target="_blank" rel="noreferrer" class="hover:text-accent">
-								{project.title}
+				<Reveal step={index % 3} class={index === 0 ? 'md:col-span-2' : ''}>
+					<article
+						class="group flex h-full flex-col overflow-hidden rounded-card border border-border bg-surface-raised transition duration-300 ease-out-expo hover:border-accent hover:shadow-glow"
+					>
+						{#if project.screenshot?.url}
+							<a href={project.projectUrl} target="_blank" rel="noreferrer" tabindex="-1">
+								<img
+									src={project.screenshot.url}
+									alt={project.screenshot.alt}
+									width="1000"
+									loading="lazy"
+									class="aspect-video w-full object-cover object-top brightness-90 transition duration-300 group-hover:brightness-100"
+								/>
 							</a>
-						</h3>
-						<div class="text-muted">
-							<BlockContent blocks={project.description} />
+						{/if}
+						<div class="flex flex-auto flex-col p-6">
+							<h3 class="mb-3 text-heading-sm text-foreground">
+								<a href={project.projectUrl} target="_blank" rel="noreferrer" class="hover:text-accent">
+									{project.title}
+								</a>
+							</h3>
+							<div class="text-muted">
+								<BlockContent blocks={project.description} />
+							</div>
+							<ul class="mt-auto flex flex-wrap gap-2 pt-2">
+								{#each project.tags as tag (tag.label)}
+									<li class="rounded-full bg-accent-wash px-2.5 py-1 font-mono text-tiny text-accent">
+										{tag.label}
+									</li>
+								{/each}
+							</ul>
 						</div>
-						<ul class="mt-auto flex flex-wrap gap-2 pt-2">
-							{#each project.tags as tag (tag.label)}
-								<li class="rounded-full bg-accent-wash px-2.5 py-1 font-mono text-tiny text-accent">
-									{tag.label}
-								</li>
-							{/each}
-						</ul>
-					</div>
-				</article>
+					</article>
+				</Reveal>
 			{/each}
 		</div>
 	</div>
