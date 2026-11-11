@@ -147,4 +147,4 @@ studio/
 ## Deployment
 
 - **Site:** Netlify builds on every push to `main` with `npm ci && npm run build` and publishes `build/`. It renders on the server through Netlify functions (adapter-netlify). The Sanity env vars are set in the Netlify dashboard.
-- **Studio:** deployed separately to Sanity hosting with `cd studio && npm run deploy`.
+- **Studio:** deployed separately to Sanity hosting (https://richard-dev.sanity.studio/) with `cd studio && npm run deploy`. `pastenes.dev/studio` is a 302 to it, set in the root `_redirects` file; adapter-netlify requires that file at the project root, not in `static/`, and copies it into `build/`.
