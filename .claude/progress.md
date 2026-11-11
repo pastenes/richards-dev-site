@@ -140,6 +140,20 @@ Refresh the visual design of the portfolio site.
 
 ---
 
+## Phase 5: Sanity content for the redesign `STATUS: IN PROGRESS`
+
+Move the redesign's hard-coded content into Sanity and map it to the front end.
+
+### Tasks
+- [x] `skills` singleton (groups of skills with a core flag; native fields, not the tags plugin) → `Skills.svelte`
+- [x] `certification` documents (orderable; title, issuer, issued date, credential ID and URL) → `Certifications.svelte` (placeholder cards pad the last row)
+- [x] Studio structure: Skills singleton and an orderable Certifications list
+- [ ] Seed the dataset with the former hard-coded content, then enter the real cert date and credential ID
+- [ ] Deploy the studio (`cd studio && npm run deploy`)
+- [ ] Decide on `about.tags` (unused since the Skills section) and the remaining tags-plugin fields (`resume.skills`, `project.tags`)
+
+---
+
 ## Completed Work
 
 _(Items will be moved here as phases are completed)_

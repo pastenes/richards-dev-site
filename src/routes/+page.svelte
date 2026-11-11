@@ -33,7 +33,7 @@
 	<Header hero={data.hero} />
 	<About content={data.about.content} />
 	<Work projects={data.projects} />
-	<Skills />
-	<Certifications />
+	<Skills groups={data.skillGroups} />
+	<Certifications certifications={data.certifications} />
 </main>
 <Footer />

@@ -2,7 +2,7 @@ import { client, responsiveImage } from '#lib/sanity.ts';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
-	const [hero, about, projects] = await Promise.all([
+	const [hero, about, projects, skills, certifications] = await Promise.all([
 		client.fetch(`*[_type == "hero"][0]{
 			title,
 			intro[]{children[]{text}},
@@ -11,8 +11,7 @@ export const load: PageServerLoad = async () => {
 		}`),
 		client.fetch(`*[_type == "about"][0]{
 			_id,
-			content[]{..., _type == "image" => {asset->{_id, url}}},
-			tags[]{value}
+			content[]{..., _type == "image" => {asset->{_id, url}}}
 		}`),
 		client.fetch(`*[_type == "project"] | order(orderRank asc){
 			_id,
@@ -22,6 +21,17 @@ export const load: PageServerLoad = async () => {
 			tags[]{label},
 			description[]{...},
 			screenshot{alt, asset->{_id, url}}
+		}`),
+		client.fetch(`*[_id == "skills"][0]{
+			groups[]{_key, title, skills[]{_key, name, core}}
+		}`),
+		client.fetch(`*[_type == "certification"] | order(orderRank asc){
+			_id,
+			title,
+			issuer,
+			issued,
+			credentialId,
+			credentialUrl
 		}`)
 	]);
 
@@ -38,8 +48,7 @@ export const load: PageServerLoad = async () => {
 				: null
 		},
 		about: {
-			content: about?.content ?? [],
-			tags: about?.tags?.map((tag: { value: string }) => tag.value).sort() ?? []
+			content: about?.content ?? []
 		},
 		projects:
 			projects?.map((project: Record<string, unknown>) => ({
@@ -54,6 +63,13 @@ export const load: PageServerLoad = async () => {
 								: { url: null, srcset: '' })
 						}
 					: null
+			})) ?? [],
+		skillGroups: skills?.groups ?? [],
+		certifications:
+			certifications?.map(({ issued, ...cert }: Record<string, unknown>) => ({
+				...cert,
+				// `issued` is a YYYY-MM-DD date; the card only shows the year.
+				year: typeof issued === 'string' ? issued.slice(0, 4) : null
 			})) ?? []
 	};
 };

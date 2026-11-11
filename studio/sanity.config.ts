@@ -5,11 +5,14 @@ import {tags} from 'sanity-plugin-tags-v4'
 import {orderableDocumentListDeskItem} from '@sanity/orderable-document-list'
 import {AiFillCode} from 'react-icons/ai'
 import {GrDocumentUser} from 'react-icons/gr'
+import {FaCertificate, FaTools} from 'react-icons/fa'
 
 import hero from './schemas/documents/hero'
 import about from './schemas/documents/about'
 import project from './schemas/documents/project'
 import resume from './schemas/documents/resume'
+import skills from './schemas/documents/skills'
+import certification from './schemas/documents/certification'
 import blockContent from './schemas/objects/blockContent'
 import imageFile from './schemas/objects/image'
 import links from './schemas/objects/links'
@@ -45,6 +48,17 @@ export default defineConfig({
               S,
               context,
             }),
+            S.listItem()
+              .title('Skills')
+              .icon(FaTools)
+              .child(S.document().schemaType('skills').documentId('skills')),
+            orderableDocumentListDeskItem({
+              type: 'certification',
+              title: 'Certifications',
+              icon: FaCertificate,
+              S,
+              context,
+            }),
             S.divider(),
             S.listItem()
               .title('Resume')
@@ -62,6 +76,8 @@ export default defineConfig({
       about,
       project,
       resume,
+      skills,
+      certification,
       blockContent,
       imageFile,
       links,

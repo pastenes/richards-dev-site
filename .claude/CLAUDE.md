@@ -76,7 +76,7 @@ src/
     actions/reveal.ts      # scroll-reveal action used by Reveal.svelte
   routes/
     +layout.svelte         # app.css, fonts, skip link, the shared Nav (PDF button on /resume), page transitions
-    +page.server.ts        # GROQ: hero, about, projects (Promise.all)
+    +page.server.ts        # GROQ: hero, about, projects, skills, certifications (Promise.all)
     +page.svelte           # landing page + SEO/OG meta in <svelte:head>
     resume/+page.server.ts # GROQ: resume singleton; formats experience dates
     resume/+page.svelte    # printable resume (print: variants in markup, page scaling in app.css)
@@ -86,7 +86,7 @@ static/                    # icon.png, meta.png (OG), Resume-Richard-Pastenes.pd
 studio/
   sanity.config.ts         # studio config: custom structure, vision, tags plugin
   sanity.cli.ts            # projectId lpvkp4xx, dataset production, deployment appId
-  schemas/documents/       # hero, about, project, resume
+  schemas/documents/       # hero, about, project, resume, skills, certification
   schemas/objects/         # blockContent, imageFile, links, education, experience, achievment
 ```
 
@@ -97,14 +97,16 @@ studio/
   - The vars have to exist **at build time**: locally in `.env.development` / `.env.production` (both gitignored), and in the Netlify dashboard for deploys.
 - The client uses `useCdn: true` and `apiVersion: '2024-01-01'`.
 - Image URLs are resolved on the server with `responsiveImage(asset, widths)` from `#lib/sanity.ts` (WebP `url` + `srcset`); components add `sizes`. Headshot 350/525/700, project screenshots 400/700/1000/1400. Components only ever get `{ alt, url, srcset }`. `+page.svelte` preconnects to `cdn.sanity.io` because the headshot is the largest paint.
-- Projects are sorted by `orderRank`, which comes from `@sanity/orderable-document-list` (editors drag to reorder them in the studio).
-- Tag fields (`about.tags`, `resume.skills`) are flattened to sorted `string[]` on the server. `project.tags` stays as `{label}[]`.
-- **Skills and certifications are hard-coded** in `Skills.svelte` and `Certifications.svelte`, not fetched from Sanity. `about.tags` is still queried but no longer rendered. The cert year and credential ID are placeholders.
+- Projects and certifications are sorted by `orderRank`, which comes from `@sanity/orderable-document-list` (editors drag to reorder them in the studio).
+- `resume.skills` (a tags field) is flattened to a sorted `string[]` on the server. `project.tags` stays as `{label}[]`. `about.tags` still exists in the schema and data but is no longer queried or rendered (the Skills section replaced it).
+- Skills come from the `skills` singleton as `skillGroups` (`{_key, title, skills[]{_key, name, core}}`). Certifications come back with `issued` reduced to a `year` string; the card hides any empty meta (year, credential ID) and links the title when `credentialUrl` is set. `Certifications.svelte` pads the last row of three with dashed placeholder cards.
 
 ### Sanity content model
 - `hero`: title, intro (block array; **only the first span is rendered** in Header), links (`links` object: twitter/linkedin/github handles), headshot (`imageFile`).
 - `about`: content (block array with link annotations), tags (`tags` type).
 - `project`: orderRank, title, screenshot, projectUrl, description (blocks), tags.
+- `skills`: a singleton with document ID `skills`. `groups[]` (`skillGroup`: title, `skills[]` of `skill`: name, core). Native fields, not the tags plugin, since tags can't carry a group or a core flag.
+- `certification`: orderRank, title, issuer, issued (date; the site shows the year), credentialId, credentialUrl.
 - `resume`: a singleton with document ID `resume`. Fields: name, jobTitle, contact fieldset, summary, interests, education[], experience[] (each with `achievment[]`), skills.
 - The spelling **`achievment` is a typo, but it's part of the stored data.** Don't rename it in schemas or queries unless you also migrate the Content Lake.
 - When you change a schema, update the matching GROQ projection in `src/routes/**/+page.server.ts` as well. The site has no generated types, so a mismatch fails silently and the field just renders empty.
