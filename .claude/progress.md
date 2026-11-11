@@ -110,7 +110,7 @@ Tailwind v4 is a full rewrite with a new configuration approach and significant 
 
 ---
 
-## Phase 4: Update Design `STATUS: IN PROGRESS`
+## Phase 4: Update Design `STATUS: IN PROGRESS` (redesign steps 1-7 done)
 
 Refresh the visual design of the portfolio site.
 
@@ -129,6 +129,7 @@ Refresh the visual design of the portfolio site.
 - [x] Skills + Certifications (redesign step 4): `Skills.svelte` (four group cards, core chips highlighted) replaces `TechTags.svelte`; new `Certifications.svelte` (Next.js Certified Developer, placeholder year/ID, two dashed placeholder cards). Both hard-coded. About is now a single column with `SectionHeading`; nav gains Skills and Certs links
 - [x] Reveal (redesign step 5): `actions/reveal.ts` (IntersectionObserver, once, threshold 0.15) + `Reveal.svelte`; applied to section headings, About text, Work/Skills/Cert cards with staggered delays. Visible by default (only below-the-fold elements hide), skipped for reduced motion
 - [x] Hero (redesign step 6): `HeroLandscape.svelte` (six-layer Mt. Hood / Trillium Lake SVG with scroll parallax) behind the hero; copy restyled; headshot bottom-right at 2x. Removed the `subtle` token. Pending: Richard's new cut-out photo (the current Sanity headshot is used meanwhile); optional pointer drift
+- [x] Resume restyle and PDF (redesign step 7): the resume uses the site's tokens and fonts (themed on screen, paper colors on a white page in print), shares the pill nav with a PDF button, and `static/Resume-Richard-Pastenes.pdf` is re-exported from its print view (one A4 page). Removed the `resume-*` colors, `black`, `spacing-nav`, the `resume-*` fonts, and the Montserrat / Open Sans / Poppins packages
 - [ ] Update color scheme and typography
 - [x] Redesign hero section (including a replacement for the removed Vanta birds animation)
 - [ ] Redesign project cards

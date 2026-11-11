@@ -1,14 +1,19 @@
 <script lang="ts">
-	// Section links, in page order.
+	// `action` is the accent button: Resume on the home page, the PDF on the resume page.
+	let {
+		action = { label: 'Resume', href: '/resume' }
+	}: { action?: { label: string; href: string } } = $props();
+
+	// Home page sections, in page order. Root-relative so they also work from /resume.
 	const links = [
-		{ label: 'About', href: '#about' },
-		{ label: 'Work', href: '#work' },
-		{ label: 'Skills', href: '#skills' },
-		{ label: 'Certs', href: '#certifications' }
+		{ label: 'About', href: '/#about' },
+		{ label: 'Work', href: '/#work' },
+		{ label: 'Skills', href: '/#skills' },
+		{ label: 'Certs', href: '/#certifications' }
 	];
 </script>
 
-<!-- Floating pill, fixed top-center. Small screens show only the brand and the Resume button. -->
+<!-- Floating pill, fixed top-center. Small screens show only the brand and the action button. -->
 <nav
 	class="fixed top-4 left-1/2 z-30 flex -translate-x-1/2 items-center gap-6 rounded-full border border-border bg-surface/80 py-1.5 pr-1.5 pl-5 whitespace-nowrap backdrop-blur print:hidden"
 >
@@ -19,9 +24,9 @@
 		{/each}
 	</ul>
 	<a
-		href="/resume"
+		href={action.href}
 		class="rounded-full bg-accent px-4 py-2 font-mono text-sm text-on-accent hover:bg-accent-hover"
 	>
-		Resume
+		{action.label}
 	</a>
 </nav>

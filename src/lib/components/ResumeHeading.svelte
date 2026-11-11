@@ -4,8 +4,9 @@
 	let { children }: { children: Snippet } = $props();
 </script>
 
-<h3
-	class="relative my-4 inline-block font-mono text-lg font-bold tracking-normal text-resume-accent lowercase before:absolute before:bottom-0 before:left-0 before:h-px before:w-7.5 before:bg-black"
+<!-- Resume section title: lowercase mono in the accent color over a short accent rule. -->
+<h2
+	class="relative mt-8 mb-4 inline-block pb-1.5 font-mono text-sm tracking-normal text-accent lowercase before:absolute before:bottom-0 before:left-0 before:h-px before:w-7.5 before:bg-accent"
 >
 	{@render children()}
-</h3>
+</h2>

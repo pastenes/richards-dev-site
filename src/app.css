@@ -32,24 +32,13 @@
   --color-land-mid: #14403a;
   --color-land-near: #0c2623;
   --color-land-front: #070f0f;
-
-  /* Resume colors. The resume is always a white page, so these don't change with the theme. */
-  --color-resume-band: #ebebeb; /* header and footer */
-  --color-resume-accent: #3cb1e4; /* section titles */
-  --color-resume-ink: #222222; /* timeline dots */
-  --color-resume-rule: #a8b2d1; /* timeline lines */
-  --color-resume-date: #c4c4c4; /* experience dates */
-  --color-black: #000000;
-  --color-white: #ffffff;
+  --color-white: #ffffff; /* print page background */
 
   /* Fonts, named by role. Weights are imported from @fontsource in the routes. */
   --font-heading: Instrument Serif, Georgia, serif; /* weight 400 only */
   --font-body: Instrument Sans, system-ui, sans-serif;
   --font-script: Caveat, cursive; /* one accent word per section heading */
   --font-mono: Fira Code, monospace; /* all monospace text, including code and pre */
-  --font-resume-heading: Montserrat, sans-serif;
-  --font-resume-subheading: Poppins, sans-serif; /* resume roles and degrees, until the resume phase */
-  --font-resume-body: Open Sans, sans-serif;
 
   /* Type scale additions. Line heights ride along, so `text-heading-md` sets both. */
   --text-tiny: 0.775rem;
@@ -76,9 +65,6 @@
   --shadow-glow: 0 0 0 1px rgb(100 255 218 / 0.35), 0 12px 40px rgb(100 255 218 / 0.14);
 
   --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
-
-  /* Left offset of the resume page's PDF button on large screens. */
-  --spacing-nav: 11.5rem;
 
   /* Content widths: `sm:max-w-narrow lg:max-w-wide` steps the content column with the viewport. */
   --container-narrow: 640px;
@@ -142,7 +128,8 @@
     @apply mb-4;
   }
 
-  /* Resume printing: scale everything down to fit A4 and keep background colors. */
+  /* Resume printing: scale everything down to fit one A4 page and keep background colors.
+     The paper colors apply in print via the light-theme block above. */
   @media print {
     html,
     body {
