@@ -87,7 +87,6 @@ studio/
   sanity.cli.ts            # projectId lpvkp4xx, dataset production, deployment appId
   schemas/documents/       # hero, about, project, resume, skills, certification
   schemas/objects/         # blockContent, imageFile, links, education, experience, achievment
-  migrations/              # Content Lake migrations (`npx sanity migration run <name>`, dry run by default)
 ```
 
 ### Data flow
@@ -98,7 +97,7 @@ studio/
 - The client uses `useCdn: true` and `apiVersion: '2024-01-01'`.
 - Image URLs are resolved on the server with `responsiveImage(asset, widths)` from `#lib/sanity.ts` (WebP `url` + `srcset`); components add `sizes`. Headshot 350/525/700, project screenshots 400/700/1000/1400. Components only ever get `{ alt, url, srcset }`. `+page.svelte` preconnects to `cdn.sanity.io` because the headshot is the largest paint.
 - Projects and certifications are sorted by `orderRank`, which comes from `@sanity/orderable-document-list` (editors drag to reorder them in the studio).
-- Tag fields (`project.tags`, `resume.skills`) are native tag arrays (`string[]`, `options.layout: 'tags'`; there's no tags plugin). The loaders pass them through `tagNames()` from `#lib/sanity.ts`, which also reads the old plugin shape (`{label, value}[]`) until the `tags-to-strings` migration has run; `resume.skills` is sorted on the server.
+- Tag fields (`project.tags`, `resume.skills`) are native tag arrays (`string[]`, `options.layout: 'tags'`; there's no tags plugin). The loaders pass them through `tagNames()` from `#lib/sanity.ts`; `resume.skills` is sorted on the server. The old plugin data was converted once with a migration (Nov 2026); there is no migration code in the repo.
 - Skills come from the `skills` singleton as `skillGroups` (`{_key, title, skills[]{_key, name, core}}`). Certifications come back with `issued` reduced to a `year` string; the card hides any empty meta (year, credential ID) and links the title when `credentialUrl` is set. `Certifications.svelte` pads the last row of three with dashed placeholder cards.
 
 ### Sanity content model
