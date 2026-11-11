@@ -32,7 +32,6 @@
   --color-land-mid: #14403a;
   --color-land-near: #0c2623;
   --color-land-front: #070f0f;
-  --color-subtle: #c4c4c4; /* current hero background, until the hero phase */
 
   /* Resume colors. The resume is always a white page, so these don't change with the theme. */
   --color-resume-band: #ebebeb; /* header and footer */

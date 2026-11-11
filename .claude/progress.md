@@ -128,8 +128,9 @@ Refresh the visual design of the portfolio site.
 - [x] Work (redesign step 3): bento grid in `Work.svelte` (first project spans two columns from `md`), cards with screenshot on top, glow and accent border on hover; new `SectionHeading.svelte`. No data changes
 - [x] Skills + Certifications (redesign step 4): `Skills.svelte` (four group cards, core chips highlighted) replaces `TechTags.svelte`; new `Certifications.svelte` (Next.js Certified Developer, placeholder year/ID, two dashed placeholder cards). Both hard-coded. About is now a single column with `SectionHeading`; nav gains Skills and Certs links
 - [x] Reveal (redesign step 5): `actions/reveal.ts` (IntersectionObserver, once, threshold 0.15) + `Reveal.svelte`; applied to section headings, About text, Work/Skills/Cert cards with staggered delays. Visible by default (only below-the-fold elements hide), skipped for reduced motion
+- [x] Hero (redesign step 6): `HeroLandscape.svelte` (six-layer Mt. Hood / Trillium Lake SVG with scroll parallax) behind the hero; copy restyled; headshot bottom-right at 2x. Removed the `subtle` token. Pending: Richard's new cut-out photo (the current Sanity headshot is used meanwhile); optional pointer drift
 - [ ] Update color scheme and typography
-- [ ] Redesign hero section (including a replacement for the removed Vanta birds animation)
+- [x] Redesign hero section (including a replacement for the removed Vanta birds animation)
 - [ ] Redesign project cards
 - [ ] Improve responsive layout
 - [ ] Add page transitions

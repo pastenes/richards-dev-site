@@ -31,7 +31,7 @@ export const load: PageServerLoad = async () => {
 			headshot: hero?.headshot
 				? {
 						alt: hero.headshot.alt,
-						url: hero.headshot.asset ? urlFor(hero.headshot.asset).width(380).format('webp').url() : null
+						url: hero.headshot.asset ? urlFor(hero.headshot.asset).width(700).format('webp').url() : null
 					}
 				: null
 		},
