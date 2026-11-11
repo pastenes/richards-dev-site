@@ -1,4 +1,4 @@
-import { client, responsiveImage } from '#lib/sanity.ts';
+import { client, responsiveImage, tagNames } from '#lib/sanity.ts';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
@@ -18,7 +18,7 @@ export const load: PageServerLoad = async () => {
 			title,
 			orderRank,
 			projectUrl,
-			tags[]{label},
+			tags,
 			description[]{...},
 			screenshot{alt, asset->{_id, url}}
 		}`),
@@ -53,6 +53,7 @@ export const load: PageServerLoad = async () => {
 		projects:
 			projects?.map((project: Record<string, unknown>) => ({
 				...project,
+				tags: tagNames(project.tags),
 				screenshot: project.screenshot
 					? {
 							alt: (project.screenshot as Record<string, unknown>).alt,

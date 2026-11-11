@@ -1,7 +1,6 @@
 import {defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
-import {tags} from 'sanity-plugin-tags-v4'
 import {orderableDocumentListDeskItem} from '@sanity/orderable-document-list'
 import {AiFillCode} from 'react-icons/ai'
 import {GrDocumentUser} from 'react-icons/gr'
@@ -67,7 +66,6 @@ export default defineConfig({
           ]),
     }),
     visionTool(),
-    tags({}),
   ],
 
   schema: {

@@ -27,3 +27,14 @@ export function responsiveImage(source: unknown, widths: number[]) {
 		srcset: widths.map((width) => `${at(width)} ${width}w`).join(', ')
 	};
 }
+
+/**
+ * Tag names from a native tags field (`string[]`). Also reads the old tags-plugin shape
+ * (`{label, value}[]`) so the site works before and after the tag migration runs.
+ */
+export function tagNames(list: unknown): string[] {
+	if (!Array.isArray(list)) return [];
+	return list
+		.map((tag) => (typeof tag === 'string' ? tag : (tag as { label?: string } | null)?.label))
+		.filter((tag): tag is string => Boolean(tag));
+}

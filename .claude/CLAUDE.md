@@ -47,7 +47,6 @@ There are **no lint, format, typecheck, or test scripts**. To check your work, r
 | **studio:** react / react-dom | ^19.3 | 19.3 |
 | **studio:** @sanity/vision | ^6.23 | 6.23 (keep it in step with `sanity`) |
 | **studio:** @sanity/orderable-document-list | ^2 | 2.0 |
-| **studio:** sanity-plugin-tags-v4 | ^1.0.25 | 1.0.25 (requires sanity ^6.18) |
 | **studio:** styled-components | ^6.6 | 6.6 |
 | **studio:** typescript | ^6 | 6.0 |
 
@@ -84,10 +83,11 @@ src/
 vite.config.ts             # tailwindcss() plugin + sveltekit({...}) with adapter and preprocess (no svelte.config.js)
 static/                    # icon.png, meta.png (OG), Resume-Richard-Pastenes.pdf
 studio/
-  sanity.config.ts         # studio config: custom structure, vision, tags plugin
+  sanity.config.ts         # studio config: custom structure, vision
   sanity.cli.ts            # projectId lpvkp4xx, dataset production, deployment appId
   schemas/documents/       # hero, about, project, resume, skills, certification
   schemas/objects/         # blockContent, imageFile, links, education, experience, achievment
+  migrations/              # Content Lake migrations (`npx sanity migration run <name>`, dry run by default)
 ```
 
 ### Data flow
@@ -98,16 +98,16 @@ studio/
 - The client uses `useCdn: true` and `apiVersion: '2024-01-01'`.
 - Image URLs are resolved on the server with `responsiveImage(asset, widths)` from `#lib/sanity.ts` (WebP `url` + `srcset`); components add `sizes`. Headshot 350/525/700, project screenshots 400/700/1000/1400. Components only ever get `{ alt, url, srcset }`. `+page.svelte` preconnects to `cdn.sanity.io` because the headshot is the largest paint.
 - Projects and certifications are sorted by `orderRank`, which comes from `@sanity/orderable-document-list` (editors drag to reorder them in the studio).
-- `resume.skills` (a tags field) is flattened to a sorted `string[]` on the server. `project.tags` stays as `{label}[]`. `about.tags` still exists in the schema and data but is no longer queried or rendered (the Skills section replaced it).
+- Tag fields (`project.tags`, `resume.skills`) are native tag arrays (`string[]`, `options.layout: 'tags'`; there's no tags plugin). The loaders pass them through `tagNames()` from `#lib/sanity.ts`, which also reads the old plugin shape (`{label, value}[]`) until the `tags-to-strings` migration has run; `resume.skills` is sorted on the server.
 - Skills come from the `skills` singleton as `skillGroups` (`{_key, title, skills[]{_key, name, core}}`). Certifications come back with `issued` reduced to a `year` string; the card hides any empty meta (year, credential ID) and links the title when `credentialUrl` is set. `Certifications.svelte` pads the last row of three with dashed placeholder cards.
 
 ### Sanity content model
 - `hero`: title, intro (block array; **only the first span is rendered** in Header), links (`links` object: twitter/linkedin/github handles), headshot (`imageFile`).
-- `about`: content (block array with link annotations), tags (`tags` type).
-- `project`: orderRank, title, screenshot, projectUrl, description (blocks), tags.
-- `skills`: a singleton with document ID `skills`. `groups[]` (`skillGroup`: title, `skills[]` of `skill`: name, core). Native fields, not the tags plugin, since tags can't carry a group or a core flag.
+- `about`: content (block array with link annotations). Its old `tags` field was removed (the `skills` document replaced it).
+- `project`: orderRank, title, screenshot, projectUrl, description (blocks), tags (`string[]`).
+- `skills`: a singleton with document ID `skills`. `groups[]` (`skillGroup`: title, `skills[]` of `skill`: name, core). Plain objects rather than a tag field, since tags can't carry a group or a core flag.
 - `certification`: orderRank, title, issuer, issued (date; the site shows the year), credentialId, credentialUrl.
-- `resume`: a singleton with document ID `resume`. Fields: name, jobTitle, contact fieldset, summary, interests, education[], experience[] (each with `achievment[]`), skills.
+- `resume`: a singleton with document ID `resume`. Fields: name, jobTitle, contact fieldset, summary, interests, education[], experience[] (each with `achievment[]`), skills (`string[]`).
 - The spelling **`achievment` is a typo, but it's part of the stored data.** Don't rename it in schemas or queries unless you also migrate the Content Lake.
 - When you change a schema, update the matching GROQ projection in `src/routes/**/+page.server.ts` as well. The site has no generated types, so a mismatch fails silently and the field just renders empty.
 

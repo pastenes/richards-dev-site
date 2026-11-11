@@ -65,16 +65,10 @@ export default defineType({
     defineField({
       name: 'tags',
       title: 'Tags',
-      type: 'tags',
-      options: {
-        predefinedTags: [
-          {label: 'React', value: 'react'},
-          {label: 'Gatsby', value: 'gatsby'},
-          {label: 'WordPress', value: 'wordpress'},
-        ],
-        includeFromRelated: 'tags',
-        allowCreate: true,
-      },
+      description: 'Type a tag and press Enter.',
+      type: 'array',
+      of: [{type: 'string'}],
+      options: {layout: 'tags'},
     }),
   ],
 })

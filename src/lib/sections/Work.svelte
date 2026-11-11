@@ -7,7 +7,7 @@
 		_id: string;
 		title: string;
 		projectUrl: string;
-		tags: Array<{ label: string }>;
+		tags: string[];
 		description: unknown[];
 		screenshot: { alt: string; url: string | null; srcset: string } | null;
 	};
@@ -67,9 +67,9 @@
 								<BlockContent blocks={project.description} />
 							</div>
 							<ul class="mt-auto flex flex-wrap gap-2 pt-2">
-								{#each project.tags as tag (tag.label)}
+								{#each project.tags as tag (tag)}
 									<li class="rounded-full bg-accent-wash px-2.5 py-1 font-mono text-tiny text-accent">
-										{tag.label}
+										{tag}
 									</li>
 								{/each}
 							</ul>
