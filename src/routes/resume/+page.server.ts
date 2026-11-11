@@ -1,4 +1,4 @@
-import { client } from '$lib/sanity';
+import { client, tagNames } from '#lib/sanity.ts';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
@@ -27,10 +27,10 @@ export const load: PageServerLoad = async () => {
 				achievment
 			}
 		},
-		skills[]{value}
+		skills
 	}`);
 
-	const skills = resume?.skills?.map((s: { value: string }) => s.value).sort() ?? [];
+	const skills = tagNames(resume?.skills).sort();
 
 	// Format dates for experience
 	const experience =

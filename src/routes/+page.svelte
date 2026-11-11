@@ -1,8 +1,10 @@
 <script lang="ts">
-	import Header from '$lib/sections/Header.svelte';
-	import About from '$lib/sections/About.svelte';
-	import Work from '$lib/sections/Work.svelte';
-	import Footer from '$lib/components/Footer.svelte';
+	import Header from '#lib/sections/Header.svelte';
+	import About from '#lib/sections/About.svelte';
+	import Work from '#lib/sections/Work.svelte';
+	import Skills from '#lib/sections/Skills.svelte';
+	import Certifications from '#lib/sections/Certifications.svelte';
+	import Footer from '#lib/components/Footer.svelte';
 
 	let { data } = $props();
 </script>
@@ -11,6 +13,8 @@
 	<title>Richard's Dev Landing | Richard Pastenes' personal web development website</title>
 	<meta name="description" content="Richard Pastenes' personal web development website" />
 	<link rel="canonical" href="https://richard.pastenes.dev" />
+	<!-- Images (including the hero headshot, the largest paint) come from Sanity's CDN. -->
+	<link rel="preconnect" href="https://cdn.sanity.io" />
 	<meta property="og:title" content="Richard's Dev Landing" />
 	<meta property="og:description" content="Richard Pastenes' personal web development website" />
 	<meta property="og:type" content="website" />
@@ -25,9 +29,11 @@
 	<meta name="twitter:image:alt" content="Richard Pastenes' personal web development website" />
 </svelte:head>
 
-<main>
+<main id="main">
 	<Header hero={data.hero} />
-	<About content={data.about.content} tags={data.about.tags} />
+	<About content={data.about.content} />
 	<Work projects={data.projects} />
+	<Skills groups={data.skillGroups} />
+	<Certifications certifications={data.certifications} />
 </main>
 <Footer />

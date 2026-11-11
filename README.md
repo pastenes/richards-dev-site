@@ -34,13 +34,12 @@
 
 | Layer | Technology |
 |-------|-----------|
-| ⚙️ Framework | [SvelteKit 2](https://kit.svelte.dev/) + [Svelte 5](https://svelte.dev/) |
-| 🎨 Styling | [Tailwind CSS 3](https://tailwindcss.com/) |
-| 📦 CMS | [Sanity v5](https://www.sanity.io/) (Studio + Content Lake) |
+| ⚙️ Framework | [SvelteKit 3](https://svelte.dev/docs/kit) + [Svelte 5](https://svelte.dev/) |
+| 🎨 Styling | [Tailwind CSS 4](https://tailwindcss.com/) |
+| 📦 CMS | [Sanity v6](https://www.sanity.io/) (Studio + Content Lake) |
 | 🔍 Queries | [GROQ](https://www.sanity.io/docs/groq) via [@sanity/client](https://www.npmjs.com/package/@sanity/client) |
 | 📝 Rich Text | [@portabletext/svelte](https://github.com/portabletext/svelte-portabletext) |
 | 🖼️ Images | [@sanity/image-url](https://www.npmjs.com/package/@sanity/image-url) |
-| 🐦 Animation | [Vanta.js](https://github.com/tengbao/vanta) (Three.js) |
 | 🔤 Fonts | [Fontsource](https://fontsource.org/) (Fira Code, Montserrat, Open Sans, Poppins, PT Serif) |
 | 🚀 Hosting | [Netlify](https://www.netlify.com/) (SSR via adapter-netlify) |
 
@@ -57,12 +56,11 @@
 │   │   └── sanity.ts      # Sanity client & image URL builder
 │   ├── app.html           # HTML shell
 │   └── app.css            # Global styles & Tailwind directives
-├── cms/
-│   ├── sanity.config.ts   # Sanity Studio v5 configuration
+├── studio/
+│   ├── sanity.config.ts   # Sanity Studio v6 configuration
 │   ├── sanity.cli.ts      # CLI config with deployment settings
 │   └── schemas/           # Document & object type definitions
-├── tailwind.config.js
-├── svelte.config.js
+├── vite.config.ts
 ├── netlify.toml
 └── package.json
 ```
@@ -73,7 +71,7 @@
 
 ### Prerequisites
 
-- Node.js v24+
+- Node.js v26+
 - npm
 
 ### 1. Clone & install
@@ -106,10 +104,10 @@ The site will be available at [http://localhost:5173](http://localhost:5173).
 
 ## 📦 Sanity Studio
 
-The CMS lives in the `cms/` directory and is deployed separately.
+The CMS lives in the `studio/` directory and is deployed separately.
 
 ```bash
-cd cms
+cd studio
 npm install
 npm run dev
 ```

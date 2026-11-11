@@ -96,7 +96,10 @@ export default defineType({
     defineField({
       name: 'skills',
       title: 'Skills',
-      type: 'tags',
+      description: 'Type a skill and press Enter. Shown alphabetically on the resume.',
+      type: 'array',
+      of: [{type: 'string'}],
+      options: {layout: 'tags'},
       group: 'skills',
     }),
   ],

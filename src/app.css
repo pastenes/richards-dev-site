@@ -1,132 +1,154 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
-@media print {
-  html,
-  body {
-    font-size: 71%;
-    background-color: white !important;
-  }
-  * {
-    -webkit-print-color-adjust: exact !important;
-    color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-  .pdf-button {
-    display: none;
-  }
-  @page {
-    size: 210mm 297mm;
-    margin-top: 0;
-    margin-bottom: -20px;
-    &:footer {
-      display: none;
+/* Don't generate classes from the docs (.claude/ mentions class names that aren't in the markup). */
+@source not '../.claude';
+
+/*
+ * Design tokens. Every theme value the site uses is defined here; components use plain
+ * Tailwind classes built from these tokens (no custom utility classes, no arbitrary values).
+ * Values come from the "Pastenes Portfolio Design System" (see .claude/redesign/).
+ */
+@theme {
+  /*
+   * Colors, named by role. The default palette is cleared, so these are the only colors that exist.
+   * Values here are the dark theme; the light ("paper") theme overrides the same names below.
+   */
+  --color-*: initial;
+  --color-background: #0a0c0d; /* page background */
+  --color-surface: #111416; /* nav, panels */
+  --color-surface-raised: #181d1f; /* cards */
+  --color-foreground: #f3f6f5; /* headings and primary text */
+  --color-muted: #a8b3b0; /* body copy */
+  --color-caption: #8a9794; /* eyebrows, meta lines */
+  --color-border: #262d30;
+  --color-border-strong: #66757b;
+  --color-accent: #64ffda; /* links, tags, highlights */
+  --color-accent-hover: #a4ffeb;
+  --color-on-accent: #04211b; /* text on an accent fill */
+  --color-accent-wash: rgb(100 255 218 / 0.1); /* tinted fills: tags, core skill chips */
+  --color-mint: #64ffda; /* same in both themes: moon, snow, glow in the hero landscape */
+  --color-land-sky: #0d1517; /* hero landscape layers, back to front */
+  --color-land-far: #1f5c52;
+  --color-land-mid: #14403a;
+  --color-land-near: #0c2623;
+  --color-land-front: #070f0f;
+  --color-white: #ffffff; /* print page background */
+
+  /* Fonts, named by role. Weights are imported from @fontsource in the routes. */
+  --font-heading: Instrument Serif, Georgia, serif; /* weight 400 only */
+  --font-body: Instrument Sans, system-ui, sans-serif;
+  --font-script: Caveat, cursive; /* one accent word per section heading */
+  --font-mono: Fira Code, monospace; /* all monospace text, including code and pre */
+
+  /* Type scale additions. Line heights ride along, so `text-heading-md` sets both. */
+  --text-tiny: 0.775rem;
+  --text-display-xl: 5.5rem;
+  --text-display-xl--line-height: 0.95;
+  --text-display-lg: 4rem;
+  --text-display-lg--line-height: 1;
+  --text-heading-md: 2.75rem;
+  --text-heading-md--line-height: 1.05;
+  --text-heading-sm: 1.75rem;
+  --text-heading-sm--line-height: 1.15;
+  --text-script-lg: 3rem;
+  --text-script-lg--line-height: 0.92;
+  --text-script-md: 1.75rem;
+  --text-script-md--line-height: 1.07;
+
+  --tracking-heading: -0.01em;
+
+  /* Radii by role, so the default rounded-* scale stays untouched. */
+  --radius-card: 12px;
+  --radius-feature: 20px;
+
+  --shadow-card: 0 12px 32px rgb(0 0 0 / 0.45);
+  --shadow-glow: 0 0 0 1px rgb(100 255 218 / 0.35), 0 12px 40px rgb(100 255 218 / 0.14);
+
+  --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Content widths: `sm:max-w-narrow lg:max-w-wide` steps the content column with the viewport. */
+  --container-narrow: 640px;
+  --container-wide: 1000px;
+
+  --animate-blink: blink 1s step-end infinite;
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
     }
   }
 }
 
-body {
-  @apply h-screen w-screen bg-darker font-pt-serif;
-}
-section {
-  @apply px-14 py-32 lg:px-32;
-}
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  @apply font-poppins font-bold;
-}
-h1 {
-  @apply mb-4 text-3xl;
-}
-p {
-  @apply mb-4;
-}
-.blink {
-  animation: blinker 1s step-end infinite;
-}
-@keyframes blinker {
-  50% {
-    opacity: 0;
+/*
+ * Light ("paper") theme: follows the visitor's system setting, and always applies in print.
+ * Utilities read the color tokens as CSS variables, so overriding the variables re-themes every
+ * class (`bg-surface`, `text-accent/50`, ...) with no extra class names. This rule is outside any
+ * layer, so it beats the theme layer where Tailwind defines the dark values.
+ */
+@media (prefers-color-scheme: light), print {
+  :root {
+    --color-background: #f4f6f3;
+    --color-surface: #ffffff;
+    --color-surface-raised: #eaefeb;
+    --color-foreground: #0d1213;
+    --color-muted: #3f4b49;
+    --color-caption: #56625f;
+    --color-border: #d3dbd6;
+    --color-border-strong: #7b8884;
+    --color-accent: #006b56;
+    --color-accent-hover: #00503f;
+    --color-on-accent: #ffffff;
+    --color-accent-wash: rgb(0 107 86 / 0.08);
+    --color-land-sky: #e4efe9;
+    --color-land-far: #a9d6cb;
+    --color-land-mid: #6fb3a4;
+    --color-land-near: #2f7f6f;
+    --color-land-front: #0f4a40;
   }
 }
 
-/* Resume only styles */
-.rh1 {
-  @apply font-montserrat text-lg font-thin uppercase tracking-widest print:text-5xl md:text-5xl;
-}
-.rh2 {
-  @apply font-montserrat text-xs font-thin uppercase;
-}
-.rh3 {
-  @apply relative my-4 inline-block font-mono text-lg font-bold lowercase text-blue;
-  &:before {
-    content: "";
-    position: absolute;
-    width: 30px;
-    height: 1px;
-    bottom: 0;
-    left: 0;
-    border-bottom: 1px solid black;
+/*
+ * Element defaults. They live in the base layer so utility classes on the same element win.
+ * They also style headings and paragraphs rendered from Sanity rich text, which can't take classes.
+ */
+@layer base {
+  /* Instrument Serif only comes in 400, so headings aren't bold. */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-heading font-normal tracking-heading;
   }
-}
-.rh4 {
-  @apply tracking-wider;
-}
-.rh5 {
-  @apply font-opensans text-xs font-light;
-}
-.rdate {
-  @apply text-xs text-neutral;
-}
-.rexperience {
-  @apply relative m-0 list-none p-0;
-  &:before {
-    @apply bg-muted;
-    content: "";
-    display: inline-block;
-    width: 1px;
-    position: absolute;
-    left: 3px;
-    top: 5px;
-    height: calc(100% - 10px);
+  h1 {
+    @apply mb-4 text-3xl;
   }
-  > li {
-    position: relative;
-    padding-left: 15px;
-    margin-bottom: 15px;
-    &:before {
-      @apply bg-dark;
-      content: "";
-      display: inline-block;
-      width: 8px;
-      height: 8px;
-      position: absolute;
-      left: 0;
-      top: 5px;
-      border-radius: 10px;
+  p {
+    @apply mb-4;
+  }
+
+  /* Keyboard focus: an accent ring on every focusable element (it follows rounded corners). */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-accent;
+  }
+
+  /* Resume printing: scale everything down to fit one A4 page and keep background colors.
+     The paper colors apply in print via the light-theme block above. */
+  @media print {
+    html,
+    body {
+      font-size: 71%;
+    }
+    * {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
     }
   }
-  ul {
-    @apply my-2;
-    li {
-      position: relative;
-      padding-left: 10px;
-      &:before {
-        @apply bg-muted;
-        content: "";
-        display: inline-block;
-        width: 4px;
-        height: 4px;
-        position: absolute;
-        left: 0;
-        top: 7px;
-        border-radius: 10px;
-      }
-    }
-  }
+}
+
+@page {
+  size: 210mm 297mm;
+  margin-top: 0;
+  margin-bottom: -20px;
 }

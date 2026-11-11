@@ -38,19 +38,5 @@ export default defineType({
         },
       ],
     }),
-    defineField({
-      name: 'tags',
-      title: 'Skills',
-      type: 'tags',
-      options: {
-        predefinedTags: [
-          {label: 'React', value: 'react'},
-          {label: 'Gatsby', value: 'gatsby'},
-          {label: 'WordPress', value: 'wordpress'},
-        ],
-        includeFromRelated: 'tags',
-        allowCreate: true,
-      },
-    }),
   ],
 })
