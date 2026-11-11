@@ -58,7 +58,7 @@ Fonts come from `@fontsource/*`. Import only the weights you use. A font that's 
 | Instrument Serif 400 | `font-heading` | All headings (base-layer `h1`–`h6` rule in app.css). It has no bold, so headings are `font-normal` | `+layout.svelte` |
 | Instrument Sans 400, 700 | `font-body` | Body text (`<body>` class in `app.html`) | `+layout.svelte` |
 | Caveat 400 | `font-script` | Nav brand; one accent word per section heading (redesign) | `+layout.svelte` |
-| Fira Code 400 (+600, 700 on the resume) | `font-mono` | All monospace text: hero "Hi, I'm", nav links and Resume button, tech tags, footer, 404 link, resume PDF button and section titles | 400 in `+layout.svelte`; 600/700 in `resume/+page.svelte` |
+| Fira Code 400 (+600, 700 on the resume) | `font-mono` | All monospace text: hero "Hi, I'm", nav links and Resume button, section eyebrows, project tags, skill chips, cert meta line, footer, 404 link, resume PDF button and section titles | 400 in `+layout.svelte`; 600/700 in `resume/+page.svelte` |
 | Montserrat 100 | `font-resume-heading` | Resume name and job title (`font-thin`) | `resume/+page.svelte` |
 | Poppins 700 | `font-resume-subheading` | Resume roles and degrees (kept until the resume restyle) | `resume/+page.svelte` |
 | Open Sans 300 | `font-resume-body` | Resume body (`font-light`) | `resume/+page.svelte` |
@@ -74,8 +74,8 @@ src/
   env.ts                   # defineEnvVars: declares the Sanity env vars
   lib/
     sanity.ts              # Sanity client + urlFor() image builder (SERVER ONLY)
-    sections/              # Header (hero), About, Work
-    components/            # BlockContent (PortableText), Footer, Nav (floating pill), SectionHeading, TechTags, ResumeHeading
+    sections/              # Header (hero), About, Work, Skills, Certifications (page order)
+    components/            # BlockContent (PortableText), Footer, Nav (floating pill), SectionHeading, ResumeHeading
   routes/
     +layout.svelte         # imports app.css + base fonts
     +page.server.ts        # GROQ: hero, about, projects (Promise.all)
@@ -101,6 +101,7 @@ studio/
 - Image URLs are resolved on the server with `urlFor(...).width(n).format('webp').url()`: 380px for the headshot, 1000px for project screenshots. Components only ever get `{ alt, url }`.
 - Projects are sorted by `orderRank`, which comes from `@sanity/orderable-document-list` (editors drag to reorder them in the studio).
 - Tag fields (`about.tags`, `resume.skills`) are flattened to sorted `string[]` on the server. `project.tags` stays as `{label}[]`.
+- **Skills and certifications are hard-coded** in `Skills.svelte` and `Certifications.svelte`, not fetched from Sanity. `about.tags` is still queried but no longer rendered. The cert year and credential ID are placeholders.
 
 ### Sanity content model
 - `hero`: title, intro (block array; **only the first span is rendered** in Header), links (`links` object: twitter/linkedin/github handles), headshot (`imageFile`).

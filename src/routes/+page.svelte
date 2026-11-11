@@ -3,6 +3,8 @@
 	import Header from '#lib/sections/Header.svelte';
 	import About from '#lib/sections/About.svelte';
 	import Work from '#lib/sections/Work.svelte';
+	import Skills from '#lib/sections/Skills.svelte';
+	import Certifications from '#lib/sections/Certifications.svelte';
 	import Footer from '#lib/components/Footer.svelte';
 
 	let { data } = $props();
@@ -29,7 +31,9 @@
 <Nav />
 <main>
 	<Header hero={data.hero} />
-	<About content={data.about.content} tags={data.about.tags} />
+	<About content={data.about.content} />
 	<Work projects={data.projects} />
+	<Skills />
+	<Certifications />
 </main>
 <Footer />

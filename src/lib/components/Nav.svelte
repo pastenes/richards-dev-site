@@ -1,8 +1,10 @@
 <script lang="ts">
-	// Section links. Skills and Certs join this list when those sections exist.
+	// Section links, in page order.
 	const links = [
 		{ label: 'About', href: '#about' },
-		{ label: 'Work', href: '#work' }
+		{ label: 'Work', href: '#work' },
+		{ label: 'Skills', href: '#skills' },
+		{ label: 'Certs', href: '#certifications' }
 	];
 </script>
 
