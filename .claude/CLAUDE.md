@@ -140,6 +140,8 @@ studio/
 - `.claude/progress.md` tracks the roadmap and is current. Phases 1 (Gatsby → SvelteKit), 2 (Sanity v2 → v5), and 3 (Tailwind v3 → v4) are done. Phase 4 (redesign) is in progress; the handoff from Claude Design is in `.claude/redesign/` (`plan.md` lists the sub-phases).
 - The README logo path (`src/images/icon.png`) points to a file that doesn't exist. The icon is at `static/icon.png`.
 - **Vite 8 minifies CSS with Lightning CSS**, which is stricter than esbuild was. Invalid CSS (such as nesting `&` where it isn't allowed) now fails the build instead of passing through.
+- **`studio/package.json` has npm `overrides`** that force patched versions of transitive Sanity CLI dependencies flagged by Dependabot: `js-yaml` and `smol-toml` under `@vercel/frameworks`, and `minimatch` under `@oclif/core`. Remove each one once `sanity`/`@sanity/cli` ships the patched version itself (`npm ls <pkg>` shows what it resolves to; `npm audit` should stay at 0).
+- The site's only `npm audit` finding is `deepmerge` (low, via `@sveltejs/vite-plugin-svelte`), with no patched release. It only merges build-time config, so there's nothing to fix.
 - Generated or ignored directories: `.svelte-kit/`, `build/`, `.netlify/`, `studio/.sanity/`, `studio/dist/`. Don't edit them.
 
 ## Deployment
