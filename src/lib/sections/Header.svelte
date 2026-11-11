@@ -5,7 +5,7 @@
 		title?: string;
 		intro?: Array<{ children?: Array<{ text?: string }> }>;
 		links?: { github?: string; linkedin?: string; twitter?: string };
-		headshot?: { alt?: string; url?: string | null } | null;
+		headshot?: { alt?: string; url?: string | null; srcset?: string } | null;
 	};
 
 	let { hero = {} as HeroData }: { hero: HeroData } = $props();
@@ -59,6 +59,8 @@
 	{#if hero.headshot?.url}
 		<img
 			src={hero.headshot.url}
+			srcset={hero.headshot.srcset}
+			sizes="(min-width: 1024px) min(20vw, 448px), (min-width: 768px) min(33vw, 448px), min(50vw, 448px)"
 			alt={hero.headshot.alt ?? ''}
 			width="700"
 			height="758"

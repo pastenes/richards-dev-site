@@ -15,3 +15,15 @@ const builder = createImageUrlBuilder(client);
 export function urlFor(source: unknown) {
 	return builder.image(source as SanityImageSource);
 }
+
+/**
+ * A WebP image at several widths, for `<img src srcset sizes>`. `src` is the largest width
+ * (the fallback); the component supplies `sizes` so the browser picks the smallest that fits.
+ */
+export function responsiveImage(source: unknown, widths: number[]) {
+	const at = (width: number) => urlFor(source).width(width).format('webp').url();
+	return {
+		url: at(Math.max(...widths)),
+		srcset: widths.map((width) => `${at(width)} ${width}w`).join(', ')
+	};
+}

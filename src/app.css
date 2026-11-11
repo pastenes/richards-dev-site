@@ -128,6 +128,11 @@
     @apply mb-4;
   }
 
+  /* Keyboard focus: an accent ring on every focusable element (it follows rounded corners). */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-accent;
+  }
+
   /* Resume printing: scale everything down to fit one A4 page and keep background colors.
      The paper colors apply in print via the light-theme block above. */
   @media print {

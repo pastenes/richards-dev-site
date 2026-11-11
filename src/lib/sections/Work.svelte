@@ -9,10 +9,14 @@
 		projectUrl: string;
 		tags: Array<{ label: string }>;
 		description: unknown[];
-		screenshot: { alt: string; url: string | null } | null;
+		screenshot: { alt: string; url: string | null; srcset: string } | null;
 	};
 
 	let { projects = [] }: { projects: Project[] } = $props();
+
+	// Rendered image widths per breakpoint, for `sizes` (the featured card spans two columns).
+	const featuredSizes = '(min-width: 1024px) min(658px, 66vw), (min-width: 768px) 640px, calc(100vw - 48px)';
+	const cardSizes = '(min-width: 1024px) min(317px, 33vw), (min-width: 768px) 308px, calc(100vw - 48px)';
 </script>
 
 <section id="work" class="px-6 py-32 md:px-14 lg:px-32">
@@ -27,21 +31,37 @@
 						class="group flex h-full flex-col overflow-hidden rounded-card border border-border bg-surface-raised transition duration-300 ease-out-expo hover:border-accent hover:shadow-glow"
 					>
 						{#if project.screenshot?.url}
-							<a href={project.projectUrl} target="_blank" rel="noreferrer" tabindex="-1">
+							{#snippet screenshot(url: string, srcset: string)}
 								<img
-									src={project.screenshot.url}
-									alt={project.screenshot.alt}
+									src={url}
+									{srcset}
+									sizes={index === 0 ? featuredSizes : cardSizes}
+									alt=""
 									width="1000"
+									height="563"
 									loading="lazy"
+									decoding="async"
 									class="aspect-video w-full object-cover object-top brightness-90 transition duration-300 group-hover:brightness-100"
 								/>
-							</a>
+							{/snippet}
+							{#if project.projectUrl}
+								<!-- Duplicate of the title link, so it's hidden from keyboard and screen readers. -->
+								<a href={project.projectUrl} target="_blank" rel="noreferrer" tabindex="-1" aria-hidden="true">
+									{@render screenshot(project.screenshot.url, project.screenshot.srcset)}
+								</a>
+							{:else}
+								{@render screenshot(project.screenshot.url, project.screenshot.srcset)}
+							{/if}
 						{/if}
 						<div class="flex flex-auto flex-col p-6">
 							<h3 class="mb-3 text-heading-sm text-foreground">
-								<a href={project.projectUrl} target="_blank" rel="noreferrer" class="hover:text-accent">
+								{#if project.projectUrl}
+									<a href={project.projectUrl} target="_blank" rel="noreferrer" class="hover:text-accent">
+										{project.title}
+									</a>
+								{:else}
 									{project.title}
-								</a>
+								{/if}
 							</h3>
 							<div class="text-muted">
 								<BlockContent blocks={project.description} />

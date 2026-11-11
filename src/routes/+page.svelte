@@ -1,5 +1,4 @@
 <script lang="ts">
-	import Nav from '#lib/components/Nav.svelte';
 	import Header from '#lib/sections/Header.svelte';
 	import About from '#lib/sections/About.svelte';
 	import Work from '#lib/sections/Work.svelte';
@@ -14,6 +13,8 @@
 	<title>Richard's Dev Landing | Richard Pastenes' personal web development website</title>
 	<meta name="description" content="Richard Pastenes' personal web development website" />
 	<link rel="canonical" href="https://richard.pastenes.dev" />
+	<!-- Images (including the hero headshot, the largest paint) come from Sanity's CDN. -->
+	<link rel="preconnect" href="https://cdn.sanity.io" />
 	<meta property="og:title" content="Richard's Dev Landing" />
 	<meta property="og:description" content="Richard Pastenes' personal web development website" />
 	<meta property="og:type" content="website" />
@@ -28,8 +29,7 @@
 	<meta name="twitter:image:alt" content="Richard Pastenes' personal web development website" />
 </svelte:head>
 
-<Nav />
-<main>
+<main id="main">
 	<Header hero={data.hero} />
 	<About content={data.about.content} />
 	<Work projects={data.projects} />

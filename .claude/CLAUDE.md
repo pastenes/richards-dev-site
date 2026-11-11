@@ -11,7 +11,7 @@ Richard Pastenes' personal portfolio and resume site (https://richard.pastenes.d
 Site (repo root):
 
 ```bash
-npm run dev       # vite dev → http://localhost:5173
+npm run dev       # vite dev --host → http://localhost:5173, plus a Network URL for phones/tablets on the same Wi-Fi
 npm run build     # vite build (adapter-netlify output in build/)
 npm run preview   # preview the production build
 ```
@@ -75,12 +75,12 @@ src/
     components/            # BlockContent (PortableText), Footer, Nav (floating pill), SectionHeading, Reveal, HeroLandscape, ResumeHeading
     actions/reveal.ts      # scroll-reveal action used by Reveal.svelte
   routes/
-    +layout.svelte         # imports app.css + base fonts
+    +layout.svelte         # app.css, fonts, skip link, the shared Nav (PDF button on /resume), page transitions
     +page.server.ts        # GROQ: hero, about, projects (Promise.all)
     +page.svelte           # landing page + SEO/OG meta in <svelte:head>
     resume/+page.server.ts # GROQ: resume singleton; formats experience dates
     resume/+page.svelte    # printable resume (print: variants in markup, page scaling in app.css)
-    +error.svelte          # 404 page
+    +error.svelte          # 404/error page ("> go back home": pressing return anywhere goes home)
 vite.config.ts             # tailwindcss() plugin + sveltekit({...}) with adapter and preprocess (no svelte.config.js)
 static/                    # icon.png, meta.png (OG), Resume-Richard-Pastenes.pdf
 studio/
@@ -96,7 +96,7 @@ studio/
   - It can only be imported from server modules (`*.server.ts`). Importing it from a component will fail the build.
   - The vars have to exist **at build time**: locally in `.env.development` / `.env.production` (both gitignored), and in the Netlify dashboard for deploys.
 - The client uses `useCdn: true` and `apiVersion: '2024-01-01'`.
-- Image URLs are resolved on the server with `urlFor(...).width(n).format('webp').url()`: 700px for the headshot (2x), 1000px for project screenshots. Components only ever get `{ alt, url }`.
+- Image URLs are resolved on the server with `responsiveImage(asset, widths)` from `#lib/sanity.ts` (WebP `url` + `srcset`); components add `sizes`. Headshot 350/525/700, project screenshots 400/700/1000/1400. Components only ever get `{ alt, url, srcset }`. `+page.svelte` preconnects to `cdn.sanity.io` because the headshot is the largest paint.
 - Projects are sorted by `orderRank`, which comes from `@sanity/orderable-document-list` (editors drag to reorder them in the studio).
 - Tag fields (`about.tags`, `resume.skills`) are flattened to sorted `string[]` on the server. `project.tags` stays as `{label}[]`.
 - **Skills and certifications are hard-coded** in `Skills.svelte` and `Certifications.svelte`, not fetched from Sanity. `about.tags` is still queried but no longer rendered. The cert year and credential ID are placeholders.
@@ -126,6 +126,9 @@ studio/
 - **`--color-*: initial` in `@theme` replaces the default palette instead of extending it.** Colors are named by role: `background`, `surface`, `surface-raised`, `foreground`, `muted`, `caption`, `border`, `border-strong`, `accent`, `accent-hover`, `on-accent`, `accent-wash`, `mint`, `land-sky`/`far`/`mid`/`near`/`front` (hero landscape), and `white` (print page background) (`transparent` and `current` are built in). Pick a token by role, not by how it looks. Classes like `text-red-500` or `bg-slate-800` won't exist. Everything else extends the defaults: fonts, the `text-display-*`/`heading-*`/`script-*` sizes, `text-tiny`, `tracking-heading`, `rounded-card`/`rounded-feature`, `shadow-card`/`shadow-glow`, `ease-out-expo`, `animate-blink`, and the content widths `max-w-narrow` (640px) and `max-w-wide` (1000px).
 - **Theme:** the `@theme` colors are the dark theme. A `@media (prefers-color-scheme: light), print` block in `app.css` overrides the same `--color-*` variables with the light ("paper") values, so there are no `dark:` classes; one class works in both themes. Print is always light, on a white page (`print:bg-white` on body); `mint` is the same in both themes. The resume uses the themed roles like every other page, so it follows the system theme on screen and prints in the paper colors.
 - There's no `container` class. Content columns use `mx-auto sm:max-w-narrow lg:max-w-wide` (Work, resume) or `mx-auto max-w-4xl` (About, 404). Section padding (`px-14 py-32 lg:px-32`, or `px-6 md:px-14` on redesigned sections) is written on each `<section>`; there's no global `section` rule. Redesigned sections open with `SectionHeading` (`eyebrow`, `title`, and a `script` word in Caveat).
+- **Accessibility:** every page has `<main id="main">` (the skip link targets it), and the base layer draws an accent `:focus-visible` ring on everything. Decorative images and duplicate links get `alt=""` / `aria-hidden`; motion (reveal, parallax, page transitions, smooth scroll, the 404 cursor blink) is skipped under reduced motion. axe reported 0 violations on all pages in both themes; re-run it after big changes.
+- **Page transitions:** `onNavigate` in `+layout.svelte` wraps cross-page navigations in `document.startViewTransition` (the browser's default cross-fade). It skips same-page anchor jumps and reduced motion; browsers without the API navigate normally.
+- **Performance:** `inlineStyleThreshold` in `vite.config.ts` inlines the CSS into the HTML (no render-blocking stylesheet). If the CSS grows past the threshold it silently goes back to a `<link>`. Lighthouse mobile: performance 95, accessibility/best practices/SEO 100, CLS ~0.
 - **Scroll reveal:** wrap an element in `<Reveal>` (`as` for the tag, `step` to stagger siblings, `class` for its own classes) instead of repeating the animation classes. The action adds `data-hidden` only to elements that start below the fold and removes it on first view, so server-rendered and no-JS pages show everything, and reduced motion skips it. Don't put `Reveal`'s classes on an element that has its own `transition`/`duration` (wrap it instead, as the Work cards do).
 - **Cascade layers:** Tailwind 4 puts utilities in `@layer utilities`, and CSS outside a layer beats every layer. Element rules (`h1`–`h6`, `p`) must stay inside `@layer base`, or they'll override utility classes like `mb-0` or `text-5xl` on those elements.
 - Don't define a multi-layer `--drop-shadow-*` token (`a, b`). Tailwind 4.3 wraps it in a single `drop-shadow()`, which is invalid, so the filter silently becomes `none`. `drop-shadow-lg` uses v4's default.

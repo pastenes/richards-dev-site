@@ -1,4 +1,4 @@
-import { client, urlFor } from '#lib/sanity.ts';
+import { client, responsiveImage } from '#lib/sanity.ts';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
@@ -31,7 +31,9 @@ export const load: PageServerLoad = async () => {
 			headshot: hero?.headshot
 				? {
 						alt: hero.headshot.alt,
-						url: hero.headshot.asset ? urlFor(hero.headshot.asset).width(700).format('webp').url() : null
+						...(hero.headshot.asset
+							? responsiveImage(hero.headshot.asset, [350, 525, 700])
+							: { url: null, srcset: '' })
 					}
 				: null
 		},
@@ -45,12 +47,11 @@ export const load: PageServerLoad = async () => {
 				screenshot: project.screenshot
 					? {
 							alt: (project.screenshot as Record<string, unknown>).alt,
-							url: (project.screenshot as Record<string, unknown>).asset
-								? urlFor((project.screenshot as Record<string, unknown>).asset)
-										.width(1000)
-										.format('webp')
-										.url()
-								: null
+							...((project.screenshot as Record<string, unknown>).asset
+								? responsiveImage((project.screenshot as Record<string, unknown>).asset, [
+										400, 700, 1000, 1400
+									])
+								: { url: null, srcset: '' })
 						}
 					: null
 			})) ?? []
