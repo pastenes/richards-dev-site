@@ -100,7 +100,7 @@ Tailwind v4 is a full rewrite with a new configuration approach and significant 
 
 ### Also done alongside Phase 3
 - Upgraded to SvelteKit 3, Vite 8, TypeScript 6, Sanity 6, and Node 26
-- Removed Vanta.js and the vendored `static/three.min.js` (r135). The hero is a static grey background until the Phase 4 redesign.
+- Removed Vanta.js and the vendored `static/three.min.js` (r135). The hero is a static gray background until the Phase 4 redesign.
 - Design-system cleanup:
   - All styling is plain Tailwind classes built from `@theme` tokens. Removed every custom class and `@utility` (`container`, `drop-shadow-lg`, `.blink`, `.pdf-button`, `.rh1`–`.rh5`, `.rdate`, `.rexperience`), and there are no arbitrary values.
   - Fonts are named by role (`font-heading`, `font-body`, `font-mono`, `font-resume-heading`, `font-resume-body`). `font-mono` is Fira Code everywhere; the footer, 404 link and resume used to fall back to the system mono font.
@@ -110,7 +110,7 @@ Tailwind v4 is a full rewrite with a new configuration approach and significant 
 
 ---
 
-## Phase 4: Update Design `STATUS: TODO`
+## Phase 4: Update Design `STATUS: IN PROGRESS`
 
 Refresh the visual design of the portfolio site.
 
@@ -122,7 +122,9 @@ Refresh the visual design of the portfolio site.
 - Update color palette if desired
 
 ### Tasks
-- [ ] Design review and mood board
+- [x] Design review and mood board (Claude Design handoff in `.claude/redesign/`: `plan.md`, `tokens.css`, `components.md`)
+- [x] Tokens and fonts (redesign step 1): dark tokens in `@theme`, light "paper" override via `prefers-color-scheme` (and always in print); Instrument Serif / Instrument Sans / Caveat replace Poppins / PT Serif; resume pinned to constant colors and Poppins until its restyle
+- [x] Nav (redesign step 2): `Nav.svelte` floating pill (Caveat brand, mono section links, accent Resume button; links hidden below `md`) replaces `Jumplinks.svelte`. Skills/Certs links get added with those sections
 - [ ] Update color scheme and typography
 - [ ] Redesign hero section (including a replacement for the removed Vanta birds animation)
 - [ ] Redesign project cards

@@ -1,33 +1,84 @@
 @import 'tailwindcss';
 
+/* Don't generate classes from the docs (.claude/ mentions class names that aren't in the markup). */
+@source not '../.claude';
+
 /*
  * Design tokens. Every theme value the site uses is defined here; components use plain
  * Tailwind classes built from these tokens (no custom utility classes, no arbitrary values).
+ * Values come from the "Pastenes Portfolio Design System" (see .claude/redesign/).
  */
 @theme {
-  /* Colors, named by role. The default palette is cleared, so these are the only colors that exist. */
+  /*
+   * Colors, named by role. The default palette is cleared, so these are the only colors that exist.
+   * Values here are the dark theme; the light ("paper") theme overrides the same names below.
+   */
   --color-*: initial;
-  --color-background: #141414; /* page background */
-  --color-surface: #222222; /* nav, project panels, resume timeline dots */
-  --color-foreground: #fafafa; /* headings and borders on dark */
-  --color-muted: #a8b2d1; /* body copy on dark, resume timeline lines */
+  --color-background: #0a0c0d; /* page background */
+  --color-surface: #111416; /* nav, panels */
+  --color-surface-raised: #181d1f; /* cards */
+  --color-foreground: #f3f6f5; /* headings and primary text */
+  --color-muted: #a8b3b0; /* body copy */
+  --color-caption: #8a9794; /* eyebrows, meta lines */
+  --color-border: #262d30;
+  --color-border-strong: #66757b;
   --color-accent: #64ffda; /* links, tags, highlights */
-  --color-subtle: #c4c4c4; /* hero background, de-emphasized text on white */
-  --color-resume-band: #ebebeb; /* resume header and footer */
-  --color-resume-accent: #3cb1e4; /* resume section titles */
+  --color-accent-hover: #a4ffeb;
+  --color-on-accent: #04211b; /* text on an accent fill */
+  --color-accent-wash: rgb(100 255 218 / 0.1); /* tinted fills: tags, core skill chips */
+  --color-mint: #64ffda; /* same in both themes: moon, snow, glow in the hero landscape */
+  --color-land-sky: #0d1517; /* hero landscape layers, back to front */
+  --color-land-far: #1f5c52;
+  --color-land-mid: #14403a;
+  --color-land-near: #0c2623;
+  --color-land-front: #070f0f;
+  --color-subtle: #c4c4c4; /* current hero background, until the hero phase */
+
+  /* Resume colors. The resume is always a white page, so these don't change with the theme. */
+  --color-resume-band: #ebebeb; /* header and footer */
+  --color-resume-accent: #3cb1e4; /* section titles */
+  --color-resume-ink: #222222; /* timeline dots */
+  --color-resume-rule: #a8b2d1; /* timeline lines */
+  --color-resume-date: #c4c4c4; /* experience dates */
   --color-black: #000000;
   --color-white: #ffffff;
 
   /* Fonts, named by role. Weights are imported from @fontsource in the routes. */
-  --font-heading: Poppins, sans-serif;
-  --font-body: PT Serif, serif;
+  --font-heading: Instrument Serif, Georgia, serif; /* weight 400 only */
+  --font-body: Instrument Sans, system-ui, sans-serif;
+  --font-script: Caveat, cursive; /* one accent word per section heading */
   --font-mono: Fira Code, monospace; /* all monospace text, including code and pre */
   --font-resume-heading: Montserrat, sans-serif;
+  --font-resume-subheading: Poppins, sans-serif; /* resume roles and degrees, until the resume phase */
   --font-resume-body: Open Sans, sans-serif;
 
+  /* Type scale additions. Line heights ride along, so `text-heading-md` sets both. */
   --text-tiny: 0.775rem;
+  --text-display-xl: 5.5rem;
+  --text-display-xl--line-height: 0.95;
+  --text-display-lg: 4rem;
+  --text-display-lg--line-height: 1;
+  --text-heading-md: 2.75rem;
+  --text-heading-md--line-height: 1.05;
+  --text-heading-sm: 1.75rem;
+  --text-heading-sm--line-height: 1.15;
+  --text-script-lg: 3rem;
+  --text-script-lg--line-height: 0.92;
+  --text-script-md: 1.75rem;
+  --text-script-md--line-height: 1.07;
 
-  /* Left offset of the floating nav (jump links, resume PDF button) on large screens. */
+  --tracking-heading: -0.01em;
+
+  /* Radii by role, so the default rounded-* scale stays untouched. */
+  --radius-card: 12px;
+  --radius-feature: 20px;
+
+  --shadow-card: 0 12px 32px rgb(0 0 0 / 0.45);
+  --shadow-glow: 0 0 0 1px rgb(100 255 218 / 0.35), 0 12px 40px rgb(100 255 218 / 0.14);
+
+  --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Left offset of the resume page's PDF button on large screens. */
   --spacing-nav: 11.5rem;
 
   /* Content widths: `sm:max-w-narrow lg:max-w-wide` steps the content column with the viewport. */
@@ -44,17 +95,46 @@
 }
 
 /*
+ * Light ("paper") theme: follows the visitor's system setting, and always applies in print.
+ * Utilities read the color tokens as CSS variables, so overriding the variables re-themes every
+ * class (`bg-surface`, `text-accent/50`, ...) with no extra class names. This rule is outside any
+ * layer, so it beats the theme layer where Tailwind defines the dark values.
+ */
+@media (prefers-color-scheme: light), print {
+  :root {
+    --color-background: #f4f6f3;
+    --color-surface: #ffffff;
+    --color-surface-raised: #eaefeb;
+    --color-foreground: #0d1213;
+    --color-muted: #3f4b49;
+    --color-caption: #56625f;
+    --color-border: #d3dbd6;
+    --color-border-strong: #7b8884;
+    --color-accent: #006b56;
+    --color-accent-hover: #00503f;
+    --color-on-accent: #ffffff;
+    --color-accent-wash: rgb(0 107 86 / 0.08);
+    --color-land-sky: #e4efe9;
+    --color-land-far: #a9d6cb;
+    --color-land-mid: #6fb3a4;
+    --color-land-near: #2f7f6f;
+    --color-land-front: #0f4a40;
+  }
+}
+
+/*
  * Element defaults. They live in the base layer so utility classes on the same element win.
  * They also style headings and paragraphs rendered from Sanity rich text, which can't take classes.
  */
 @layer base {
+  /* Instrument Serif only comes in 400, so headings aren't bold. */
   h1,
   h2,
   h3,
   h4,
   h5,
   h6 {
-    @apply font-heading font-bold;
+    @apply font-heading font-normal tracking-heading;
   }
   h1 {
     @apply mb-4 text-3xl;

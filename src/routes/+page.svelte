@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Nav from '#lib/components/Nav.svelte';
 	import Header from '#lib/sections/Header.svelte';
 	import About from '#lib/sections/About.svelte';
 	import Work from '#lib/sections/Work.svelte';
@@ -25,6 +26,7 @@
 	<meta name="twitter:image:alt" content="Richard Pastenes' personal web development website" />
 </svelte:head>
 
+<Nav />
 <main>
 	<Header hero={data.hero} />
 	<About content={data.about.content} tags={data.about.tags} />

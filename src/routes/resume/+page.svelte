@@ -1,6 +1,7 @@
 <script lang="ts">
 	import '@fontsource/montserrat/100.css';
 	import '@fontsource/open-sans/300.css';
+	import '@fontsource/poppins/700.css';
 	import '@fontsource/fira-code/600.css';
 	import '@fontsource/fira-code/700.css';
 	import ResumeHeading from '#lib/components/ResumeHeading.svelte';
@@ -26,7 +27,7 @@
 		>
 			{resume.name}
 		</h1>
-		<h2 class="font-resume-heading text-xs font-thin uppercase">{resume.jobTitle}</h2>
+		<h2 class="font-resume-heading text-xs font-thin tracking-normal uppercase">{resume.jobTitle}</h2>
 		<ul class="flex gap-4 text-xs">
 			<li><span class="font-mono font-semibold">p.</span>{resume.phone}</li>
 			<li><span class="font-mono font-semibold">e.</span>{resume.email}</li>
@@ -57,7 +58,7 @@
 				<ul>
 					{#each resume.education ?? [] as item (item._key)}
 						<li>
-							<h4 class="tracking-wider">{item.degree}</h4>
+							<h4 class="font-resume-subheading font-bold tracking-wider">{item.degree}</h4>
 							<p class="mb-0">{item.year}</p>
 							<p>{item.school}</p>
 						</li>
@@ -68,21 +69,21 @@
 				<ResumeHeading>Experience</ResumeHeading>
 				<!-- Timeline: a vertical rule on the list, a dot per role, and a small dot per achievement. -->
 				<ul
-					class="relative before:absolute before:inset-y-1.25 before:left-0.75 before:w-px before:bg-muted"
+					class="relative before:absolute before:inset-y-1.25 before:left-0.75 before:w-px before:bg-resume-rule"
 				>
 					{#each resume.experience ?? [] as item (item._key)}
 						<li
-							class="relative mb-3.75 pl-3.75 before:absolute before:top-1.25 before:left-0 before:size-2 before:rounded-full before:bg-surface"
+							class="relative mb-3.75 pl-3.75 before:absolute before:top-1.25 before:left-0 before:size-2 before:rounded-full before:bg-resume-ink"
 						>
 							<div class="flex justify-between">
-								<h4 class="tracking-wider">{item.role}</h4>
-								<span class="text-xs text-subtle">{item.start} - {item.end}</span>
+								<h4 class="font-resume-subheading font-bold tracking-wider">{item.role}</h4>
+								<span class="text-xs text-resume-date">{item.start} - {item.end}</span>
 							</div>
 							<h5 class="font-resume-body text-xs font-light">{item.employer}</h5>
 							<ul class="my-2">
 								{#each item.achievment ?? [] as piece (piece._key)}
 									<li
-										class="relative pl-2.5 before:absolute before:top-1.75 before:left-0 before:size-1 before:rounded-full before:bg-muted"
+										class="relative pl-2.5 before:absolute before:top-1.75 before:left-0 before:size-1 before:rounded-full before:bg-resume-rule"
 									>
 										{piece.achievment}
 									</li>

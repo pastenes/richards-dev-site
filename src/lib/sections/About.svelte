@@ -1,12 +1,10 @@
 <script lang="ts">
-	import Jumplinks from '#lib/components/Jumplinks.svelte';
 	import BlockContent from '#lib/components/BlockContent.svelte';
 	import TechTags from '#lib/components/TechTags.svelte';
 
 	let { content = [], tags = [] }: { content: unknown[]; tags: string[] } = $props();
 </script>
 
-<Jumplinks />
 <section id="about" class="relative px-14 py-32 lg:px-32">
 	<div class="mx-auto h-full max-w-4xl">
 		<h2 class="text-right text-3xl text-foreground">About Me</h2>
