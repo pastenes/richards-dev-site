@@ -125,6 +125,7 @@ Refresh the visual design of the portfolio site.
 - [x] Design review and mood board (Claude Design handoff in `.claude/redesign/`: `plan.md`, `tokens.css`, `components.md`)
 - [x] Tokens and fonts (redesign step 1): dark tokens in `@theme`, light "paper" override via `prefers-color-scheme` (and always in print); Instrument Serif / Instrument Sans / Caveat replace Poppins / PT Serif; resume pinned to constant colors and Poppins until its restyle
 - [x] Nav (redesign step 2): `Nav.svelte` floating pill (Caveat brand, mono section links, accent Resume button; links hidden below `md`) replaces `Jumplinks.svelte`. Skills/Certs links get added with those sections
+- [x] Work (redesign step 3): bento grid in `Work.svelte` (first project spans two columns from `md`), cards with screenshot on top, glow and accent border on hover; new `SectionHeading.svelte`. No data changes
 - [ ] Update color scheme and typography
 - [ ] Redesign hero section (including a replacement for the removed Vanta birds animation)
 - [ ] Redesign project cards

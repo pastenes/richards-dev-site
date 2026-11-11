@@ -75,7 +75,7 @@ src/
   lib/
     sanity.ts              # Sanity client + urlFor() image builder (SERVER ONLY)
     sections/              # Header (hero), About, Work
-    components/            # BlockContent (PortableText), Footer, Nav (floating pill), TechTags, ResumeHeading
+    components/            # BlockContent (PortableText), Footer, Nav (floating pill), SectionHeading, TechTags, ResumeHeading
   routes/
     +layout.svelte         # imports app.css + base fonts
     +page.server.ts        # GROQ: hero, about, projects (Promise.all)
@@ -126,7 +126,7 @@ studio/
 
 - **`--color-*: initial` in `@theme` replaces the default palette instead of extending it.** Colors are named by role: `background`, `surface`, `surface-raised`, `foreground`, `muted`, `caption`, `border`, `border-strong`, `accent`, `accent-hover`, `on-accent`, `accent-wash`, `mint`, `land-sky`/`far`/`mid`/`near`/`front` (hero landscape), `subtle` (current hero background), the constant resume colors `resume-band`, `resume-accent`, `resume-ink`, `resume-rule`, `resume-date`, plus `black` and `white` (`transparent` and `current` are built in). Pick a token by role, not by how it looks. Classes like `text-red-500` or `bg-slate-800` won't exist. Everything else extends the defaults: fonts, the `text-display-*`/`heading-*`/`script-*` sizes, `text-tiny`, `tracking-heading`, `rounded-card`/`rounded-feature`, `shadow-card`/`shadow-glow`, `ease-out-expo`, `spacing-nav`, `animate-blink`, and the content widths `max-w-narrow` (640px) and `max-w-wide` (1000px).
 - **Theme:** the `@theme` colors are the dark theme. A `@media (prefers-color-scheme: light), print` block in `app.css` overrides the same `--color-*` variables with the light ("paper") values, so there are no `dark:` classes; one class works in both themes. Print is always light. The resume page is always white, so it uses only the constant `resume-*`, `black` and `white` colors (never the themed roles), and `mint` is the same in both themes.
-- There's no `container` class. Content columns use `mx-auto sm:max-w-narrow lg:max-w-wide` (Work, resume) or `mx-auto max-w-4xl` (About, 404). Section padding (`px-14 py-32 lg:px-32`) is written on each `<section>`; there's no global `section` rule.
+- There's no `container` class. Content columns use `mx-auto sm:max-w-narrow lg:max-w-wide` (Work, resume) or `mx-auto max-w-4xl` (About, 404). Section padding (`px-14 py-32 lg:px-32`, or `px-6 md:px-14` on redesigned sections) is written on each `<section>`; there's no global `section` rule. Redesigned sections open with `SectionHeading` (`eyebrow`, `title`, and a `script` word in Caveat).
 - **Cascade layers:** Tailwind 4 puts utilities in `@layer utilities`, and CSS outside a layer beats every layer. Element rules (`h1`–`h6`, `p`) must stay inside `@layer base`, or they'll override utility classes like `mb-0` or `text-5xl` on those elements.
 - Don't define a multi-layer `--drop-shadow-*` token (`a, b`). Tailwind 4.3 wraps it in a single `drop-shadow()`, which is invalid, so the filter silently becomes `none`. `drop-shadow-lg` uses v4's default.
 - There's no hero animation right now. Vanta and Three.js were removed, and a replacement is part of Phase 4 (redesign).
