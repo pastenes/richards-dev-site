@@ -14,5 +14,5 @@ Check after applying:
 - Scroll slowly: trees climb over the lake and the mountain's base; by about half a viewport the remaining hero is forest.
 - The cut-out photo sits above the SVG (z-order in `Header.svelte` unchanged).
 
-## v2.1: front-most background-coloured tree row
-Added a ninth layer, last in the SVG: a dense row of spruces filled with `fill-background` (the page background token) and a solid `fill-background` base below it, pinned to the bottom edge of the hero (`k` 0, so it doesn't rise with scroll). Its tips cut into the forest above, and its base is the same colour as the section below, so there is no seam between the hero and About. It follows the theme (paper colour in the light theme). Replace `src/lib/components/HeroLandscape.svelte` again with this file.
+## v2.1: front-most background-colored tree row
+Added a ninth layer, last in the SVG: a dense row of spruces filled with `fill-background` (the page background token) and a solid `fill-background` base below it, pinned to the bottom edge of the hero (`k` 0, so it doesn't rise with scroll). Its tips cut into the forest above, and its base is the same color as the section below, so there is no seam between the hero and About. It follows the theme (paper color in the light theme). Replace `src/lib/components/HeroLandscape.svelte` again with this file.

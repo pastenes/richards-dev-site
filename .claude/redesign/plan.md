@@ -30,8 +30,8 @@ Source of truth for visuals: the "Pastenes Portfolio Design System" artifact (Cl
 2. Real cert year and credential ID, whenever you have them.
 
 ## Phases (each = one review + one commit by you)
-1. **Tokens and fonts. DONE (by Richard, in `src/app.css`).** Merge `tokens.css` into `src/app.css` `@theme`. Install `@fontsource/instrument-serif`, `instrument-sans`, `caveat`; update imports in `+layout.svelte`. Change the base-layer heading rule: Instrument Serif has no bold, so drop `font-bold`. Keep `subtle` and `resume-*` tokens for now. Run `npm run build` and svelte-check. (`/design-sync` doesn't support Svelte components, so the artifact and the code are kept in step by hand; tokens live in `src/app.css`.)
-2. **Nav.** Replace `Jumplinks.svelte` (sticky vertical) with a floating pill nav. See `components.md`.
+1. **Tokens and fonts. DONE (by Richard, in `src/app.css`).** Merge the design system's tokens into `src/app.css` `@theme`. Install `@fontsource/instrument-serif`, `instrument-sans`, `caveat`; update imports in `+layout.svelte`. Change the base-layer heading rule: Instrument Serif has no bold, so drop `font-bold`. Keep `subtle` and `resume-*` tokens for now. Run `npm run build` and svelte-check. (`/design-sync` doesn't support Svelte components, so the artifact and the code are kept in step by hand; tokens live in `src/app.css`.)
+2. **Nav.** Replace `Jumplinks.svelte` (sticky vertical) with a floating pill nav (now `src/lib/components/Nav.svelte`).
 3. **Work.** Replace the alternating rows in `Work.svelte` with the bento grid. No data changes needed.
 4. **Skills + Certifications.** Replace `TechTags` with grouped skills; add `Certifications.svelte`. Hard-coded data in the components (no Sanity changes).
 5. **Reveal action.** `src/lib/actions/reveal.ts` and apply to sections/cards.
@@ -40,6 +40,6 @@ Source of truth for visuals: the "Pastenes Portfolio Design System" artifact (Cl
 
 ## Workflow
 - Code changes happen in the Zed Claude Code session; this chat is for design review and mockups.
-- Visual iteration loop: change the design system artifact here, then update the repo from `components.md`.
+- Visual iteration loop: change the design system artifact here, then update the matching component in `src/`.
 - Update `.claude/progress.md` when a phase is done (Phase 4 "redesign" is the current TODO there).
 - Constraints to remember: no arbitrary values (spacing scale accepts multiples of 0.25), no `@apply`, repeated class groups become components, external links `target="_blank" rel="noreferrer"`, icon-only links get `aria-label`.
