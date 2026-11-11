@@ -149,9 +149,9 @@ Move the redesign's hard-coded content into Sanity and map it to the front end.
 - [x] `certification` documents (orderable; title, issuer, issued date, credential ID and URL) → `Certifications.svelte` (placeholder cards pad the last row)
 - [x] Studio structure: Skills singleton and an orderable Certifications list
 - [ ] Seed the dataset with the former hard-coded content, then enter the real cert date and credential ID
-- [x] Replace `sanity-plugin-tags-v4` with native tag arrays (`string[]`, `layout: 'tags'`) on `project.tags` and `resume.skills`; remove `about.tags`; uninstall the plugin. The site reads both tag shapes (`tagNames()`)
-- [ ] Run the `tags-to-strings` migration (`cd studio && npx sanity migration run tags-to-strings --no-dry-run`) after the site is deployed, then deploy the studio. Order: site deploy → migration → studio deploy
-- [ ] After the migration, drop the old-shape branch from `tagNames()`
+- [x] Replace `sanity-plugin-tags-v4` with native tag arrays (`string[]`, `layout: 'tags'`) on `project.tags` and `resume.skills`; remove `about.tags`; uninstall the plugin
+- [x] Ran the `tags-to-strings` migration on production after release-4 went live, then deployed the studio
+- [x] Dropped the old-shape branch from `tagNames()`
 
 ---
 
