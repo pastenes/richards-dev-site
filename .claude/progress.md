@@ -128,7 +128,7 @@ Refresh the visual design of the portfolio site.
 - [x] Work (redesign step 3): bento grid in `Work.svelte` (first project spans two columns from `md`), cards with screenshot on top, glow and accent border on hover; new `SectionHeading.svelte`. No data changes
 - [x] Skills + Certifications (redesign step 4): `Skills.svelte` (four group cards, core chips highlighted) replaces `TechTags.svelte`; new `Certifications.svelte` (Next.js Certified Developer, placeholder year/ID, two dashed placeholder cards). Both hard-coded. About is now a single column with `SectionHeading`; nav gains Skills and Certs links
 - [x] Reveal (redesign step 5): `actions/reveal.ts` (IntersectionObserver, once, threshold 0.15) + `Reveal.svelte`; applied to section headings, About text, Work/Skills/Cert cards with staggered delays. Visible by default (only below-the-fold elements hide), skipped for reduced motion
-- [x] Hero (redesign step 6): `HeroLandscape.svelte` (six-layer Mt. Hood / Trillium Lake SVG with scroll parallax) behind the hero; copy restyled; headshot bottom-right at 2x. Removed the `subtle` token. Pending: Richard's new cut-out photo (the current Sanity headshot is used meanwhile); optional pointer drift
+- [x] Hero (redesign step 6): `HeroLandscape.svelte` (six-layer Mt. Hood / Trillium Lake SVG with scroll parallax) behind the hero; copy restyled; headshot bottom-right at 2x. Removed the `subtle` token. Pending: Richard's new cut-out photo (the current Sanity headshot is used meanwhile)
 - [x] Resume restyle and PDF (redesign step 7): the resume uses the site's tokens and fonts (themed on screen, paper colors on a white page in print), shares the pill nav with a PDF button, and `static/Resume-Richard-Pastenes.pdf` is re-exported from its print view (one A4 page). Removed the `resume-*` colors, `black`, `spacing-nav`, the `resume-*` fonts, and the Montserrat / Open Sans / Poppins packages
 - [x] Update color scheme and typography
 - [x] Redesign hero section (including a replacement for the removed Vanta birds animation)
@@ -136,6 +136,9 @@ Refresh the visual design of the portfolio site.
 - [x] Improve responsive layout (`npm run dev` exposes a Network URL for device testing; 404 page redesigned)
 - [x] Add page transitions (View Transitions cross-fade via `onNavigate`)
 - [x] Accessibility audit and improvements (axe: 0 violations, both themes; skip link, focus ring, `main` landmarks, decorative image fixes)
+- [x] Hover parallax: landscape layers and headshot drift against the eased pointer (off for touch and reduced motion)
+- [x] Hero birds: `HeroBirds.svelte` canvas boids flock over the lake, behind the nearest trees, scattering from the pointer (replaces the Vanta birds without a library)
+- [x] Styled rich-text links (`RichTextLink.svelte`: accent underline, external links in a new tab)
 - [x] Performance optimization (Core Web Vitals) (Lighthouse mobile 92→95, SEO 92→100: inlined CSS, CDN preconnect, responsive `srcset`, no empty links)
 
 ---

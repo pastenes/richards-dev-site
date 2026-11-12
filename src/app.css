@@ -32,6 +32,7 @@
   --color-land-mid: #14403a;
   --color-land-near: #0c2623;
   --color-land-front: #070f0f;
+  --color-bird: #a4ffeb; /* hero birds (HeroBirds draws with the canvas's text color) */
   --color-white: #ffffff; /* print page background */
 
   /* Fonts, named by role. Weights are imported from @fontsource in the routes. */
@@ -104,6 +105,7 @@
     --color-land-mid: #6fb3a4;
     --color-land-near: #2f7f6f;
     --color-land-front: #0f4a40;
+    --color-bird: #0f4a40;
   }
 }
 

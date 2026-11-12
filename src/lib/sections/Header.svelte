@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { MediaQuery } from 'svelte/reactivity';
 	import HeroLandscape from '#lib/components/HeroLandscape.svelte';
 
 	type HeroData = {
@@ -9,14 +10,53 @@
 	};
 
 	let { hero = {} as HeroData }: { hero: HeroData } = $props();
+
+	// Hover parallax: the pointer's position across the viewport (-1..1 on each axis), eased so the
+	// landscape layers and the photo glide after it. Off for touch and reduced motion.
+	const reduceMotion = new MediaQuery('(prefers-reduced-motion: reduce)');
+	const finePointer = new MediaQuery('(hover: hover) and (pointer: fine)');
+	let pointer = $state({ x: 0, y: 0 });
+	let target = { x: 0, y: 0 };
+	let frame = 0;
+
+	function ease() {
+		const x = pointer.x + (target.x - pointer.x) * 0.08;
+		const y = pointer.y + (target.y - pointer.y) * 0.08;
+		const settled = Math.abs(target.x - x) < 0.001 && Math.abs(target.y - y) < 0.001;
+		pointer = settled ? { ...target } : { x, y };
+		frame = settled ? 0 : requestAnimationFrame(ease);
+	}
+
+	function aim(x: number, y: number) {
+		target = { x, y };
+		if (!frame) frame = requestAnimationFrame(ease);
+	}
+
+	function onpointermove(event: PointerEvent) {
+		if (reduceMotion.current || !finePointer.current || event.pointerType === 'touch') return;
+		aim((event.clientX / window.innerWidth) * 2 - 1, (event.clientY / window.innerHeight) * 2 - 1);
+	}
+
+	// Drift back to center when the pointer leaves the window. (`pointerout` with no relatedTarget
+	// isn't reliable here: it also fires when moving between the landscape's SVG `<use>` elements.)
+	$effect(() => {
+		const recenter = () => aim(0, 0);
+		document.documentElement.addEventListener('mouseleave', recenter);
+		return () => {
+			document.documentElement.removeEventListener('mouseleave', recenter);
+			cancelAnimationFrame(frame);
+		};
+	});
 </script>
+
+<svelte:window {onpointermove} />
 
 <!--
 	Hero: layered Mt. Hood landscape behind, copy in the open sky on the left, cut-out photo
 	bottom-right (kept right of the summit on wide screens, below it on phones).
 -->
 <section class="relative h-screen overflow-hidden bg-land-sky px-6 md:px-14 lg:px-32">
-	<HeroLandscape />
+	<HeroLandscape {pointer} />
 
 	<div class="relative z-10 max-w-xl pt-28 md:pt-36">
 		<p class="mb-2 font-mono text-accent">Hi, I'm</p>
@@ -65,7 +105,8 @@
 			width="700"
 			height="758"
 			fetchpriority="high"
-			class="absolute right-0 bottom-0 z-10 w-1/2 max-w-md md:w-1/3 lg:w-1/5"
+			style:translate="{-pointer.x * 10}px 0"
+			class="absolute -right-3 bottom-0 z-10 w-1/2 max-w-md md:w-1/3 lg:w-1/5"
 		/>
 	{/if}
 </section>
