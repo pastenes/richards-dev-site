@@ -20,7 +20,8 @@ export const load: PageServerLoad = async () => {
 			projectUrl,
 			tags,
 			description[]{...},
-			screenshot{alt, asset->{_id, url}}
+			screenshot{alt, asset->{_id, url}},
+			"previewVideo": previewVideo.asset->url
 		}`),
 		client.fetch(`*[_id == "skills"][0]{
 			groups[]{_key, title, skills[]{_key, name, core}}
