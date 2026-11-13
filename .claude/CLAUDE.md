@@ -71,7 +71,7 @@ src/
   lib/
     sanity.ts              # Sanity client + urlFor() image builder (SERVER ONLY)
     sections/              # Header (hero), About, Work, Skills, Certifications (page order)
-    components/            # BlockContent (PortableText) + RichTextLink, Footer, Nav (floating pill), SectionHeading, Reveal, HeroLandscape + HeroBirds, ResumeHeading
+    components/            # BlockContent (PortableText) + RichTextLink/List/ListItem, Footer, Nav (floating pill), SectionHeading, Reveal, HeroLandscape + HeroBirds, ResumeHeading
     actions/reveal.ts      # scroll-reveal action used by Reveal.svelte
   routes/
     +layout.svelte         # app.css, fonts, skip link, the shared Nav (PDF button on /resume), page transitions
@@ -120,7 +120,7 @@ studio/
   - No custom classes or `@utility` rules, and no arbitrary values (`w-[30px]`, `top-[5px]`). v4's spacing scale accepts any multiple of 0.25 (`w-7.5` is 30px, `top-1.25` is 5px, `h-150` is 600px), so most one-off sizes need neither. If a value repeats or carries meaning, add a token.
   - To reuse a group of classes, make a component (like `ResumeHeading.svelte`) rather than an `@apply` class.
   - `app.css` only holds tokens, base-layer element defaults (`h1`–`h6`, `p`, which also style Sanity rich text that can't take classes), and print rules that have no utility (page scaling, `print-color-adjust`, `@page`).
-- Links inside Sanity rich text render through `RichTextLink.svelte` (passed to `PortableText` in `BlockContent.svelte`): accent color and underline, and external URLs open in a new tab.
+- Sanity rich text renders through `BlockContent.svelte`, which passes custom components to `PortableText`: `RichTextLink` (accent color and underline; external URLs open in a new tab), `RichTextList` (bullet and numbered lists; Tailwind's reset removes markers and indentation, so they're set there) and `RichTextListItem`.
 - External links use `target="_blank" rel="noreferrer"`, and icon-only links get an `aria-label`. Icons are inline SVGs, with no icon library on the site.
 
 ## Gotchas
