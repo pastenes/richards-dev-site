@@ -27,6 +27,14 @@ export default defineType({
       type: 'imageFile',
     }),
     defineField({
+      name: 'previewVideo',
+      title: 'Preview video',
+      description:
+        'Optional. A muted MP4 that plays over the screenshot on hover: 16:9, about 1000px wide (1400px for the first project), 6–10 s, no audio, under 1 MB.',
+      type: 'file',
+      options: {accept: 'video/mp4'},
+    }),
+    defineField({
       name: 'projectUrl',
       title: 'Project URL',
       type: 'url',

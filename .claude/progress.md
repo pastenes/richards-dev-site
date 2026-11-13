@@ -155,6 +155,8 @@ Move the redesign's hard-coded content into Sanity and map it to the front end.
 - [x] Replace `sanity-plugin-tags-v4` with native tag arrays (`string[]`, `layout: 'tags'`) on `project.tags` and `resume.skills`; remove `about.tags`; uninstall the plugin
 - [x] Ran the `tags-to-strings` migration on production after release-4 went live, then deployed the studio
 - [x] Dropped the old-shape branch from `tagNames()`
+- [x] `project.previewVideo` (optional MP4) → plays over the card screenshot on hover (`actions/hoverVideo.ts`; lazy, mouse/pen only, skipped for reduced motion)
+- [ ] Record and upload a preview clip for each project
 
 ---
 

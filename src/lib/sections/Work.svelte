@@ -1,5 +1,6 @@
 <script lang="ts">
 	import BlockContent from '#lib/components/BlockContent.svelte';
+	import { hoverVideo } from '#lib/actions/hoverVideo.ts';
 	import Reveal from '#lib/components/Reveal.svelte';
 	import SectionHeading from '#lib/components/SectionHeading.svelte';
 
@@ -10,6 +11,8 @@
 		tags: string[];
 		description: unknown[];
 		screenshot: { alt: string; url: string | null; srcset: string } | null;
+		// Optional MP4 (Sanity file URL) that plays over the screenshot on hover.
+		previewVideo: string | null;
 	};
 
 	let { projects = [] }: { projects: Project[] } = $props();
@@ -28,21 +31,36 @@
 			{#each projects as project, index (project._id)}
 				<Reveal step={index % 3} class={index === 0 ? 'md:col-span-2' : ''}>
 					<article
+						use:hoverVideo={project.previewVideo}
 						class="group flex h-full flex-col overflow-hidden rounded-card border border-border bg-surface-raised transition duration-300 ease-out-expo hover:border-accent hover:shadow-glow"
 					>
 						{#if project.screenshot?.url}
 							{#snippet screenshot(url: string, srcset: string)}
-								<img
-									src={url}
-									{srcset}
-									sizes={index === 0 ? featuredSizes : cardSizes}
-									alt=""
-									width="1000"
-									height="563"
-									loading="lazy"
-									decoding="async"
-									class="aspect-video w-full object-cover object-top brightness-90 transition duration-300 group-hover:brightness-100"
-								/>
+								<div class="relative">
+									<img
+										src={url}
+										{srcset}
+										sizes={index === 0 ? featuredSizes : cardSizes}
+										alt=""
+										width="1000"
+										height="563"
+										loading="lazy"
+										decoding="async"
+										class="aspect-video w-full object-cover object-top brightness-90 transition duration-300 group-hover:brightness-100"
+									/>
+									{#if project.previewVideo}
+										<!-- Hover preview: no src until the first hover (see actions/hoverVideo.ts). -->
+										<video
+											muted
+											loop
+											playsinline
+											preload="none"
+											aria-hidden="true"
+											tabindex="-1"
+											class="absolute inset-0 size-full object-cover object-top opacity-0 transition-opacity duration-300 data-playing:opacity-100"
+										></video>
+									{/if}
+								</div>
 							{/snippet}
 							{#if project.projectUrl}
 								<!-- Duplicate of the title link, so it's hidden from keyboard and screen readers. -->
