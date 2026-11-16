@@ -1,8 +1,16 @@
-import { client, tagNames } from '#lib/sanity.ts';
+import { error } from '@sveltejs/kit';
+import { client, siteResumeQuery, tagNames } from '#lib/sanity.ts';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async () => {
-	const resume = await client.fetch(`*[_type == "resume"][0]{
+/**
+ * `/resume` shows the site resume. `/resume?id=<document id>` shows any published resume; the studio's
+ * "Generate Resume PDF" prints it that way (netlify/functions/resume-pdf.mts). Tailored resumes are
+ * only reachable by their random ID, and that view is noindexed.
+ */
+export const load: PageServerLoad = async ({ url }) => {
+	const id = url.searchParams.get('id');
+	const resume = await (id ? client.withConfig({ useCdn: false }) : client).fetch(
+		`${id ? '*[_type == "resume" && _id == $id][0]' : siteResumeQuery}{
 		name,
 		jobTitle,
 		phone,
@@ -36,7 +44,11 @@ export const load: PageServerLoad = async () => {
 			}
 		},
 		skills
-	}`);
+	}`,
+		id ? { id } : {},
+		{ perspective: 'published' }
+	);
+	if (!resume) error(404, 'Resume not found');
 
 	const skills = tagNames(resume?.skills).sort();
 
@@ -59,6 +71,7 @@ export const load: PageServerLoad = async () => {
 			})) ?? [];
 
 	return {
+		noindex: Boolean(id),
 		resume: {
 			...resume,
 			certifications,

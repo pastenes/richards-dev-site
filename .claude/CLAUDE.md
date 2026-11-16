@@ -43,6 +43,7 @@ There are **no lint, format, typecheck, or test scripts**. To check your work, r
 | @sanity/client | ^8 | 8.15 |
 | @sanity/image-url | ^2 | 2.1 |
 | @portabletext/svelte | ^4 | 4.0 |
+| puppeteer-core / @sparticuz/chromium | ^25.17 / ^153 | 25.17 / 153 (only in the `resume-pdf` Netlify function) |
 | **studio:** sanity | ^6.23 | 6.23 (needs Node ≥22.12; React strict mode is on in dev) |
 | **studio:** react / react-dom | ^19.3 | 19.3 |
 | **studio:** @sanity/vision | ^6.23 | 6.23 (keep it in step with `sanity`) |
@@ -78,15 +79,19 @@ src/
     +layout.svelte         # app.css, fonts, skip link, the shared Nav (PDF button on /resume), page transitions
     +page.server.ts        # GROQ: hero, about, projects, skills, certifications (Promise.all)
     +page.svelte           # landing page + SEO/OG meta in <svelte:head>
-    resume/+page.server.ts # GROQ: resume singleton; formats experience dates
+    resume/+page.server.ts # GROQ: the site resume, or any resume by `?id=` (noindexed); formats experience dates
     resume/+page.svelte    # printable resume (print: variants in markup, page scaling in app.css)
+    Resume-Richard-Pastenes.pdf/+server.ts # the PDF button: streams the site resume's generated PDF
     +error.svelte          # 404/error page ("> go back home": pressing return anywhere goes home)
+netlify/functions/resume-pdf.mts # headless Chrome prints /resume?id=… to PDF (Studio's Generate Resume PDF)
+netlify/tsconfig.json      # Node types for the functions (the root tsconfig only covers src/); check with `npx tsc -p netlify`
 vite.config.ts             # tailwindcss() plugin + sveltekit({...}) with adapter and preprocess (no svelte.config.js)
-static/                    # icon.png, meta.png (OG), Resume-Richard-Pastenes.pdf
+static/                    # icon.png, meta.png (OG)
 studio/
   sanity.config.ts         # studio config: custom structure, vision, arrays never collapse ("Show all X items" is off)
   sanity.cli.ts            # projectId lpvkp4xx, dataset production, deployment appId
-  schemas/documents/       # hero, about, project, resume, skills, certification
+  schemas/documents/       # hero, about, project, resume, resumeSettings, skills, certification
+  actions/                 # resume document actions: Show on site (+ On site badge), Generate Resume PDF
   schemas/objects/         # blockContent, imageFile, links, education, experience, achievment
 ```
 
@@ -107,7 +112,8 @@ studio/
 - `project`: orderRank, title, screenshot, previewVideo (optional MP4 `file`; the loader passes its CDN URL as `previewVideo`), projectUrl, description (blocks), tags (`string[]`).
 - `skills`: a singleton with document ID `skills`. `groups[]` (`skillGroup`: title, `skills[]` of `skill`: name, core). Plain objects rather than a tag field, since tags can't carry a group or a core flag.
 - `certification`: orderRank, title, issuer, inProgress (boolean; shows "In progress" instead of the year and credential ID, with a clock seal on the home card, and hides Issued in the Studio), issued (date; the site shows the year), credentialId, credentialUrl.
-- `resume`: a singleton with document ID `resume`. Fields: name, jobTitle, contact fieldset, summary, interests, education[], certifications[] (references to `certification` documents, so the resume picks and orders its own subset; the loader reduces `issued` to `year` and drops broken references), experience[] (each with `achievment[]`), skills (`string[]`).
+- `resume`: one document per resume version (the Studio's **Resumes** list; duplicate one to tailor it to a job posting). The original has document ID `resume`; duplicates get random IDs. Fields: label (internal name for the list), name, jobTitle, contact fieldset, summary, interests, education[], certifications[] (references to `certification` documents, so the resume picks and orders its own subset; the loader reduces `issued` to `year` and drops broken references), experience[] (each with `achievment[]`), skills (`string[]`), pdfFileName (without `.pdf`), pdf (read-only file, set by Generate Resume PDF).
+- `resumeSettings`: a singleton (document ID `resumeSettings`, the Studio's **Site resume**) whose `siteResume` reference picks the resume shown at `/resume` and behind the PDF button. Also set by a resume's **Show on site** action. `siteResumeQuery` in `#lib/sanity.ts` falls back to the document `resume` while it's unset. Always fetch resumes with `{ perspective: 'published' }`: the token can read drafts.
 - The spelling **`achievment` is a typo, but it's part of the stored data.** Don't rename it in schemas or queries unless you also migrate the Content Lake.
 - When you change a schema, update the matching GROQ projection in `src/routes/**/+page.server.ts` as well. The site has no generated types, so a mismatch fails silently and the field just renders empty.
 
@@ -137,7 +143,18 @@ studio/
 - **Cascade layers:** Tailwind 4 puts utilities in `@layer utilities`, and CSS outside a layer beats every layer. Element rules (`h1`–`h6`, `p`) must stay inside `@layer base`, or they'll override utility classes like `mb-0` or `text-5xl` on those elements.
 - Don't define a multi-layer `--drop-shadow-*` token (`a, b`). Tailwind 4.3 wraps it in a single `drop-shadow()`, which is invalid, so the filter silently becomes `none`. `drop-shadow-lg` uses v4's default.
 - **Hero:** `HeroLandscape.svelte` renders the decorative Mt. Hood / Trillium Lake scene as two inline SVGs that share one viewBox: the back one (sky, stars, Hood, foothills, far trees, the lake, and the shared `<defs>`) and the front one (the nearest trees and the foreground). `HeroBirds.svelte`, a canvas with a small boids flock that replaces the old Vanta birds, sits between them in the lake's layer, so the birds fly over the lake and behind the nearest trees, slowly and calmly; they scatter from the mouse. Layers rise at different rates as you scroll (`bind:scrollY`) and drift against the pointer (hover parallax: `Header.svelte` eases the pointer position and passes it down; `drift(k, depth)` sets each layer's transform). Pointer drift and scatter are off for touch; under reduced motion the scene is frozen and the birds aren't rendered. Everything is `print:hidden`. The paths come from the design system, so regenerate them there (see `.claude/redesign/hero/`) rather than hand-editing them; only move whole `<g>` layers between the two SVGs. Hero copy stays `text-foreground` in the open sky on the left; the cut-out headshot (Sanity `hero.headshot`, a transparent PNG served as 700px WebP) sits bottom-right, right of the summit, and drifts slightly with the pointer.
-- **The resume PDF is a static file** (`static/Resume-Richard-Pastenes.pdf`) exported from the resume page's print view. It isn't regenerated automatically, so re-export it whenever the resume content or styling changes: open `/resume` in Chrome, Print → Save as PDF, paper A4, margins Default, "Background graphics" on. It should fit on one page.
+- **Resume PDFs are generated, not hand-exported.**
+  - **Button:** a resume's **Generate Resume PDF** action (`studio/actions/generateResumePdf.tsx`) calls `https://pastenes.dev/.netlify/functions/resume-pdf?id=<id>`. Override the site with `SANITY_STUDIO_SITE_URL` in `studio/.env.development`.
+  - **Function:** `netlify/functions/resume-pdf.mts` opens this deploy's `/resume?id=…` in headless Chrome with print media, so the light theme always applies. If the resume runs over one A4 page, it prints slightly smaller (scale down to 0.85). It returns a tagged PDF with selectable text (~70 KB) and an `X-Pdf-Pages` count.
+  - **Saving:** the action uploads the PDF with the Studio user's auth (no write token on the server) and sets the resume's `pdf` field. It only runs on published resumes with no pending draft.
+  - **Serving:** `/Resume-Richard-Pastenes.pdf` is a route, not a static file, so don't add one to `static/`. It streams the site resume's `pdf`, and redirects to `/resume` until one exists.
+  - **Routing:** the function has no custom `config.path`, because SvelteKit's function claims `/*` (minus `/.netlify/*`).
+  - **Testing locally:** import the handler in a Node script with `CHROME_PATH` (local Chrome) and `RESUME_RENDER_ORIGIN` (the dev server URL) set.
+- **Resume read order:** the markup puts Experience, then Skills, then the sidebar (Summary, Education, Certifications, Interests). Grid placement (`md:col-start-*`/`row-start-*`, `order-first` on phones) puts the sidebar on the left. Chrome writes PDF text in paint order, and positioned elements paint after unpositioned ones, so:
+  - Each grid child is `relative`.
+  - `ResumeHeading`'s rule is an in-flow `after:` block, not absolutely positioned.
+
+  Keep it that way, or text extraction and ATS parsers read the PDF out of order. After layout changes, generate a PDF and check its extracted text order.
 - Resume print: `app.css` scales the root font to 71% in print and sets the A4 `@page`. Everything else is `print:` variants in the markup (`print:hidden` on the nav, `print:grid` layout and `print:p-12` page padding, `print:bg-white` on body). Since sizes are rem-based, the timeline dots and rules scale down with the text. Check print preview when you edit the resume page.
 - The Footer social links are **hardcoded**. The Header social links come from the CMS (`hero.links`).
 - `.claude/progress.md` tracks the roadmap and is current. Phases 1 (Gatsby → SvelteKit), 2 (Sanity v2 → v5), and 3 (Tailwind v3 → v4) are done. Phase 4 (redesign) is in progress; the handoff from Claude Design is in `.claude/redesign/` (`plan.md` lists the sub-phases).

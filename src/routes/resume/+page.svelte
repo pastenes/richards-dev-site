@@ -7,6 +7,7 @@
 
 <svelte:head>
 	<title>Resume | Richard Pastenes</title>
+	{#if data.noindex}<meta name="robots" content="noindex" />{/if}
 </svelte:head>
 
 <!--
@@ -29,20 +30,59 @@
 			</ul>
 		</header>
 
-		<div class="md:grid md:grid-cols-3 md:gap-10 print:grid print:grid-cols-3 print:gap-8">
-			<div>
+		<!--
+			Read order: the HTML puts Experience, then Skills, then the sidebar (Summary, Education,
+			Certifications, Interests), so PDF text extraction and ATS parsers read the main column first.
+			Grid placement keeps the sidebar on the left. Each grid child is `relative` so Chrome paints
+			(and the PDF stores) the text in this order: positioned elements paint after unpositioned ones,
+			so mixing the two would scramble the PDF's text order.
+		-->
+		<div class="flex flex-col md:grid md:grid-cols-3 md:gap-x-10 print:grid print:grid-cols-3 print:gap-x-8">
+			<section class="relative md:col-span-2 md:col-start-2 md:row-start-1 print:col-span-2 print:col-start-2 print:row-start-1">
+				<ResumeHeading>Experience</ResumeHeading>
+				<!-- Timeline: a vertical rule on the list, a dot per role, and a small dot per achievement. -->
+				<ul
+					class="relative before:absolute before:inset-y-1.25 before:left-0.75 before:w-px before:bg-border"
+				>
+					{#each resume.experience ?? [] as item (item._key)}
+						<li
+							class="relative mb-5 pl-5 before:absolute before:top-1.75 before:left-0 before:size-2 before:rounded-full before:bg-accent last:mb-0"
+						>
+							<div class="sm:flex sm:items-baseline sm:justify-between sm:gap-4 print:flex print:items-baseline print:justify-between print:gap-4">
+								<h3 class="mb-0 text-lg text-foreground">{item.role}</h3>
+								<span class="block font-mono text-tiny whitespace-nowrap text-caption">
+									{item.start} - {item.end}
+								</span>
+							</div>
+							<p class="mb-1.5 text-caption">{item.employer}</p>
+							<ul class="space-y-0.5">
+								{#each item.achievment ?? [] as piece (piece._key)}
+									<li
+										class="relative pl-3 before:absolute before:top-2 before:left-0 before:size-1 before:rounded-full before:bg-border-strong"
+									>
+										{piece.achievment}
+									</li>
+								{/each}
+							</ul>
+						</li>
+					{/each}
+				</ul>
+			</section>
+
+			<section class="relative md:col-span-3 md:row-start-2 print:col-span-3 print:row-start-2">
+				<ResumeHeading>Skills</ResumeHeading>
+				<ul class="grid grid-cols-2 gap-x-6 md:grid-cols-4 print:grid-cols-4">
+					{#each resume.skills as skill}
+						<li>{skill}</li>
+					{/each}
+				</ul>
+			</section>
+
+			<!-- Sidebar: first on phones (order-first), the left column from md. -->
+			<div class="relative order-first md:order-none md:col-start-1 md:row-start-1 print:order-none print:col-start-1 print:row-start-1">
 				<section>
 					<ResumeHeading>Summary</ResumeHeading>
 					<p class="mb-0">{resume.summary}</p>
-				</section>
-
-				<section>
-					<ResumeHeading>Interests</ResumeHeading>
-					<ul>
-						{#each resume.interests ?? [] as interest}
-							<li>{interest}</li>
-						{/each}
-					</ul>
 				</section>
 
 				<section>
@@ -84,47 +124,16 @@
 						</ul>
 					</section>
 				{/if}
+
+				<section>
+					<ResumeHeading>Interests</ResumeHeading>
+					<ul>
+						{#each resume.interests ?? [] as interest}
+							<li>{interest}</li>
+						{/each}
+					</ul>
+				</section>
 			</div>
-
-			<section class="col-span-2">
-				<ResumeHeading>Experience</ResumeHeading>
-				<!-- Timeline: a vertical rule on the list, a dot per role, and a small dot per achievement. -->
-				<ul
-					class="relative before:absolute before:inset-y-1.25 before:left-0.75 before:w-px before:bg-border"
-				>
-					{#each resume.experience ?? [] as item (item._key)}
-						<li
-							class="relative mb-5 pl-5 before:absolute before:top-1.75 before:left-0 before:size-2 before:rounded-full before:bg-accent last:mb-0"
-						>
-							<div class="sm:flex sm:items-baseline sm:justify-between sm:gap-4 print:flex print:items-baseline print:justify-between print:gap-4">
-								<h3 class="mb-0 text-lg text-foreground">{item.role}</h3>
-								<span class="block font-mono text-tiny whitespace-nowrap text-caption">
-									{item.start} - {item.end}
-								</span>
-							</div>
-							<p class="mb-1.5 text-caption">{item.employer}</p>
-							<ul class="space-y-0.5">
-								{#each item.achievment ?? [] as piece (piece._key)}
-									<li
-										class="relative pl-3 before:absolute before:top-2 before:left-0 before:size-1 before:rounded-full before:bg-border-strong"
-									>
-										{piece.achievment}
-									</li>
-								{/each}
-							</ul>
-						</li>
-					{/each}
-				</ul>
-			</section>
 		</div>
-
-		<section>
-			<ResumeHeading>Skills</ResumeHeading>
-			<ul class="grid grid-cols-2 gap-x-6 md:grid-cols-4 print:grid-cols-4">
-				{#each resume.skills as skill}
-					<li>{skill}</li>
-				{/each}
-			</ul>
-		</section>
 	</article>
 </main>

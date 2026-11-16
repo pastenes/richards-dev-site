@@ -157,6 +157,8 @@ Move the redesign's hard-coded content into Sanity and map it to the front end.
 - [x] Dropped the old-shape branch from `tagNames()`
 - [x] `project.previewVideo` (optional MP4) → plays over the card screenshot on hover (`actions/hoverVideo.ts`; lazy, mouse/pen only, skipped for reduced motion)
 - [ ] Record and upload a preview clip for each project
+- [x] Multiple resumes: `resume` is a document list (duplicate to tailor), `resumeSettings` picks the site resume ("Show on site" action + "On site" badge), and "Generate Resume PDF" prints a resume via the `resume-pdf` Netlify function into its `pdf` field; `/Resume-Richard-Pastenes.pdf` streams the site resume's PDF (the static file is gone). Resume markup reordered for ATS read order (Experience, Skills, then the sidebar with Interests last)
+- [ ] Label the existing resume, click "Show on site" and "Generate Resume PDF" after the site and studio deploys
 
 ---
 
