@@ -84,7 +84,7 @@ src/
 vite.config.ts             # tailwindcss() plugin + sveltekit({...}) with adapter and preprocess (no svelte.config.js)
 static/                    # icon.png, meta.png (OG), Resume-Richard-Pastenes.pdf
 studio/
-  sanity.config.ts         # studio config: custom structure, vision
+  sanity.config.ts         # studio config: custom structure, vision, arrays never collapse ("Show all X items" is off)
   sanity.cli.ts            # projectId lpvkp4xx, dataset production, deployment appId
   schemas/documents/       # hero, about, project, resume, skills, certification
   schemas/objects/         # blockContent, imageFile, links, education, experience, achievment

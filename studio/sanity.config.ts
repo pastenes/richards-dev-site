@@ -68,6 +68,12 @@ export default defineConfig({
     visionTool(),
   ],
 
+  // Always list every array item (skills, experience, achievements, tags...) instead of collapsing
+  // long arrays behind a "Show all X items" button.
+  form: {
+    arrays: {collapseItems: {enabled: false}},
+  },
+
   schema: {
     types: [
       hero,
