@@ -106,7 +106,7 @@ studio/
 - `about`: content (block array with link annotations). Its old `tags` field was removed (the `skills` document replaced it).
 - `project`: orderRank, title, screenshot, previewVideo (optional MP4 `file`; the loader passes its CDN URL as `previewVideo`), projectUrl, description (blocks), tags (`string[]`).
 - `skills`: a singleton with document ID `skills`. `groups[]` (`skillGroup`: title, `skills[]` of `skill`: name, core). Plain objects rather than a tag field, since tags can't carry a group or a core flag.
-- `certification`: orderRank, title, issuer, issued (date; the site shows the year), credentialId, credentialUrl.
+- `certification`: orderRank, title, issuer, inProgress (boolean; shows "In progress" instead of the year and credential ID, with a clock seal on the home card, and hides Issued in the Studio), issued (date; the site shows the year), credentialId, credentialUrl.
 - `resume`: a singleton with document ID `resume`. Fields: name, jobTitle, contact fieldset, summary, interests, education[], certifications[] (references to `certification` documents, so the resume picks and orders its own subset; the loader reduces `issued` to `year` and drops broken references), experience[] (each with `achievment[]`), skills (`string[]`).
 - The spelling **`achievment` is a typo, but it's part of the stored data.** Don't rename it in schemas or queries unless you also migrate the Content Lake.
 - When you change a schema, update the matching GROQ projection in `src/routes/**/+page.server.ts` as well. The site has no generated types, so a mismatch fails silently and the field just renders empty.

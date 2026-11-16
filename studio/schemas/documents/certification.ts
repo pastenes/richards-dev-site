@@ -22,9 +22,18 @@ export default defineType({
       type: 'string',
     }),
     defineField({
+      name: 'inProgress',
+      title: 'In progress',
+      description:
+        'Still working toward it. The site shows "In progress" instead of the year and credential ID. Turn it off and set Issued once you earn it.',
+      type: 'boolean',
+      initialValue: false,
+    }),
+    defineField({
       name: 'issued',
       title: 'Issued',
       description: 'Only the year is shown on the site.',
+      hidden: ({document}) => Boolean(document?.inProgress),
       type: 'date',
     }),
     defineField({
@@ -40,6 +49,10 @@ export default defineType({
     }),
   ],
   preview: {
-    select: {title: 'title', subtitle: 'issuer'},
+    select: {title: 'title', issuer: 'issuer', inProgress: 'inProgress'},
+    prepare: ({title, issuer, inProgress}) => ({
+      title,
+      subtitle: [issuer, inProgress && 'In progress'].filter(Boolean).join(' · '),
+    }),
   },
 })

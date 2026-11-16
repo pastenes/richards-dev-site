@@ -30,6 +30,7 @@ export const load: PageServerLoad = async () => {
 			_id,
 			title,
 			issuer,
+			inProgress,
 			issued,
 			credentialId,
 			credentialUrl
@@ -68,10 +69,11 @@ export const load: PageServerLoad = async () => {
 			})) ?? [],
 		skillGroups: skills?.groups ?? [],
 		certifications:
-			certifications?.map(({ issued, ...cert }: Record<string, unknown>) => ({
+			certifications?.map(({ issued, inProgress, ...cert }: Record<string, unknown>) => ({
 				...cert,
-				// `issued` is a YYYY-MM-DD date; the card only shows the year.
-				year: typeof issued === 'string' ? issued.slice(0, 4) : null
+				inProgress: inProgress === true,
+				// `issued` is a YYYY-MM-DD date; the card only shows the year (none while in progress).
+				year: !inProgress && typeof issued === 'string' ? issued.slice(0, 4) : null
 			})) ?? []
 	};
 };

@@ -7,6 +7,7 @@
 		_id: string;
 		title: string;
 		issuer: string | null;
+		inProgress: boolean;
 		year: string | null;
 		credentialId: string | null;
 		credentialUrl: string | null;
@@ -14,10 +15,12 @@
 
 	let { certifications = [] }: { certifications: Certification[] } = $props();
 
-	// Dashed cards that fill the last row of three, holding space for future certifications.
+	// Dashed cards that fill the last row of three, holding space for future certifications. (Skip the
+	// "in progress" teaser when a real card already says so.)
+	const anyInProgress = $derived(certifications.some((cert) => cert.inProgress));
 	const placeholders = $derived(
 		Array.from({ length: (3 - (certifications.length % 3)) % 3 }, (_, index) =>
-			index === 0 ? 'Next one in progress' : 'More to come'
+			index === 0 && !anyInProgress ? 'Next one in progress' : 'More to come'
 		)
 	);
 </script>
@@ -28,18 +31,27 @@
 
 		<ul class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 			{#each certifications as cert, index (cert._id)}
-				{@const meta = ['Credential', cert.year, cert.credentialId].filter(Boolean)}
+				{@const meta = cert.inProgress
+					? ['In progress']
+					: ['Credential', cert.year, cert.credentialId].filter(Boolean)}
 				<Reveal
 					as="li"
 					step={index % 3}
 					class="flex flex-col gap-4 rounded-card border border-border bg-surface-raised p-6"
 				>
-					<!-- Seal -->
+					<!-- Seal: a check once earned, a clock on a dashed ring while in progress. -->
 					<div
-						class="flex size-12 items-center justify-center rounded-full border-2 border-accent text-accent"
+						class={[
+							'flex size-12 items-center justify-center rounded-full border-2 border-accent text-accent',
+							cert.inProgress && 'border-dashed'
+						]}
 						aria-hidden="true"
 					>
-						<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
+						{#if cert.inProgress}
+							<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>
+						{:else}
+							<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
+						{/if}
 					</div>
 					<div>
 						<h3 class="mb-1 text-heading-sm text-foreground">
@@ -55,8 +67,10 @@
 							<p class="mb-0 text-muted">{cert.issuer}</p>
 						{/if}
 					</div>
-					{#if meta.length > 1}
-						<p class="mt-auto mb-0 font-mono text-tiny text-caption">{meta.join(' · ')}</p>
+					{#if cert.inProgress || meta.length > 1}
+						<p class={['mt-auto mb-0 font-mono text-tiny', cert.inProgress ? 'text-accent' : 'text-caption']}>
+							{meta.join(' · ')}
+						</p>
 					{/if}
 				</Reveal>
 			{/each}

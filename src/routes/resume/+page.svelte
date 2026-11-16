@@ -74,7 +74,11 @@
 										{/if}
 									</h3>
 									{#if cert.issuer}<p class="mb-0">{cert.issuer}</p>{/if}
-									{#if cert.year}<p class="mb-0 font-mono text-tiny text-caption">{cert.year}</p>{/if}
+									{#if cert.inProgress}
+										<p class="mb-0 font-mono text-tiny text-accent">In progress</p>
+									{:else if cert.year}
+										<p class="mb-0 font-mono text-tiny text-caption">{cert.year}</p>
+									{/if}
 								</li>
 							{/each}
 						</ul>

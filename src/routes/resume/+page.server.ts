@@ -20,6 +20,7 @@ export const load: PageServerLoad = async () => {
 			_id,
 			title,
 			issuer,
+			inProgress,
 			issued,
 			credentialUrl
 		},
@@ -51,9 +52,10 @@ export const load: PageServerLoad = async () => {
 	const certifications =
 		resume?.certifications
 			?.filter(Boolean)
-			.map(({ issued, ...cert }: Record<string, unknown>) => ({
+			.map(({ issued, inProgress, ...cert }: Record<string, unknown>) => ({
 				...cert,
-				year: issued ? String(issued).slice(0, 4) : ''
+				inProgress: inProgress === true,
+				year: !inProgress && issued ? String(issued).slice(0, 4) : ''
 			})) ?? [];
 
 	return {
