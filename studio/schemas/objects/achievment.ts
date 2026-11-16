@@ -6,8 +6,12 @@ export default defineType({
   fields: [
     defineField({
       name: 'achievment',
-      title: 'Achievment',
-      type: 'string',
+      title: 'Achievement',
+      type: 'text',
+      rows: 3,
     }),
   ],
+  preview: {
+    select: {title: 'achievment'},
+  },
 })
