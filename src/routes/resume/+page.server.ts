@@ -16,6 +16,13 @@ export const load: PageServerLoad = async () => {
 			school,
 			year
 		},
+		certifications[]->{
+			_id,
+			title,
+			issuer,
+			issued,
+			credentialUrl
+		},
 		experience[]{
 			_key,
 			role,
@@ -40,9 +47,19 @@ export const load: PageServerLoad = async () => {
 			end: item.end ? formatDate(item.end as string) : ''
 		})) ?? [];
 
+	// Certifications show the year only; drop references to deleted documents.
+	const certifications =
+		resume?.certifications
+			?.filter(Boolean)
+			.map(({ issued, ...cert }: Record<string, unknown>) => ({
+				...cert,
+				year: issued ? String(issued).slice(0, 4) : ''
+			})) ?? [];
+
 	return {
 		resume: {
 			...resume,
+			certifications,
 			experience,
 			skills
 		}

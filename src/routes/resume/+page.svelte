@@ -57,6 +57,29 @@
 						{/each}
 					</ul>
 				</section>
+
+				{#if resume.certifications.length}
+					<section>
+						<ResumeHeading>Certifications</ResumeHeading>
+						<ul class="space-y-3">
+							{#each resume.certifications as cert (cert._id)}
+								<li>
+									<h3 class="mb-0 text-lg text-foreground">
+										{#if cert.credentialUrl}
+											<a href={cert.credentialUrl} target="_blank" rel="noreferrer" class="hover:text-accent">
+												{cert.title}
+											</a>
+										{:else}
+											{cert.title}
+										{/if}
+									</h3>
+									{#if cert.issuer}<p class="mb-0">{cert.issuer}</p>{/if}
+									{#if cert.year}<p class="mb-0 font-mono text-tiny text-caption">{cert.year}</p>{/if}
+								</li>
+							{/each}
+						</ul>
+					</section>
+				{/if}
 			</div>
 
 			<section class="col-span-2">

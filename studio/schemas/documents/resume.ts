@@ -87,6 +87,16 @@ export default defineType({
       group: 'summary',
     }),
     defineField({
+      name: 'certifications',
+      title: 'Certifications',
+      description:
+        'Pick from the Certifications list (the same documents the home page shows). Drag to reorder.',
+      type: 'array',
+      of: [{type: 'reference', to: [{type: 'certification'}]}],
+      validation: (Rule) => Rule.unique(),
+      group: 'summary',
+    }),
+    defineField({
       name: 'experience',
       title: 'Experience',
       type: 'array',
