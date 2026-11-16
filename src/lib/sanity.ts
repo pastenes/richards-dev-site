@@ -10,6 +10,13 @@ export const client = createClient({
 	apiVersion: '2024-01-01'
 });
 
+/**
+ * GROQ for the resume the site shows: the one picked in the studio (`resumeSettings`), falling back
+ * to the original singleton document `resume` until one is picked. Fetch it with
+ * `{ perspective: 'published' }`, since the token can also read drafts.
+ */
+export const siteResumeQuery = `coalesce(*[_id == "resumeSettings"][0].siteResume->, *[_id == "resume"][0])`;
+
 const builder = createImageUrlBuilder(client);
 
 export function urlFor(source: unknown) {

@@ -4,3 +4,8 @@
 
 [build.environment]
   NODE_VERSION = "26"
+
+# The resume PDF function (netlify/functions/resume-pdf.mts) ships its own headless Chromium,
+# kept out of the bundler so its compressed binary is copied as is.
+[functions."resume-pdf"]
+  external_node_modules = ["@sparticuz/chromium"]

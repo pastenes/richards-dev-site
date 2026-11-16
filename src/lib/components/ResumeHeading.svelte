@@ -4,9 +4,13 @@
 	let { children }: { children: Snippet } = $props();
 </script>
 
-<!-- Resume section title: lowercase mono in the accent color over a short accent rule. -->
+<!--
+	Resume section title: lowercase mono in the accent color over a short accent rule. The rule is an
+	in-flow block, not absolutely positioned, so the heading isn't painted (and stored in the PDF) after
+	the text it introduces.
+-->
 <h2
-	class="relative mt-8 mb-4 inline-block pb-1.5 font-mono text-sm tracking-normal text-accent lowercase before:absolute before:bottom-0 before:left-0 before:h-px before:w-7.5 before:bg-accent"
+	class="mt-8 mb-4 inline-block font-mono text-sm tracking-normal text-accent lowercase after:mt-1.25 after:block after:h-px after:w-7.5 after:bg-accent"
 >
 	{@render children()}
 </h2>

@@ -1,9 +1,14 @@
 import {defineType, defineField} from 'sanity'
+import {GrDocumentUser} from 'react-icons/gr'
+
+// One document per resume version (duplicate one to tailor it to a job posting). The site shows the
+// one picked as the site resume (`resumeSettings`), and "Generate Resume PDF" prints a resume to `pdf`.
 
 export default defineType({
   name: 'resume',
   title: 'Resume',
   type: 'document',
+  icon: GrDocumentUser,
   groups: [
     {
       name: 'header',
@@ -22,9 +27,22 @@ export default defineType({
       name: 'skills',
       title: 'Skills',
     },
+    {
+      name: 'pdf',
+      title: 'PDF',
+    },
   ],
   fieldsets: [{name: 'contact', title: 'Contact Info'}],
   fields: [
+    defineField({
+      name: 'label',
+      title: 'Label',
+      description:
+        'Internal name for this version, shown in the Resumes list (e.g. "Base" or "Acme, Staff Front-End"). Not shown on the resume.',
+      type: 'string',
+      validation: (Rule) => Rule.required(),
+      group: 'header',
+    }),
     defineField({
       name: 'name',
       title: 'Name',
@@ -112,5 +130,30 @@ export default defineType({
       options: {layout: 'tags'},
       group: 'skills',
     }),
+    defineField({
+      name: 'pdfFileName',
+      title: 'PDF file name',
+      description:
+        'Without ".pdf". Use a role-specific name for tailored versions (e.g. Resume-Richard-Pastenes-Acme).',
+      type: 'string',
+      initialValue: 'Resume-Richard-Pastenes',
+      validation: (Rule) =>
+        Rule.required().regex(/^[A-Za-z0-9_-]+$/, {name: 'letters, numbers, - and _ only'}),
+      group: 'pdf',
+    }),
+    defineField({
+      name: 'pdf',
+      title: 'PDF',
+      description:
+        'Set by "Generate Resume PDF" (in the document actions menu) from the published resume. Regenerate it after publishing changes.',
+      type: 'file',
+      options: {accept: 'application/pdf'},
+      readOnly: true,
+      group: 'pdf',
+    }),
   ],
+  preview: {
+    select: {label: 'label', name: 'name', jobTitle: 'jobTitle'},
+    prepare: ({label, name, jobTitle}) => ({title: label || name || 'Untitled resume', subtitle: jobTitle}),
+  },
 })
