@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { tick } from 'svelte';
 	import BlockContent from '#lib/components/BlockContent.svelte';
 	import { hoverVideo } from '#lib/actions/hoverVideo.ts';
 	import Reveal from '#lib/components/Reveal.svelte';
@@ -19,7 +20,27 @@
 
 	// Rendered image widths per breakpoint, for `sizes` (the featured card spans two columns).
 	const featuredSizes = '(min-width: 1024px) min(658px, 66vw), (min-width: 768px) 640px, calc(100vw - 48px)';
+	const wideSizes = '(min-width: 1024px) min(488px, 50vw), (min-width: 768px) 308px, calc(100vw - 48px)';
 	const cardSizes = '(min-width: 1024px) min(317px, 33vw), (min-width: 768px) 308px, calc(100vw - 48px)';
+
+	// From lg the grid has six columns: the featured card takes four and the next one two (row 1),
+	// the next two take three each (row 2, wider cards), and the rest two each (rows of three).
+	const spans = ['md:col-span-2 lg:col-span-4', 'lg:col-span-2', 'lg:col-span-3', 'lg:col-span-3'];
+	const sizes = [featuredSizes, cardSizes, wideSizes, wideSizes];
+
+	// From lg, the grid starts with the first two rows (four projects), and "Load more" adds two rows
+	// of three at a time. The rest are hidden with CSS, not left out, so smaller
+	// screens (and the server-rendered page) still list every project.
+	let shown = $state(4);
+	let grid: HTMLElement;
+
+	async function loadMore() {
+		const first = shown;
+		shown += 6;
+		await tick();
+		// Move focus to the first new card, so keyboard and screen reader users land on it.
+		grid.querySelectorAll('article')[first]?.focus({ preventScroll: true });
+	}
 </script>
 
 <section id="work" class="px-6 py-32 md:px-14 lg:px-32">
@@ -27,11 +48,15 @@
 		<SectionHeading eyebrow="Work" title="Some things I've" script="built" />
 
 		<!-- Bento grid: the first project is featured and spans two columns. -->
-		<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+		<div bind:this={grid} class="grid gap-6 md:grid-cols-2 lg:grid-cols-6">
 			{#each projects as project, index (project._id)}
-				<Reveal step={index % 3} class={index === 0 ? 'md:col-span-2' : ''}>
+				<Reveal
+					step={index % 3}
+					class="{spans[index] ?? 'lg:col-span-2'} {index >= shown ? 'lg:hidden' : ''}"
+				>
 					<article
 						use:hoverVideo={project.previewVideo}
+						tabindex="-1"
 						class="group flex h-full flex-col overflow-hidden rounded-card border border-border bg-surface-raised transition duration-300 ease-out-expo hover:border-accent hover:shadow-glow"
 					>
 						{#if project.screenshot?.url}
@@ -40,7 +65,7 @@
 									<img
 										src={url}
 										{srcset}
-										sizes={index === 0 ? featuredSizes : cardSizes}
+										sizes={sizes[index] ?? cardSizes}
 										alt=""
 										width="1000"
 										height="563"
@@ -96,5 +121,16 @@
 				</Reveal>
 			{/each}
 		</div>
+		{#if projects.length > shown}
+			<div class="mt-12 hidden justify-center lg:flex">
+				<button
+					type="button"
+					onclick={loadMore}
+					class="rounded-full border border-border-strong px-6 py-3 font-mono text-sm text-foreground transition duration-300 ease-out-expo hover:border-accent hover:text-accent"
+				>
+					Load more
+				</button>
+			</div>
+		{/if}
 	</div>
 </section>
