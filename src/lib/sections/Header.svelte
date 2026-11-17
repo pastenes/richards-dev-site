@@ -6,16 +6,18 @@
 		title?: string;
 		intro?: Array<{ children?: Array<{ text?: string }> }>;
 		links?: { github?: string; linkedin?: string; twitter?: string };
-		headshot?: { alt?: string; url?: string | null; srcset?: string } | null;
 	};
 
-	let { hero = {} as HeroData }: { hero: HeroData } = $props();
+	// `pointer` is bindable so the page can pass it to the headshot, which lives outside the hero.
+	let {
+		hero = {} as HeroData,
+		pointer = $bindable({ x: 0, y: 0 })
+	}: { hero: HeroData; pointer?: { x: number; y: number } } = $props();
 
 	// Hover parallax: the pointer's position across the viewport (-1..1 on each axis), eased so the
-	// landscape layers and the photo glide after it. Off for touch and reduced motion.
+	// landscape layers and the photo (`Headshot.svelte`) glide after it. Off for touch and reduced motion.
 	const reduceMotion = new MediaQuery('(prefers-reduced-motion: reduce)');
 	const finePointer = new MediaQuery('(hover: hover) and (pointer: fine)');
-	let pointer = $state({ x: 0, y: 0 });
 	let target = { x: 0, y: 0 };
 	let frame = 0;
 
@@ -52,8 +54,8 @@
 <svelte:window {onpointermove} />
 
 <!--
-	Hero: layered Mt. Hood landscape behind, copy in the open sky on the left, cut-out photo
-	bottom-right (kept right of the summit on wide screens, below it on phones).
+	Hero: layered Mt. Hood landscape behind, copy in the open sky on the left. The cut-out photo
+	is `Headshot.svelte`, rendered by the page so it can stick beside About on desktop.
 -->
 <section class="relative h-screen overflow-hidden bg-land-sky px-6 md:px-14 lg:px-32">
 	<HeroLandscape {pointer} />
@@ -96,17 +98,4 @@
 		</div>
 	</div>
 
-	{#if hero.headshot?.url}
-		<img
-			src={hero.headshot.url}
-			srcset={hero.headshot.srcset}
-			sizes="(min-width: 1024px) min(20vw, 448px), (min-width: 768px) min(33vw, 448px), min(50vw, 448px)"
-			alt={hero.headshot.alt ?? ''}
-			width="700"
-			height="758"
-			fetchpriority="high"
-			style:translate="{-pointer.x * 10}px 0"
-			class="absolute -right-3 bottom-0 z-10 w-1/2 max-w-md md:w-1/3 lg:w-1/5"
-		/>
-	{/if}
 </section>

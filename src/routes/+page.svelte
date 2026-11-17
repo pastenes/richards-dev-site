@@ -5,8 +5,10 @@
 	import Skills from '#lib/sections/Skills.svelte';
 	import Certifications from '#lib/sections/Certifications.svelte';
 	import Footer from '#lib/components/Footer.svelte';
+	import Headshot from '#lib/components/Headshot.svelte';
 
 	let { data } = $props();
+	let pointer = $state({ x: 0, y: 0 });
 </script>
 
 <svelte:head>
@@ -30,8 +32,12 @@
 </svelte:head>
 
 <main id="main">
-	<Header hero={data.hero} />
-	<About content={data.about.content} />
+	<!-- The headshot spans the hero and About, so it can stick beside the About text (see Headshot). -->
+	<div class="relative">
+		<Header hero={data.hero} bind:pointer />
+		<About content={data.about.content} />
+		<Headshot headshot={data.hero?.headshot} {pointer} />
+	</div>
 	<Work projects={data.projects} />
 	<Skills groups={data.skillGroups} />
 	<Certifications certifications={data.certifications} />
