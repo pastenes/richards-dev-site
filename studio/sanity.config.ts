@@ -21,6 +21,7 @@ import experience from './schemas/objects/experience'
 import achievment from './schemas/objects/achievment'
 import {ShowOnSiteAction, SiteResumeBadge} from './actions/siteResume'
 import {GenerateResumePdfAction} from './actions/generateResumePdf'
+import {alsoInHeaderMenu} from './actions/alsoInHeaderMenu'
 
 export default defineConfig({
   name: 'default',
@@ -84,8 +85,14 @@ export default defineConfig({
     newDocumentOptions: (prev) => prev.filter((item) => item.templateId !== 'resumeSettings'),
     actions: (prev, {schemaType}) => {
       // Generate comes first so it's the main button whenever there's nothing to publish (it hides
-      // itself while there are unpublished changes, letting Publish take that spot).
-      if (schemaType === 'resume') return [GenerateResumePdfAction, ...prev, ShowOnSiteAction]
+      // itself while there are unpublished changes, letting Publish take that spot). Generate,
+      // Duplicate and Show on site are also listed in the header's "⋯" menu, where they're easier to find.
+      if (schemaType === 'resume')
+        return [
+          alsoInHeaderMenu(GenerateResumePdfAction),
+          ...prev.map((action) => (action.action === 'duplicate' ? alsoInHeaderMenu(action) : action)),
+          alsoInHeaderMenu(ShowOnSiteAction),
+        ]
       if (schemaType === 'resumeSettings')
         return prev.filter(({action}) => action === 'publish' || action === 'discardChanges')
       return prev
