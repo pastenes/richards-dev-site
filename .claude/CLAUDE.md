@@ -92,7 +92,6 @@ studio/
   sanity.config.ts         # studio config: custom structure, vision, arrays never collapse ("Show all X items" is off)
   sanity.cli.ts            # projectId lpvkp4xx, dataset production, deployment appId
   schemas/documents/       # hero, about, project, resume, siteSettings, skills, certification
-  migrations/site-settings/ # one-time: resumeSettings → siteSettings (delete once run on production)
   actions/                 # resume document actions: Show on site (+ On site badge), Generate Resume PDF
   schemas/objects/         # blockContent, imageFile, links, education, experience, achievment
 ```
@@ -160,7 +159,7 @@ studio/
 
   Keep it that way, or text extraction and ATS parsers read the PDF out of order. After layout changes, generate a PDF and check its extracted text order.
 - Resume print: `app.css` sets the root font to 95% in print (bullets and summary ~10pt, dates and contacts ~8.5pt) and an A4 `@page` with 10mm top and bottom margins on every page. The resume is two pages on purpose: don't shrink it back to one, since one page needed ~6.7pt text. Everything else is `print:` variants in the markup (`print:hidden` on the nav, `print:grid` layout, `print:px-12` side padding, `print:break-inside-avoid` on bullets, education and certifications, `print:break-after-avoid` on `ResumeHeading` and on each job's title and employer (a job can break between bullets), and `print:bg-white` on body). Since sizes are rem-based, the timeline dots and rules scale down with the text. Check print preview when you edit the resume page.
-- The Footer social links are **hardcoded**. The Header social links come from the CMS (`hero.links`).
+- Social links come from the CMS (`hero.links`), and a network with an empty handle is hidden. The hero reads them from its own data; the Footer reads `page.data.site.social` (normalized in `+layout.server.ts`, so it works on the error page too). The Footer's GitHub icon is the exception: it's hard-coded to this site's repo, not the profile.
 - `.claude/progress.md` tracks the roadmap and is current. Phases 1 (Gatsby → SvelteKit), 2 (Sanity v2 → v5), and 3 (Tailwind v3 → v4) are done. Phase 4 (redesign) is in progress; the handoff from Claude Design is in `.claude/redesign/` (`plan.md` lists the sub-phases).
 - The README logo path (`src/images/icon.png`) points to a file that doesn't exist. The icon is at `static/icon.png`.
 - **Vite 8 minifies CSS with Lightning CSS**, which is stricter than esbuild was. Invalid CSS (such as nesting `&` where it isn't allowed) now fails the build instead of passing through.
