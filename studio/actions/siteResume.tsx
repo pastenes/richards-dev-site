@@ -24,7 +24,7 @@ export const ShowOnSiteAction: DocumentActionComponent = ({id, published}) => {
       try {
         await client
           .transaction()
-          .createIfNotExists({_id: SETTINGS_ID, _type: 'resumeSettings'})
+          .createIfNotExists({_id: SETTINGS_ID, _type: 'siteSettings'})
           .patch(SETTINGS_ID, (patch) => patch.set({siteResume: {_type: 'reference', _ref: id}}))
           .commit()
       } finally {

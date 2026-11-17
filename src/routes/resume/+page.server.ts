@@ -71,7 +71,12 @@ export const load: PageServerLoad = async ({ url }) => {
 			})) ?? [];
 
 	return {
-		noindex: Boolean(id),
+		// Head tags (+layout.svelte): the summary is the description, cut to search-result length.
+		meta: {
+			title: `Resume | ${resume.name ?? 'Richard Pastenes'}`,
+			description: clip(resume.summary),
+			noindex: Boolean(id)
+		},
 		resume: {
 			...resume,
 			certifications,
@@ -84,4 +89,12 @@ export const load: PageServerLoad = async ({ url }) => {
 function formatDate(dateStr: string): string {
 	const date = new Date(dateStr);
 	return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+}
+
+/** Up to `max` characters, cut at a word and ended with an ellipsis; `undefined` when empty. */
+function clip(text: unknown, max = 160): string | undefined {
+	if (typeof text !== 'string' || !text.trim()) return undefined;
+	const clean = text.replace(/\s+/g, ' ').trim();
+	if (clean.length <= max) return clean;
+	return `${clean.slice(0, max - 1).replace(/\s+\S*$/, '')}…`;
 }

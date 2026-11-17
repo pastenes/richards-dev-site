@@ -1,11 +1,13 @@
 import {useEffect, useState} from 'react'
 import {useClient} from 'sanity'
 
-export const SETTINGS_ID = 'resumeSettings'
-const QUERY = `*[_id == "${SETTINGS_ID}"][0].siteResume._ref`
+export const SETTINGS_ID = 'siteSettings'
+// TODO: drop the `resumeSettings` fallback (and from the listener) once the site-settings migration
+// has run on production.
+const QUERY = `coalesce(*[_id == "${SETTINGS_ID}"][0].siteResume._ref, *[_id == "resumeSettings"][0].siteResume._ref)`
 
 /**
- * The `_id` of the resume the site shows (`resumeSettings.siteResume`), kept live. `undefined` while
+ * The `_id` of the resume the site shows (`siteSettings.siteResume`), kept live. `undefined` while
  * loading, `null` when none is picked yet (the site then falls back to the document `resume`).
  */
 export function useSiteResumeId(): string | null | undefined {
@@ -16,7 +18,7 @@ export function useSiteResumeId(): string | null | undefined {
     const refresh = () => client.fetch<string | null>(QUERY).then((value) => setId(value ?? null))
     refresh()
     const subscription = client
-      .listen(`*[_id == "${SETTINGS_ID}"]`, {}, {visibility: 'query'})
+      .listen(`*[_id in ["${SETTINGS_ID}", "resumeSettings"]]`, {}, {visibility: 'query'})
       .subscribe(() => refresh())
     return () => subscription.unsubscribe()
   }, [client])

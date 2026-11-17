@@ -76,9 +76,10 @@ src/
     actions/reveal.ts      # scroll-reveal action used by Reveal.svelte
     actions/hoverVideo.ts  # project card hover preview (lazy video over the screenshot)
   routes/
-    +layout.svelte         # app.css, fonts, skip link, the shared Nav (PDF button on /resume), page transitions
+    +layout.server.ts      # GROQ: Site settings (SEO/sharing defaults) + hero Twitter handle, for every page
+    +layout.svelte         # app.css, fonts, all SEO/OG/Twitter head tags, skip link, the shared Nav (PDF button on /resume), page transitions
     +page.server.ts        # GROQ: hero, about, projects, skills, certifications (Promise.all)
-    +page.svelte           # landing page + SEO/OG meta in <svelte:head>
+    +page.svelte           # landing page (head: only the Sanity CDN preconnect)
     resume/+page.server.ts # GROQ: the site resume, or any resume by `?id=` (noindexed); formats experience dates
     resume/+page.svelte    # printable resume (print: variants in markup, page scaling in app.css)
     Resume-Richard-Pastenes.pdf/+server.ts # the PDF button: streams the site resume's generated PDF
@@ -86,11 +87,12 @@ src/
 netlify/functions/resume-pdf.mts # headless Chrome prints /resume?id=… to PDF (Studio's Generate Resume PDF)
 netlify/tsconfig.json      # Node types for the functions (the root tsconfig only covers src/); check with `npx tsc -p netlify`
 vite.config.ts             # tailwindcss() plugin + sveltekit({...}) with adapter and preprocess (no svelte.config.js)
-static/                    # icon.png, meta.png (OG)
+static/                    # icon.png, meta.png (fallback share image)
 studio/
   sanity.config.ts         # studio config: custom structure, vision, arrays never collapse ("Show all X items" is off)
   sanity.cli.ts            # projectId lpvkp4xx, dataset production, deployment appId
-  schemas/documents/       # hero, about, project, resume, resumeSettings, skills, certification
+  schemas/documents/       # hero, about, project, resume, siteSettings, skills, certification
+  migrations/site-settings/ # one-time: resumeSettings → siteSettings (delete once run on production)
   actions/                 # resume document actions: Show on site (+ On site badge), Generate Resume PDF
   schemas/objects/         # blockContent, imageFile, links, education, experience, achievment
 ```
@@ -113,7 +115,7 @@ studio/
 - `skills`: a singleton with document ID `skills`. `groups[]` (`skillGroup`: title, `skills[]` of `skill`: name, core). Plain objects rather than a tag field, since tags can't carry a group or a core flag.
 - `certification`: orderRank, title, issuer, inProgress (boolean; shows "In progress" instead of the year and credential ID, with a clock seal on the home card, and hides Issued in the Studio), issued (date; the site shows the year), credentialId, credentialUrl.
 - `resume`: one document per resume version (the Studio's **Resumes** list; duplicate one to tailor it to a job posting). The original has document ID `resume`; duplicates get random IDs. Fields: label (internal name for the list), name, jobTitle, contact fieldset, summary, interests, education[], certifications[] (references to `certification` documents, so the resume picks and orders its own subset; the loader reduces `issued` to `year` and drops broken references), experience[] (each with `achievment[]`), skills (`string[]`), pdfFileName (without `.pdf`), pdf (read-only file, set by Generate Resume PDF).
-- `resumeSettings`: a singleton (document ID `resumeSettings`, the Studio's **Site resume**) whose `siteResume` reference picks the resume shown at `/resume` and behind the PDF button. Also set by a resume's **Show on site** action. `siteResumeQuery` in `#lib/sanity.ts` falls back to the document `resume` while it's unset. Always fetch resumes with `{ perspective: 'published' }`: the token can read drafts.
+- `siteSettings`: a singleton (document ID `siteSettings`, the Studio's **Site settings**). SEO & sharing group: siteName (og:site_name and the error-page title suffix), title (home page title), description, siteUrl (canonical origin; empty uses the request's origin), ogImage (image with hotspot and alt, served as a 1200×630 JPG crop; empty uses `static/meta.png`). Resume group: `siteResume`, the reference that picks the resume shown at `/resume` and behind the PDF button, also set by a resume's **Show on site** action. It replaced the `resumeSettings` singleton; `siteResumeQuery` in `#lib/sanity.ts` and the Studio's `useSiteResumeId` still fall back to `resumeSettings` (TODO: remove once the `site-settings` migration has run), then to the document `resume`. Always fetch resumes with `{ perspective: 'published' }`: the token can read drafts.
 - The spelling **`achievment` is a typo, but it's part of the stored data.** Don't rename it in schemas or queries unless you also migrate the Content Lake.
 - When you change a schema, update the matching GROQ projection in `src/routes/**/+page.server.ts` as well. The site has no generated types, so a mismatch fails silently and the field just renders empty.
 
@@ -137,6 +139,7 @@ studio/
 - There's no `container` class. Content columns use `mx-auto sm:max-w-narrow lg:max-w-wide` (Work, resume) or `mx-auto max-w-4xl` (About, 404). Section padding (`px-14 py-32 lg:px-32`, or `px-6 md:px-14` on redesigned sections) is written on each `<section>`; there's no global `section` rule. Redesigned sections open with `SectionHeading` (`eyebrow`, `title`, and a `script` word in Caveat).
 - **Accessibility:** every page has `<main id="main">` (the skip link targets it), and the base layer draws an accent `:focus-visible` ring on everything. Decorative images and duplicate links get `alt=""` / `aria-hidden`; motion (reveal, parallax, page transitions, smooth scroll, the 404 cursor blink) is skipped under reduced motion. axe reported 0 violations on all pages in both themes; re-run it after big changes.
 - **Page transitions:** `onNavigate` in `+layout.svelte` wraps cross-page navigations in `document.startViewTransition` (the browser's default cross-fade). It skips same-page anchor jumps and reduced motion; browsers without the API navigate normally.
+- **SEO and share tags** all render in `+layout.svelte`, from `data.site` (`+layout.server.ts`, Site settings with built-in defaults; a failed fetch also uses the defaults) refined by the page's own `meta` (`{ title, description, noindex }`, returned from its load). `/resume` returns `Resume | <name>`, its summary cut to 160 characters, and `noindex` for `?id=` views. Error pages get `Not Found | <site name>` and `noindex`. Don't add `<title>` or meta tags in pages: they'd duplicate the layout's. The Twitter handle (`twitter:site`) comes from `hero.links.twitter`.
 - **Performance:** `inlineStyleThreshold` in `vite.config.ts` inlines the CSS into the HTML (no render-blocking stylesheet). If the CSS grows past the threshold it silently goes back to a `<link>`. Lighthouse mobile: performance 95, accessibility/best practices/SEO 100, CLS ~0.
 - **Scroll reveal:** wrap an element in `<Reveal>` (`as` for the tag, `step` to stagger siblings, `class` for its own classes) instead of repeating the animation classes. The action adds `data-hidden` only to elements that start below the fold and removes it on first view, so server-rendered and no-JS pages show everything, and reduced motion skips it. Don't put `Reveal`'s classes on an element that has its own `transition`/`duration` (wrap it instead, as the Work cards do).
 - **Project preview videos:** a card whose project has `previewVideo` overlays a `<video muted loop playsinline preload="none">` on its screenshot, with no `src`. `use:hoverVideo` on the `<article>` sets the `src` on the first hover or keyboard focus, plays from the start, and adds `data-playing` once frames show (the video fades in with `data-playing:opacity-100`); leaving pauses it. Touch devices (no `(hover: hover) and (pointer: fine)`) and reduced motion keep the screenshot and never download the clip. Clips are recorded by hand and uploaded in the Studio: 16:9, about 1000px wide (1400px for the first project), 6–10 s, no audio, under 1 MB. Encode with `ffmpeg -i raw.mov -vf "scale=1000:-2,fps=30" -an -c:v libx264 -crf 28 -preset slow -pix_fmt yuv420p -movflags +faststart preview.mp4` (`+faststart` lets playback start before the file finishes downloading).
