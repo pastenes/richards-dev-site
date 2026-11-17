@@ -4,7 +4,7 @@ import {visionTool} from '@sanity/vision'
 import {orderableDocumentListDeskItem} from '@sanity/orderable-document-list'
 import {AiFillCode} from 'react-icons/ai'
 import {GrDocumentUser} from 'react-icons/gr'
-import {FaCertificate, FaGlobeAmericas, FaTools} from 'react-icons/fa'
+import {FaCertificate, FaCog, FaTools} from 'react-icons/fa'
 
 import hero from './schemas/documents/hero'
 import about from './schemas/documents/about'
@@ -12,7 +12,7 @@ import project from './schemas/documents/project'
 import resume from './schemas/documents/resume'
 import skills from './schemas/documents/skills'
 import certification from './schemas/documents/certification'
-import resumeSettings from './schemas/documents/resumeSettings'
+import siteSettings from './schemas/documents/siteSettings'
 import blockContent from './schemas/objects/blockContent'
 import imageFile from './schemas/objects/image'
 import links from './schemas/objects/links'
@@ -63,12 +63,13 @@ export default defineConfig({
               context,
             }),
             S.divider(),
-            // One resume per version (duplicate one to tailor it); the site shows the "Site resume".
+            // One resume per version (duplicate one to tailor it); Site settings picks the site's.
             S.documentTypeListItem('resume').title('Resumes').icon(GrDocumentUser),
+            S.divider(),
             S.listItem()
-              .title('Site resume')
-              .icon(FaGlobeAmericas)
-              .child(S.document().schemaType('resumeSettings').documentId('resumeSettings')),
+              .title('Site settings')
+              .icon(FaCog)
+              .child(S.document().schemaType('siteSettings').documentId('siteSettings')),
           ]),
     }),
     visionTool(),
@@ -81,8 +82,8 @@ export default defineConfig({
   },
 
   document: {
-    // `resumeSettings` is a singleton: only reachable from the structure, never created or copied.
-    newDocumentOptions: (prev) => prev.filter((item) => item.templateId !== 'resumeSettings'),
+    // `siteSettings` is a singleton: only reachable from the structure, never created or copied.
+    newDocumentOptions: (prev) => prev.filter((item) => item.templateId !== 'siteSettings'),
     actions: (prev, {schemaType}) => {
       // Generate comes first so it's the main button whenever there's nothing to publish (it hides
       // itself while there are unpublished changes, letting Publish take that spot). Generate,
@@ -93,7 +94,7 @@ export default defineConfig({
           ...prev.map((action) => (action.action === 'duplicate' ? alsoInHeaderMenu(action) : action)),
           alsoInHeaderMenu(ShowOnSiteAction),
         ]
-      if (schemaType === 'resumeSettings')
+      if (schemaType === 'siteSettings')
         return prev.filter(({action}) => action === 'publish' || action === 'discardChanges')
       return prev
     },
@@ -108,7 +109,7 @@ export default defineConfig({
       resume,
       skills,
       certification,
-      resumeSettings,
+      siteSettings,
       blockContent,
       imageFile,
       links,

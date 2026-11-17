@@ -2,7 +2,7 @@ import {defineType, defineField} from 'sanity'
 import {GrDocumentUser} from 'react-icons/gr'
 
 // One document per resume version (duplicate one to tailor it to a job posting). The site shows the
-// one picked as the site resume (`resumeSettings`), and "Generate Resume PDF" prints a resume to `pdf`.
+// one picked as the site resume (Site settings), and "Generate Resume PDF" prints a resume to `pdf`.
 
 export default defineType({
   name: 'resume',

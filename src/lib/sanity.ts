@@ -11,11 +11,12 @@ export const client = createClient({
 });
 
 /**
- * GROQ for the resume the site shows: the one picked in the studio (`resumeSettings`), falling back
- * to the original singleton document `resume` until one is picked. Fetch it with
+ * GROQ for the resume the site shows: the one picked in the studio's Site settings (`siteSettings`),
+ * falling back to the original singleton document `resume` until one is picked. Fetch it with
  * `{ perspective: 'published' }`, since the token can also read drafts.
+ * TODO: drop the `resumeSettings` fallback once the site-settings migration has run on production.
  */
-export const siteResumeQuery = `coalesce(*[_id == "resumeSettings"][0].siteResume->, *[_id == "resume"][0])`;
+export const siteResumeQuery = `coalesce(*[_id == "siteSettings"][0].siteResume->, *[_id == "resumeSettings"][0].siteResume->, *[_id == "resume"][0])`;
 
 const builder = createImageUrlBuilder(client);
 

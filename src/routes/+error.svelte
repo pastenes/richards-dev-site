@@ -20,10 +20,7 @@
 
 <svelte:window {onkeydown} />
 
-<svelte:head>
-	<title>{notFound ? 'Not Found' : 'Error'} | Richard's Dev Landing</title>
-</svelte:head>
-
+<!-- The title ("Not Found | <site name>") and noindex come from +layout.svelte. -->
 <main id="main" class="px-6 pt-40 pb-32 md:px-14 lg:px-32">
 	<div class="mx-auto sm:max-w-narrow lg:max-w-wide">
 		{#if notFound}
