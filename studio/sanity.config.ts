@@ -83,7 +83,9 @@ export default defineConfig({
     // `resumeSettings` is a singleton: only reachable from the structure, never created or copied.
     newDocumentOptions: (prev) => prev.filter((item) => item.templateId !== 'resumeSettings'),
     actions: (prev, {schemaType}) => {
-      if (schemaType === 'resume') return [...prev, ShowOnSiteAction, GenerateResumePdfAction]
+      // Generate comes first so it's the main button whenever there's nothing to publish (it hides
+      // itself while there are unpublished changes, letting Publish take that spot).
+      if (schemaType === 'resume') return [GenerateResumePdfAction, ...prev, ShowOnSiteAction]
       if (schemaType === 'resumeSettings')
         return prev.filter(({action}) => action === 'publish' || action === 'discardChanges')
       return prev

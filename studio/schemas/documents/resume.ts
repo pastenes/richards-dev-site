@@ -134,18 +134,17 @@ export default defineType({
       name: 'pdfFileName',
       title: 'PDF file name',
       description:
-        'Without ".pdf". Use a role-specific name for tailored versions (e.g. Resume-Richard-Pastenes-Acme).',
+        'Optional, without ".pdf". Leave empty for Resume-Richard-Pastenes, or use a role-specific name for tailored versions (e.g. Resume-Richard-Pastenes-Acme).',
       type: 'string',
-      initialValue: 'Resume-Richard-Pastenes',
-      validation: (Rule) =>
-        Rule.required().regex(/^[A-Za-z0-9_-]+$/, {name: 'letters, numbers, - and _ only'}),
+      placeholder: 'Resume-Richard-Pastenes',
+      validation: (Rule) => Rule.regex(/^[A-Za-z0-9_-]+$/, {name: 'letters, numbers, - and _ only'}),
       group: 'pdf',
     }),
     defineField({
       name: 'pdf',
       title: 'PDF',
       description:
-        'Set by "Generate Resume PDF" (in the document actions menu) from the published resume. Regenerate it after publishing changes.',
+        'Set by the "Generate Resume PDF" button at the bottom of the editor. It replaces Publish once everything is published, since the PDF is printed from the published resume. Regenerate it after publishing changes.',
       type: 'file',
       options: {accept: 'application/pdf'},
       readOnly: true,
