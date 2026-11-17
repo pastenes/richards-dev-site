@@ -19,7 +19,6 @@
 	let { progress, pointer, drift }: Props = $props();
 
 	const reduceMotion = new MediaQuery('(prefers-reduced-motion: reduce)');
-	const lightScheme = new MediaQuery('(prefers-color-scheme: light)');
 
 	// Layer placement, matching HeroLandscape's `drift(k, depth)`.
 	const K = 100;
@@ -43,9 +42,8 @@
 	let canvas = $state<HTMLCanvasElement>();
 	let color = '#a4ffeb';
 
-	// Re-read the color whenever the system theme flips (the token changes in the light block).
+	// The canvas draws in its `text-bird` color.
 	$effect(() => {
-		void lightScheme.current;
 		if (canvas) color = getComputedStyle(canvas).color;
 	});
 

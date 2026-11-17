@@ -81,12 +81,12 @@
 }
 
 /*
- * Light ("paper") theme: follows the visitor's system setting, and always applies in print.
+ * Light ("paper") theme: print only. On screen the site is always dark.
  * Utilities read the color tokens as CSS variables, so overriding the variables re-themes every
  * class (`bg-surface`, `text-accent/50`, ...) with no extra class names. This rule is outside any
  * layer, so it beats the theme layer where Tailwind defines the dark values.
  */
-@media (prefers-color-scheme: light), print {
+@media print {
   :root {
     --color-background: #f4f6f3;
     --color-surface: #ffffff;

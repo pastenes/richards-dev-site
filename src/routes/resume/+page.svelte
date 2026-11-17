@@ -6,7 +6,7 @@
 </script>
 
 <!--
-	On screen the resume follows the site theme. In print the light ("paper") colors always apply
+	On screen the resume uses the site's dark theme. In print the light ("paper") colors always apply
 	(app.css) on a white page, and the layout is sized to fit one A4 page: check print preview.
 -->
 <main id="main">
