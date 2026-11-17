@@ -146,7 +146,7 @@ studio/
 - **Resume PDFs are generated, not hand-exported.**
   - **Button:** a resume's **Generate Resume PDF** action (`studio/actions/generateResumePdf.tsx`) calls `https://pastenes.dev/.netlify/functions/resume-pdf?id=<id>`. Override the site with `SANITY_STUDIO_SITE_URL` in `studio/.env.development`.
   - **Function:** `netlify/functions/resume-pdf.mts` opens this deploy's `/resume?id=…` in headless Chrome with print media, so the light theme always applies. If the resume runs over one A4 page, it prints slightly smaller (scale down to 0.85). It returns a tagged PDF with selectable text (~70 KB) and an `X-Pdf-Pages` count.
-  - **Saving:** the action uploads the PDF with the Studio user's auth (no write token on the server) and sets the resume's `pdf` field. It only runs on published resumes with no pending draft.
+  - **Saving:** the action uploads the PDF with the Studio user's auth (no write token on the server) and sets the resume's `pdf` field. It's the first resume action, so it's the editor's main button whenever there's nothing to publish; it hides itself while there are unpublished changes, so Publish takes that spot. `pdfFileName` is optional (empty means `Resume-Richard-Pastenes`).
   - **Serving:** `/Resume-Richard-Pastenes.pdf` is a route, not a static file, so don't add one to `static/`. It streams the site resume's `pdf`, and redirects to `/resume` until one exists.
   - **Routing:** the function has no custom `config.path`, because SvelteKit's function claims `/*` (minus `/.netlify/*`).
   - **Testing locally:** import the handler in a Node script with `CHROME_PATH` (local Chrome) and `RESUME_RENDER_ORIGIN` (the dev server URL) set.

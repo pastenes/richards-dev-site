@@ -16,17 +16,15 @@ export const GenerateResumePdfAction: DocumentActionComponent = ({id, draft, pub
   const toast = useToast()
   const [busy, setBusy] = useState(false)
 
+  // Hidden until the resume is published with no pending changes; Publish is the main button then.
+  if (!published || (draft && !busy)) return null
+
   return {
     label: busy ? 'Generating PDF…' : 'Generate Resume PDF',
     icon: FaFilePdf,
-    title: !published
-      ? 'Publish this resume first: the PDF is made from the published version'
-      : draft
-        ? 'Publish your changes first: the PDF is made from the published version'
-        : 'Print the published resume to PDF and save it in the PDF tab',
-    disabled: !published || Boolean(draft) || busy,
+    title: 'Print the published resume to PDF and save it in the PDF tab',
+    disabled: busy,
     onHandle: async () => {
-      if (!published) return
       setBusy(true)
       try {
         const response = await fetch(`${SITE_URL}/.netlify/functions/resume-pdf?id=${encodeURIComponent(id)}`)
