@@ -37,6 +37,11 @@ export default defineConfig({
           .title('Content')
           .items([
             S.listItem()
+              .title('Site settings')
+              .icon(FaCog)
+              .child(S.document().schemaType('siteSettings').documentId('siteSettings')),
+            S.divider(),
+            S.listItem()
               .title('Hero Section')
               .schemaType('hero')
               .child(S.documentList().title('Hero Section').filter('_type == "hero"')),
@@ -65,11 +70,6 @@ export default defineConfig({
             S.divider(),
             // One resume per version (duplicate one to tailor it); Site settings picks the site's.
             S.documentTypeListItem('resume').title('Resumes').icon(GrDocumentUser),
-            S.divider(),
-            S.listItem()
-              .title('Site settings')
-              .icon(FaCog)
-              .child(S.document().schemaType('siteSettings').documentId('siteSettings')),
           ]),
     }),
     visionTool(),
