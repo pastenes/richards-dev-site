@@ -9,7 +9,7 @@ const SITE_URL = process.env.SANITY_STUDIO_SITE_URL || 'https://pastenes.dev'
 
 /**
  * "Generate Resume PDF": prints the published resume to PDF on the site (light theme, selectable
- * text, one A4 page), uploads it, and stores it in the resume's `pdf` field.
+ * text, A4), uploads it, and stores it in the resume's `pdf` field.
  */
 export const GenerateResumePdfAction: DocumentActionComponent = ({id, draft, published}) => {
   const client = useClient({apiVersion: '2024-01-01'})
@@ -42,11 +42,11 @@ export const GenerateResumePdfAction: DocumentActionComponent = ({id, draft, pub
           .commit()
 
         toast.push(
-          pages > 1
+          pages > 2
             ? {
                 status: 'warning',
                 title: `PDF saved, but it runs to ${pages} pages`,
-                description: 'Trim the content to fit one page, publish, and generate it again.',
+                description: 'Resumes read best on two pages at most. Trim the content, publish, and generate it again.',
                 closable: true,
               }
             : {
