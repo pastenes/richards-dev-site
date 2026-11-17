@@ -5,11 +5,11 @@ import puppeteer, { type Browser } from 'puppeteer-core';
  * headless Chrome, the same as Print → Save as PDF. The studio's "Generate Resume PDF" action calls
  * it, then uploads the result to the resume's `pdf` field.
  *
- * - Print media: always the light "paper" theme (app.css), on A4 from the page's `@page` rule.
+ * - Print media: always the light "paper" theme (app.css), on A4 pages from the `@page` rule.
  * - Text stays text (selectable, ~40 KB), and `tagged` adds a structure tree in HTML order for ATS
  *   parsers. The resume markup puts Experience and Skills before the sidebar for the same reason.
- * - Fit to one page: if the resume runs over, it's printed slightly smaller (down to MIN_SCALE).
- *   `X-Pdf-Pages` reports the final page count so the studio can warn when it still doesn't fit.
+ * - Printed at the page's own size (no shrink-to-fit, so the text stays readable; usually two pages).
+ *   `X-Pdf-Pages` reports the page count so the studio can warn when a resume runs long.
  *
  * Locally, set CHROME_PATH to an installed Chrome and RESUME_RENDER_ORIGIN to the dev server.
  * On Netlify it uses @sparticuz/chromium and prints this deploy's own netlify.app URL (DEPLOY_URL),
@@ -17,14 +17,12 @@ import puppeteer, { type Browser } from 'puppeteer-core';
  */
 
 const ALLOWED_ORIGINS = ['https://richard-dev.sanity.studio', 'http://localhost:3333'];
-const MIN_SCALE = 0.85;
-const SCALE_STEP = 0.025;
 
 export default async (request: Request) => {
 	const origin = request.headers.get('origin') ?? '';
 	const cors: Record<string, string> = {
 		'access-control-allow-origin': ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0],
-		'access-control-expose-headers': 'X-Pdf-Pages, X-Pdf-Scale',
+		'access-control-expose-headers': 'X-Pdf-Pages',
 		vary: 'Origin'
 	};
 	if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors });
@@ -47,12 +45,7 @@ export default async (request: Request) => {
 		}
 		await page.evaluate(() => document.fonts.ready);
 
-		let scale = 1;
-		let pdf = await print(page, scale);
-		while (countPages(pdf) > 1 && scale - SCALE_STEP >= MIN_SCALE - 0.001) {
-			scale -= SCALE_STEP;
-			pdf = await print(page, scale);
-		}
+		const pdf = await page.pdf({ preferCSSPageSize: true, printBackground: true, tagged: true });
 
 		// Copied into a plain ArrayBuffer-backed array, which is what `Response` accepts.
 		return new Response(new Uint8Array(pdf), {
@@ -60,8 +53,7 @@ export default async (request: Request) => {
 				...cors,
 				'content-type': 'application/pdf',
 				'cache-control': 'no-store',
-				'x-pdf-pages': String(countPages(pdf)),
-				'x-pdf-scale': scale.toFixed(3)
+				'x-pdf-pages': String(countPages(pdf))
 			}
 		});
 	} catch (error) {
@@ -85,10 +77,6 @@ async function launch() {
 		executablePath: await chromium.executablePath(),
 		headless: true
 	});
-}
-
-function print(page: import('puppeteer-core').Page, scale: number) {
-	return page.pdf({ preferCSSPageSize: true, printBackground: true, tagged: true, scale });
 }
 
 /** Page objects in a Chrome (Skia) PDF: one `/Type /Page` dictionary per page. */

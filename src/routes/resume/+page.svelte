@@ -15,7 +15,7 @@
 	(app.css) on a white page, and the layout is sized to fit one A4 page: check print preview.
 -->
 <main id="main">
-	<article class="mx-auto px-6 pt-32 pb-24 text-sm text-muted sm:max-w-narrow md:px-0 lg:max-w-wide print:max-w-none print:p-12">
+	<article class="mx-auto px-6 pt-32 pb-24 text-sm text-muted sm:max-w-narrow md:px-0 lg:max-w-wide print:max-w-none print:px-12 print:py-0">
 		<header class="mb-2 border-b border-border pb-8 print:mb-0 print:pb-6">
 			<h1 class="mb-2 text-display-lg text-foreground">{resume.name}</h1>
 			<p class="mb-4 font-mono text-base text-accent">{resume.jobTitle}</p>
@@ -31,14 +31,15 @@
 		</header>
 
 		<!--
-			Read order: the HTML puts Experience, then Skills, then the sidebar (Summary, Education,
-			Certifications, Interests), so PDF text extraction and ATS parsers read the main column first.
-			Grid placement keeps the sidebar on the left. Each grid child is `relative` so Chrome paints
-			(and the PDF stores) the text in this order: positioned elements paint after unpositioned ones,
-			so mixing the two would scramble the PDF's text order.
+			Read order. On screen: Experience and Skills come first in the HTML, and grid placement keeps
+			the sidebar on the left. In print (the PDF) it's a single column, since two columns over two
+			pages would put the sidebar between the halves of Experience: the sidebar's sections become
+			flex items (`print:contents`) and Summary moves first (`print:order-first`), giving Summary,
+			Experience, Skills, Education, Certifications, Interests. Every section is `relative` because
+			Chrome paints (and the PDF stores) positioned elements after unpositioned ones.
 		-->
-		<div class="flex flex-col md:grid md:grid-cols-3 md:gap-x-10 print:grid print:grid-cols-3 print:gap-x-8">
-			<section class="relative md:col-span-2 md:col-start-2 md:row-start-1 print:col-span-2 print:col-start-2 print:row-start-1">
+		<div class="flex flex-col md:grid md:grid-cols-3 md:gap-x-10 print:flex">
+			<section class="relative md:col-span-2 md:col-start-2 md:row-start-1">
 				<ResumeHeading>Experience</ResumeHeading>
 				<!-- Timeline: a vertical rule on the list, a dot per role, and a small dot per achievement. -->
 				<ul
@@ -46,19 +47,20 @@
 				>
 					{#each resume.experience ?? [] as item (item._key)}
 						<li
-							class="relative mb-5 pl-5 before:absolute before:top-1.75 before:left-0 before:size-2 before:rounded-full before:bg-accent last:mb-0"
+							class="relative mb-5 pl-5 print:mb-3 before:absolute before:top-1.75 before:left-0 before:size-2 before:rounded-full before:bg-accent last:mb-0"
 						>
-							<div class="sm:flex sm:items-baseline sm:justify-between sm:gap-4 print:flex print:items-baseline print:justify-between print:gap-4">
+							<!-- In print a job may break between bullets, but never right after its title or employer. -->
+							<div class="sm:flex sm:items-baseline sm:justify-between sm:gap-4 print:flex print:break-after-avoid print:items-baseline print:justify-between print:gap-4">
 								<h3 class="mb-0 text-lg text-foreground">{item.role}</h3>
 								<span class="block font-mono text-tiny whitespace-nowrap text-caption">
 									{item.start} - {item.end}
 								</span>
 							</div>
-							<p class="mb-1.5 text-caption">{item.employer}</p>
+							<p class="mb-1.5 text-caption print:break-after-avoid">{item.employer}</p>
 							<ul class="space-y-0.5">
 								{#each item.achievment ?? [] as piece (piece._key)}
 									<li
-										class="relative pl-3 before:absolute before:top-2 before:left-0 before:size-1 before:rounded-full before:bg-border-strong"
+										class="relative pl-3 print:break-inside-avoid before:absolute before:top-2 before:left-0 before:size-1 before:rounded-full before:bg-border-strong"
 									>
 										{piece.achievment}
 									</li>
@@ -69,7 +71,7 @@
 				</ul>
 			</section>
 
-			<section class="relative md:col-span-3 md:row-start-2 print:col-span-3 print:row-start-2">
+			<section class="relative md:col-span-3 md:row-start-2">
 				<ResumeHeading>Skills</ResumeHeading>
 				<ul class="grid grid-cols-2 gap-x-6 md:grid-cols-4 print:grid-cols-4">
 					{#each resume.skills as skill}
@@ -79,19 +81,21 @@
 			</section>
 
 			<!-- Sidebar: first on phones (order-first), the left column from md. -->
-			<div class="relative order-first md:order-none md:col-start-1 md:row-start-1 print:order-none print:col-start-1 print:row-start-1">
-				<section>
+			<div class="relative order-first md:order-none md:col-start-1 md:row-start-1 print:contents">
+				<section class="relative print:order-first">
 					<ResumeHeading>Summary</ResumeHeading>
 					<p class="mb-0">{resume.summary}</p>
 				</section>
 
-				<section>
+				<section class="relative">
 					<ResumeHeading>Education</ResumeHeading>
-					<ul class="space-y-3">
+					<ul class="space-y-3 print:space-y-1">
 						{#each resume.education ?? [] as item (item._key)}
-							<li>
-								<h3 class="mb-0 text-lg text-foreground">{item.degree}</h3>
-								<p class="mb-0">{item.school}</p>
+							<li class="print:flex print:break-inside-avoid print:items-baseline print:justify-between print:gap-4">
+								<div class="print:flex print:items-baseline print:gap-3">
+									<h3 class="mb-0 text-lg text-foreground">{item.degree}</h3>
+									<p class="mb-0">{item.school}</p>
+								</div>
 								<p class="mb-0 font-mono text-tiny text-caption">{item.year}</p>
 							</li>
 						{/each}
@@ -99,21 +103,23 @@
 				</section>
 
 				{#if resume.certifications.length}
-					<section>
+					<section class="relative">
 						<ResumeHeading>Certifications</ResumeHeading>
-						<ul class="space-y-3">
+						<ul class="space-y-3 print:space-y-1">
 							{#each resume.certifications as cert (cert._id)}
-								<li>
-									<h3 class="mb-0 text-lg text-foreground">
-										{#if cert.credentialUrl}
-											<a href={cert.credentialUrl} target="_blank" rel="noreferrer" class="hover:text-accent">
+								<li class="print:flex print:break-inside-avoid print:items-baseline print:justify-between print:gap-4">
+									<div class="print:flex print:items-baseline print:gap-3">
+										<h3 class="mb-0 text-lg text-foreground">
+											{#if cert.credentialUrl}
+												<a href={cert.credentialUrl} target="_blank" rel="noreferrer" class="hover:text-accent">
+													{cert.title}
+												</a>
+											{:else}
 												{cert.title}
-											</a>
-										{:else}
-											{cert.title}
-										{/if}
-									</h3>
-									{#if cert.issuer}<p class="mb-0">{cert.issuer}</p>{/if}
+											{/if}
+										</h3>
+										{#if cert.issuer}<p class="mb-0">{cert.issuer}</p>{/if}
+									</div>
 									{#if cert.inProgress}
 										<p class="mb-0 font-mono text-tiny text-accent">In progress</p>
 									{:else if cert.year}
@@ -125,9 +131,9 @@
 					</section>
 				{/if}
 
-				<section>
+				<section class="relative">
 					<ResumeHeading>Interests</ResumeHeading>
-					<ul>
+					<ul class="print:flex print:flex-wrap print:gap-x-6">
 						{#each resume.interests ?? [] as interest}
 							<li>{interest}</li>
 						{/each}

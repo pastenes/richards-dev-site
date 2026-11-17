@@ -135,12 +135,12 @@
     @apply outline-2 outline-offset-2 outline-accent;
   }
 
-  /* Resume printing: scale everything down to fit one A4 page and keep background colors.
-     The paper colors apply in print via the light-theme block above. */
+  /* Resume printing: a slightly smaller scale (bullets ~10pt, dates ~8.5pt; two A4 pages) and
+     background colors kept. The paper colors apply in print via the light-theme block above. */
   @media print {
     html,
     body {
-      font-size: 71%;
+      font-size: 95%;
     }
     * {
       -webkit-print-color-adjust: exact;
@@ -149,8 +149,9 @@
   }
 }
 
+/* A4 with the same top and bottom margin on every page (the resume runs to two); the side margins
+   come from the article's print padding. */
 @page {
   size: 210mm 297mm;
-  margin-top: 0;
-  margin-bottom: -20px;
+  margin: 10mm 0;
 }
