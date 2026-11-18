@@ -88,6 +88,8 @@
  */
 @media print {
   :root {
+    /* app.html declares a dark color scheme; without this, Chrome paints the @page margins dark. */
+    color-scheme: light;
     --color-background: #f4f6f3;
     --color-surface: #ffffff;
     --color-surface-raised: #eaefeb;
