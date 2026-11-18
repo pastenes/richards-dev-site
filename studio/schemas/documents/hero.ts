@@ -19,11 +19,6 @@ export default defineType({
       of: [{type: 'block'}],
     }),
     defineField({
-      name: 'links',
-      title: 'Links',
-      type: 'links',
-    }),
-    defineField({
       title: 'Headshot',
       name: 'headshot',
       type: 'imageFile',

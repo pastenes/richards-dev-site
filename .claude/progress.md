@@ -162,6 +162,8 @@ Move the redesign's hard-coded content into Sanity and map it to the front end.
 - [x] Multiple resumes: `resume` is a document list (duplicate to tailor), `resumeSettings` picks the site resume ("Show on site" action + "On site" badge), and "Generate Resume PDF" prints a resume via the `resume-pdf` Netlify function into its `pdf` field; `/Resume-Richard-Pastenes.pdf` streams the site resume's PDF (the static file is gone). Resume markup reordered for ATS read order (Experience, Skills, then the sidebar with Interests last)
 - [x] `siteSettings` singleton (Site settings): SEO and sharing defaults (site name, home title, description, site URL, share image) rendered by `+layout.svelte` on every page, plus the site resume, moved from `resumeSettings`
 - [x] Ran the `site-settings` migration on production (`resumeSettings` → `siteSettings`) and deleted it from the repo
+- [x] Social handles moved from the hero to Site settings (`siteSettings.social`); the hero and footer share `SocialLinks.svelte` (the footer's GitHub icon is no longer hard-coded to the repo)
+- [ ] Deploy the site, run the `social-to-site-settings` migration on production, deploy the studio; then remove the `hero.links` fallback in `+layout.server.ts` and the migration folder
 - [ ] Remove the `resumeSettings` fallbacks (`siteResumeQuery`, the Studio's `useSiteResumeId`); fill in Site settings (site URL, share image)
 - [ ] Label the existing resume, click "Show on site" and "Generate Resume PDF" after the site and studio deploys
 

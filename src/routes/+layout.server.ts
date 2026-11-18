@@ -9,8 +9,9 @@ const DEFAULTS = {
 };
 
 /**
- * Social handles (`hero.links`) for the footer, and SEO and sharing defaults from the studio's Site settings (`siteSettings`), for the meta tags in
- * `+layout.svelte`. Pages refine them by returning `meta` ({ title, description, noindex }).
+ * From the studio's Site settings (`siteSettings`): SEO and sharing defaults for the meta tags in
+ * `+layout.svelte` (pages refine them by returning `meta`: { title, description, noindex }), and the
+ * social handles the hero and footer link to (`SocialLinks.svelte`).
  */
 export const load: LayoutServerLoad = async ({ url }) => {
 	const { settings, links } = await client.fetch<{
@@ -31,7 +32,8 @@ export const load: LayoutServerLoad = async ({ url }) => {
 				siteUrl,
 				ogImage{alt, asset, crop, hotspot}
 			},
-			"links": *[_type == "hero"][0].links{github, linkedin, twitter}
+			// TODO: drop the hero fallback once the social-to-site-settings migration has run.
+			"links": coalesce(*[_id == "siteSettings"][0].social, *[_type == "hero"][0].links){github, linkedin, twitter}
 		}`,
 		{},
 		{ perspective: 'published' }
@@ -40,7 +42,7 @@ export const load: LayoutServerLoad = async ({ url }) => {
 		.catch(() => ({ settings: null, links: null }));
 
 	const siteName = settings?.siteName || DEFAULTS.siteName;
-	// Social handles from the hero (the footer shows them too); empty ones become null and are hidden.
+	// Social handles (hero and footer); empty ones become null and are hidden.
 	const handle = (value?: string) => value?.trim().replace(/^@/, '') || null;
 	const social = {
 		github: handle(links?.github),

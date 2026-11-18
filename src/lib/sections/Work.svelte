@@ -60,13 +60,13 @@
 						class="group flex h-full flex-col overflow-hidden rounded-card border border-border bg-surface-raised transition duration-300 ease-out-expo hover:border-accent hover:shadow-glow"
 					>
 						{#if project.screenshot?.url}
-							{#snippet screenshot(url: string, srcset: string)}
+							{#snippet screenshot(url: string, srcset: string, alt: string)}
 								<div class="relative">
 									<img
 										src={url}
 										{srcset}
 										sizes={sizes[index] ?? cardSizes}
-										alt=""
+										{alt}
 										width="1000"
 										height="563"
 										loading="lazy"
@@ -88,12 +88,21 @@
 								</div>
 							{/snippet}
 							{#if project.projectUrl}
-								<!-- Duplicate of the title link, so it's hidden from keyboard and screen readers. -->
-								<a href={project.projectUrl} target="_blank" rel="noreferrer" tabindex="-1" aria-hidden="true">
-									{@render screenshot(project.screenshot.url, project.screenshot.srcset)}
+								<!--
+									Same target as the title link, so it's left out of the tab order. Screen readers get the
+									screenshot's alt text as its name; without alt text it would have no name, so it's hidden.
+								-->
+								<a
+									href={project.projectUrl}
+									target="_blank"
+									rel="noreferrer"
+									tabindex="-1"
+									aria-hidden={project.screenshot.alt ? undefined : 'true'}
+								>
+									{@render screenshot(project.screenshot.url, project.screenshot.srcset, project.screenshot.alt ?? '')}
 								</a>
 							{:else}
-								{@render screenshot(project.screenshot.url, project.screenshot.srcset)}
+								{@render screenshot(project.screenshot.url, project.screenshot.srcset, project.screenshot.alt ?? '')}
 							{/if}
 						{/if}
 						<div class="flex flex-auto flex-col p-6">

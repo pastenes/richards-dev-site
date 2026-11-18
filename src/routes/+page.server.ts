@@ -6,7 +6,6 @@ export const load: PageServerLoad = async () => {
 		client.fetch(`*[_type == "hero"][0]{
 			title,
 			intro[]{children[]{text}},
-			links{github, linkedin, twitter},
 			headshot{alt, asset->{_id, url}}
 		}`),
 		client.fetch(`*[_type == "about"][0]{

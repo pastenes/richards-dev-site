@@ -144,6 +144,16 @@
     body {
       font-size: 95%;
     }
+    /* Instrument Serif's word gaps are tight (about 0.13em before a W), so parsers that find words by
+       the gaps between letters (ATS) read "LeadWeb Developer". This widens them to match the body font. */
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      word-spacing: 0.15em;
+    }
     * {
       -webkit-print-color-adjust: exact;
       print-color-adjust: exact;

@@ -1,7 +1,8 @@
 import {defineType, defineField} from 'sanity'
 import {FaCog} from 'react-icons/fa'
 
-// Singleton (document ID `siteSettings`): the site's SEO and social sharing defaults, and which
+// Singleton (document ID `siteSettings`): the site's SEO and social sharing defaults, the social
+// handles the hero and footer link to, and which
 // resume the site shows at /resume and serves as /Resume-Richard-Pastenes.pdf. The resume can also
 // be picked with "Show on site" on a resume. The reference is strong, so the site resume can't be
 // deleted while it's picked.
@@ -12,6 +13,7 @@ export default defineType({
   icon: FaCog,
   groups: [
     {name: 'seo', title: 'SEO & sharing', default: true},
+    {name: 'social', title: 'Social'},
     {name: 'resume', title: 'Resume'},
   ],
   fields: [
@@ -66,6 +68,14 @@ export default defineType({
           type: 'string',
         }),
       ],
+    }),
+    defineField({
+      name: 'social',
+      title: 'Social links',
+      description:
+        'Handles only, without the URL or "@" (e.g. "richardpastenes"). The hero and footer link to each network that has one.',
+      type: 'links',
+      group: 'social',
     }),
     defineField({
       name: 'siteResume',
