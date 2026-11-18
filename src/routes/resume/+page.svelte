@@ -68,9 +68,15 @@
 
 			<section class="relative md:col-span-3 md:row-start-2">
 				<ResumeHeading>Skills</ResumeHeading>
-				<ul class="grid grid-cols-2 gap-x-6 md:grid-cols-4 print:grid-cols-4">
-					{#each resume.skills as skill}
-						<li>{skill}</li>
+				<!-- One line per group, most relevant first; the skills keep their Studio order. -->
+				<ul class="space-y-2 print:space-y-1">
+					{#each resume.skillGroups as group (group._key)}
+						<li class="sm:flex sm:items-baseline sm:gap-4 print:flex print:break-inside-avoid print:items-baseline print:gap-4">
+							{#if group.title}
+								<h3 class="mb-0 shrink-0 font-mono text-xs text-foreground sm:w-32 print:w-32">{group.title}</h3>
+							{/if}
+							<p class="mb-0">{group.skills.join(', ')}</p>
+						</li>
 					{/each}
 				</ul>
 			</section>

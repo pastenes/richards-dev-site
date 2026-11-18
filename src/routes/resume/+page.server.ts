@@ -43,6 +43,12 @@ export const load: PageServerLoad = async ({ url }) => {
 				achievment
 			}
 		},
+		skillGroups[]{
+			_key,
+			title,
+			skills
+		},
+		// TODO: remove once the resume-skill-groups migration has run.
 		skills
 	}`,
 		id ? { id } : {},
@@ -50,7 +56,19 @@ export const load: PageServerLoad = async ({ url }) => {
 	);
 	if (!resume) error(404, 'Resume not found');
 
-	const skills = tagNames(resume?.skills).sort();
+	// Groups and skills keep their Studio order (by relevance). A resume still on the old flat list
+	// shows it as one untitled, alphabetical group.
+	const skillGroups: { _key: string; title?: string; skills: string[] }[] = Array.isArray(resume.skillGroups)
+		? resume.skillGroups
+				.map((group: { _key: string; title?: string; skills?: unknown }) => ({
+					_key: group._key,
+					title: group.title,
+					skills: tagNames(group.skills)
+				}))
+				.filter((group: { skills: string[] }) => group.skills.length)
+		: tagNames(resume.skills).length
+			? [{ _key: 'skills', skills: tagNames(resume.skills).sort() }]
+			: [];
 
 	// Format dates for experience
 	const experience =
@@ -81,7 +99,7 @@ export const load: PageServerLoad = async ({ url }) => {
 			...resume,
 			certifications,
 			experience,
-			skills
+			skillGroups
 		}
 	};
 };

@@ -1,4 +1,4 @@
-import {defineType, defineField} from 'sanity'
+import {defineType, defineField, defineArrayMember} from 'sanity'
 import {GrDocumentUser} from 'react-icons/gr'
 
 // One document per resume version (duplicate one to tailor it to a job posting). The site shows the
@@ -122,12 +122,40 @@ export default defineType({
       group: 'experience',
     }),
     defineField({
-      name: 'skills',
+      name: 'skillGroups',
       title: 'Skills',
-      description: 'Type a skill and press Enter. Shown alphabetically on the resume.',
+      description:
+        'Groups in order of relevance (most relevant first), and skills within each group in the same order. The resume shows them as listed, not alphabetically.',
       type: 'array',
-      of: [{type: 'string'}],
-      options: {layout: 'tags'},
+      of: [
+        defineArrayMember({
+          name: 'skillGroup',
+          title: 'Group',
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'title',
+              title: 'Title',
+              description: 'E.g. "Core", "UI & styling", "Platforms".',
+              type: 'string',
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: 'skills',
+              title: 'Skills',
+              description: 'Type a skill and press Enter. Drag to reorder.',
+              type: 'array',
+              of: [{type: 'string'}],
+              options: {layout: 'tags'},
+              validation: (Rule) => Rule.required().min(1).unique(),
+            }),
+          ],
+          preview: {
+            select: {title: 'title', skills: 'skills'},
+            prepare: ({title, skills}) => ({title, subtitle: skills?.join(', ')}),
+          },
+        }),
+      ],
       group: 'skills',
     }),
     defineField({

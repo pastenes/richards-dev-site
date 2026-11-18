@@ -154,6 +154,8 @@ Move the redesign's hard-coded content into Sanity and map it to the front end.
 - [ ] Seed the dataset with the former hard-coded content, then enter the real cert date and credential ID
 - [x] Replace `sanity-plugin-tags-v4` with native tag arrays (`string[]`, `layout: 'tags'`) on `project.tags` and `resume.skills`; remove `about.tags`; uninstall the plugin
 - [x] Ran the `tags-to-strings` migration on production after release-4 went live, then deployed the studio
+- [x] Resume skills grouped by relevance (`resume.skillGroups`: Core, UI & styling, Quality, Data & AI, Platforms) instead of one alphabetical list, on `/resume` and in the PDF
+- [ ] Deploy the site, run the `resume-skill-groups` migration on production, deploy the studio, regenerate the resume PDFs; then remove the flat-`skills` fallback and the migration folder
 - [x] Dropped the old-shape branch from `tagNames()`
 - [x] `project.previewVideo` (optional MP4) → plays over the card screenshot on hover (`actions/hoverVideo.ts`; lazy, mouse/pen only, skipped for reduced motion)
 - [ ] Record and upload a preview clip for each project
