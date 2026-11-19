@@ -105,8 +105,10 @@ export const load: PageServerLoad = async ({ url }) => {
 };
 
 function formatDate(dateStr: string): string {
+	// Sanity dates ("2020-02-01") parse as UTC midnight, so format in UTC too; in a time zone behind
+	// UTC (a local dev server) they'd otherwise show the previous day's month.
 	const date = new Date(dateStr);
-	return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+	return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
 }
 
 /** Up to `max` characters, cut at a word and ended with an ellipsis; `undefined` when empty. */
