@@ -34,8 +34,21 @@
 		if (!frame) frame = requestAnimationFrame(ease);
 	}
 
+	// The pause button stops the birds and the pointer drift (WCAG 2.2.2: motion that runs on its own
+	// needs a way to stop it). The choice lasts for the browser session.
+	let paused = $state(false);
+	$effect(() => {
+		paused = sessionStorage.getItem('hero-paused') === '1';
+	});
+
+	function togglePause() {
+		paused = !paused;
+		sessionStorage.setItem('hero-paused', paused ? '1' : '0');
+		if (paused) aim(0, 0);
+	}
+
 	function onpointermove(event: PointerEvent) {
-		if (reduceMotion.current || !finePointer.current || event.pointerType === 'touch') return;
+		if (paused || reduceMotion.current || !finePointer.current || event.pointerType === 'touch') return;
 		aim((event.clientX / window.innerWidth) * 2 - 1, (event.clientY / window.innerHeight) * 2 - 1);
 	}
 
@@ -57,10 +70,15 @@
 	Hero: layered Mt. Hood landscape behind, copy in the open sky on the left. The cut-out photo
 	is `Headshot.svelte`, rendered by the page so it can stick beside About on desktop.
 -->
-<section class="relative h-screen overflow-hidden bg-land-sky px-6 md:px-14 lg:px-32">
-	<HeroLandscape {pointer} />
+<!--
+	`min-h-screen`, not `h-screen`: at high zoom (or on a short window) the hero grows to fit its copy
+	instead of clipping it. The copy is z-20, above the photo layer (z-10), so it stays readable where
+	they meet.
+-->
+<section class="relative min-h-screen overflow-hidden bg-land-sky px-6 pb-24 md:px-14 lg:px-32">
+	<HeroLandscape {pointer} {paused} />
 
-	<div class="relative z-10 max-w-xl pt-28 md:pt-36">
+	<div class="relative z-20 max-w-xl pt-28 md:pt-36">
 		<p class="mb-2 font-mono text-accent">Hi, I'm</p>
 		<h1 class="mb-4 text-heading-md text-foreground md:text-display-lg lg:text-display-xl">
 			{hero.title ?? ''}
@@ -73,4 +91,18 @@
 		</div>
 	</div>
 
+	<!-- Pause/play for the birds. Not shown under reduced motion, where the birds aren't rendered. -->
+	<button
+		type="button"
+		onclick={togglePause}
+		aria-label="Pause animation"
+		aria-pressed={paused}
+		class="absolute bottom-6 left-6 z-20 rounded-full border border-border bg-surface/80 p-2 text-muted backdrop-blur hover:text-accent motion-reduce:hidden print:hidden md:left-14 lg:left-32"
+	>
+		{#if paused}
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5Z" /></svg>
+		{:else}
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="4" width="4" height="16" rx="1" /><rect x="14" y="4" width="4" height="16" rx="1" /></svg>
+		{/if}
+	</button>
 </section>

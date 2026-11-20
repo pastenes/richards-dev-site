@@ -38,7 +38,7 @@
 		href="{network.url}{encodeURIComponent(network.handle ?? '')}"
 		target="_blank"
 		rel="noreferrer"
-		aria-label={network.label}
+		aria-label="{network.label} (opens in a new tab)"
 	>
 		<svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={network.path} /></svg>
 	</a>

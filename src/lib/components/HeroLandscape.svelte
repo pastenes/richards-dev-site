@@ -9,7 +9,11 @@
 	import { MediaQuery } from 'svelte/reactivity';
 	import HeroBirds from '#lib/components/HeroBirds.svelte';
 
-	let { pointer = { x: 0, y: 0 } }: { pointer?: { x: number; y: number } } = $props();
+	// `paused`: the hero's pause button froze the birds (see Header).
+	let {
+		pointer = { x: 0, y: 0 },
+		paused = false
+	}: { pointer?: { x: number; y: number }; paused?: boolean } = $props();
 
 	let scrollY = $state(0);
 	let innerHeight = $state(1);
@@ -64,7 +68,7 @@
 	</g>
 </svg>
 
-<HeroBirds {progress} {pointer} drift={{ x: DRIFT_X, y: DRIFT_Y }} />
+<HeroBirds {progress} {pointer} {paused} drift={{ x: DRIFT_X, y: DRIFT_Y }} />
 
 <!-- Front: the two nearest rows of trees and the foreground. -->
 <svg

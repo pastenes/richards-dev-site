@@ -1,4 +1,5 @@
 <script lang="ts">
+	import NewTabNote from '#lib/components/NewTabNote.svelte';
 	import Reveal from '#lib/components/Reveal.svelte';
 	import SectionHeading from '#lib/components/SectionHeading.svelte';
 
@@ -25,9 +26,9 @@
 	);
 </script>
 
-<section id="certifications" class="px-6 py-32 md:px-14 lg:px-32">
+<section id="certifications" aria-labelledby="certifications-title" class="px-6 py-32 md:px-14 lg:px-32">
 	<div class="mx-auto sm:max-w-narrow lg:max-w-wide">
-		<SectionHeading eyebrow="Certifications" title="Always" script="learning" />
+		<SectionHeading id="certifications-title" eyebrow="Certifications" title="Always" script="learning" />
 
 		<ul class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 			{#each certifications as cert, index (cert._id)}
@@ -57,7 +58,7 @@
 						<h3 class="mb-1 text-heading-sm text-foreground">
 							{#if cert.credentialUrl}
 								<a href={cert.credentialUrl} target="_blank" rel="noreferrer" class="hover:text-accent">
-									{cert.title}
+									{cert.title}<NewTabNote />
 								</a>
 							{:else}
 								{cert.title}
@@ -74,9 +75,11 @@
 					{/if}
 				</Reveal>
 			{/each}
+			<!-- Decorative, so screen readers skip them. -->
 			{#each placeholders as placeholder, index (index)}
 				<Reveal
 					as="li"
+					aria-hidden="true"
 					step={(certifications.length + index) % 3}
 					class="flex min-h-48 items-center justify-center rounded-card border border-dashed border-border p-6 font-mono text-sm text-caption"
 				>

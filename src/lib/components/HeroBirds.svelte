@@ -8,15 +8,17 @@
 	//   (k 100), so the flock passes behind the nearest trees.
 	// - Slow cruising and wingbeats keep it calm; only a scare speeds it up.
 	// - It only animates while the hero is on screen and the tab is visible; under reduced motion it
-	//   isn't rendered.
+	//   isn't rendered. The hero's pause button (`paused`) freezes the flock where it is.
+	import { untrack } from 'svelte';
 	import { MediaQuery } from 'svelte/reactivity';
 
 	type Props = {
 		progress: number;
 		pointer: { x: number; y: number };
 		drift: { x: number; y: number };
+		paused?: boolean;
 	};
-	let { progress, pointer, drift }: Props = $props();
+	let { progress, pointer, drift, paused = false }: Props = $props();
 
 	const reduceMotion = new MediaQuery('(prefers-reduced-motion: reduce)');
 
@@ -45,6 +47,20 @@
 	// The canvas draws in its `text-bird` color.
 	$effect(() => {
 		if (canvas) color = getComputedStyle(canvas).color;
+	});
+
+	// Set by the canvas effect below: `sync` starts or stops the animation loop, `redraw` paints one
+	// frame. Pausing stops the loop; while paused, scrolling and the recentering pointer still move the
+	// frozen flock with its layer.
+	let sync = () => {};
+	let redraw = () => {};
+	$effect(() => {
+		void paused;
+		sync();
+	});
+	$effect(() => {
+		void [progress, pointer.x, pointer.y];
+		if (paused) redraw();
 	});
 
 	$effect(() => {
@@ -96,6 +112,8 @@
 			offsetY = height - 600 * scale;
 			const count = width < 768 ? 20 : 40;
 			if (birds.length !== count) spawn(count);
+			// Resizing clears the canvas; repaint it if the loop isn't running (paused).
+			if (!frame) untrack(draw);
 		}
 
 		// Where the layer currently sits (scroll parallax + pointer drift), in pixels.
@@ -225,8 +243,9 @@
 			frame = requestAnimationFrame(tick);
 		}
 
-		function sync() {
-			const run = onScreen && document.visibilityState === 'visible';
+		function update() {
+			// Untracked, so pausing doesn't rebuild the flock (the effect above calls this instead).
+			const run = onScreen && !untrack(() => paused) && document.visibilityState === 'visible';
 			if (run && !frame) {
 				last = performance.now();
 				frame = requestAnimationFrame(tick);
@@ -235,6 +254,8 @@
 				frame = 0;
 			}
 		}
+		sync = update;
+		redraw = draw;
 
 		function onPointerMove(event: PointerEvent) {
 			if (event.pointerType !== 'mouse' && event.pointerType !== 'pen') return;
@@ -248,19 +269,20 @@
 		resizeObserver.observe(el);
 		const intersectionObserver = new IntersectionObserver(([entry]) => {
 			onScreen = entry.isIntersecting;
-			sync();
+			update();
 		});
 		intersectionObserver.observe(el);
-		document.addEventListener('visibilitychange', sync);
+		document.addEventListener('visibilitychange', update);
 		window.addEventListener('pointermove', onPointerMove, { passive: true });
 		document.documentElement.addEventListener('mouseleave', onPointerLeave);
-		sync();
+		update();
 
 		return () => {
 			cancelAnimationFrame(frame);
+			sync = redraw = () => {};
 			resizeObserver.disconnect();
 			intersectionObserver.disconnect();
-			document.removeEventListener('visibilitychange', sync);
+			document.removeEventListener('visibilitychange', update);
 			window.removeEventListener('pointermove', onPointerMove);
 			document.documentElement.removeEventListener('mouseleave', onPointerLeave);
 		};

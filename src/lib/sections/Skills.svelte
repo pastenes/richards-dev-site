@@ -12,9 +12,9 @@
 	let { groups = [] }: { groups: SkillGroup[] } = $props();
 </script>
 
-<section id="skills" class="px-6 py-32 md:px-14 lg:px-32">
+<section id="skills" aria-labelledby="skills-title" class="px-6 py-32 md:px-14 lg:px-32">
 	<div class="mx-auto sm:max-w-narrow lg:max-w-wide">
-		<SectionHeading eyebrow="Skills" title="The tech I" script="use" />
+		<SectionHeading id="skills-title" eyebrow="Skills" title="The tech I" script="use" />
 
 		<div class="grid gap-6 md:grid-cols-2">
 			{#each groups as group, index (group._key)}
@@ -27,7 +27,7 @@
 									? 'border-accent bg-accent-wash text-accent'
 									: 'border-border text-muted'}"
 							>
-								{skill.name}
+								{skill.name}{#if skill.core}<span class="sr-only"> (core skill)</span>{/if}
 							</li>
 						{/each}
 					</ul>

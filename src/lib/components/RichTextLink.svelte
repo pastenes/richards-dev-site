@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import type { MarkComponentProps } from '@portabletext/svelte';
+	import NewTabNote from '#lib/components/NewTabNote.svelte';
 
 	// Link annotation in Sanity rich text (About, project descriptions). External links open in a new tab.
 	let {
@@ -22,7 +23,7 @@
 		target={external ? '_blank' : undefined}
 		rel={external ? 'noreferrer' : undefined}
 		class="text-accent underline decoration-accent/40 underline-offset-4 transition-colors hover:text-accent-hover hover:decoration-current"
-		>{@render children?.()}</a
+		>{@render children?.()}{#if external}<NewTabNote />{/if}</a
 	>
 {:else}
 	{@render children?.()}

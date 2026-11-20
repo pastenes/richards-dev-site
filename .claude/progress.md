@@ -140,6 +140,12 @@ Refresh the visual design of the portfolio site.
 - [x] Hero birds: `HeroBirds.svelte` canvas boids flock over the lake, behind the nearest trees, scattering from the pointer (replaces the Vanta birds without a library)
 - [x] Styled rich-text links (`RichTextLink.svelte`: accent underline, external links in a new tab)
 - [x] Performance optimization (Core Web Vitals) (Lighthouse mobile 92→95, SEO 92→100: inlined CSS, CDN preconnect, responsive `srcset`, no empty links)
+- [x] Accessibility pass (Nov 2026):
+  - The hero grows at 400% zoom instead of clipping its copy.
+  - A pause button for the hero birds, and the 404 cursor stops blinking after 5 s.
+  - Named section regions, and named project cards.
+  - New-tab notes for screen readers, and a "core skill" note on core chips.
+  - Scroll padding under the fixed nav, and 24px footer icon targets.
 
 ---
 

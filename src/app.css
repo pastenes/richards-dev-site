@@ -71,7 +71,8 @@
   --container-narrow: 640px;
   --container-wide: 1000px;
 
-  --animate-blink: blink 1s step-end infinite;
+  /* Five blinks, then it stays on (WCAG 2.2.2: nothing blinks for more than five seconds). */
+  --animate-blink: blink 1s step-end 5;
 
   @keyframes blink {
     50% {

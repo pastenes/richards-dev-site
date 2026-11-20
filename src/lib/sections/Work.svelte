@@ -2,6 +2,7 @@
 	import { tick } from 'svelte';
 	import BlockContent from '#lib/components/BlockContent.svelte';
 	import { hoverVideo } from '#lib/actions/hoverVideo.ts';
+	import NewTabNote from '#lib/components/NewTabNote.svelte';
 	import Reveal from '#lib/components/Reveal.svelte';
 	import SectionHeading from '#lib/components/SectionHeading.svelte';
 
@@ -43,9 +44,9 @@
 	}
 </script>
 
-<section id="work" class="px-6 py-32 md:px-14 lg:px-32">
+<section id="work" aria-labelledby="work-title" class="px-6 py-32 md:px-14 lg:px-32">
 	<div class="mx-auto sm:max-w-narrow lg:max-w-wide">
-		<SectionHeading eyebrow="Work" title="Some things I've" script="built" />
+		<SectionHeading id="work-title" eyebrow="Work" title="Some things I've" script="built" />
 
 		<!-- Bento grid: the first project is featured and spans two columns. -->
 		<div bind:this={grid} class="grid gap-6 md:grid-cols-2 lg:grid-cols-6">
@@ -57,6 +58,7 @@
 					<article
 						use:hoverVideo={project.previewVideo}
 						tabindex="-1"
+						aria-labelledby="project-{project._id}"
 						class="group flex h-full flex-col overflow-hidden rounded-card border border-border bg-surface-raised transition duration-300 ease-out-expo hover:border-accent hover:shadow-glow"
 					>
 						{#if project.screenshot?.url}
@@ -100,16 +102,17 @@
 									aria-hidden={project.screenshot.alt ? undefined : 'true'}
 								>
 									{@render screenshot(project.screenshot.url, project.screenshot.srcset, project.screenshot.alt ?? '')}
+									{#if project.screenshot.alt}<NewTabNote />{/if}
 								</a>
 							{:else}
 								{@render screenshot(project.screenshot.url, project.screenshot.srcset, project.screenshot.alt ?? '')}
 							{/if}
 						{/if}
 						<div class="flex flex-auto flex-col p-6">
-							<h3 class="mb-3 text-heading-sm text-foreground">
+							<h3 id="project-{project._id}" class="mb-3 text-heading-sm text-foreground">
 								{#if project.projectUrl}
 									<a href={project.projectUrl} target="_blank" rel="noreferrer" class="hover:text-accent">
-										{project.title}
+										{project.title}<NewTabNote />
 									</a>
 								{:else}
 									{project.title}

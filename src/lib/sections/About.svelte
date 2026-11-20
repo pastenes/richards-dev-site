@@ -7,9 +7,9 @@
 </script>
 
 <!-- Above the headshot layer (z-10, see Headshot), so the text reads over the photo where they overlap. -->
-<section id="about" class="relative z-20 px-6 py-32 md:px-14 lg:px-32">
+<section id="about" aria-labelledby="about-title" class="relative z-20 px-6 py-32 md:px-14 lg:px-32">
 	<div class="mx-auto sm:max-w-narrow lg:max-w-wide">
-		<SectionHeading eyebrow="About" title="A little about" script="me" />
+		<SectionHeading id="about-title" eyebrow="About" title="A little about" script="me" />
 		<Reveal class="max-w-2xl text-lg text-muted">
 			<BlockContent blocks={content} />
 		</Reveal>

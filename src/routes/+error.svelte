@@ -31,6 +31,7 @@
 			<p class="text-lg text-muted">{page.error?.message ?? 'Please try again in a moment.'}</p>
 		{/if}
 
+		<!-- The cursor blinks five times, then stays solid (see --animate-blink). -->
 		<a href="/" class="mt-16 inline-block font-mono text-heading-sm text-accent hover:underline md:text-heading-md">
 			&gt; go back home<span class="animate-blink motion-reduce:animate-none" aria-hidden="true">&#9612;</span>
 		</a>
