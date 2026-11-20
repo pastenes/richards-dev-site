@@ -145,7 +145,8 @@ Refresh the visual design of the portfolio site.
   - The landing page uses one Sanity query instead of five.
   - Responsive images are capped at the source width and get their real width and height (headshot CLS 0.01 → 0).
   - Caveat subsetting was tried and dropped (only 8 KB saved).
-- [ ] After deploying the performance pass: set `SANITY_WEBHOOK_SECRET` in Netlify, create the Sanity webhook, and check `cache-status: "Netlify Durable"; hit` on a repeat request
+- [x] Deployed the performance pass (Nov 2026): `SANITY_WEBHOOK_SECRET` set in Netlify, the Sanity webhook points at `purge-cache`, and `/` serves from the edge cache (`cache-status: "Netlify Edge"; hit`).
+- [x] Confirmed a publish purges the cache: the webhook got `202 Purged`, and the next request rendered a fresh page (`age: 1`). In the delivery log, `401` would mean the secrets differ
 - [x] Accessibility pass (Nov 2026):
   - The hero grows at 400% zoom instead of clipping its copy.
   - A pause button for the hero birds, and the 404 cursor stops blinking after 5 s.

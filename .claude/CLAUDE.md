@@ -185,4 +185,5 @@ studio/
 ## Deployment
 
 - **Site:** Netlify builds on every push to `main` with `npm ci && npm run build` and publishes `build/`. It renders on the server through Netlify functions (adapter-netlify), and pages are cached on Netlify's CDN (see the CDN caching gotcha). The Sanity env vars and `SANITY_WEBHOOK_SECRET` are set in the Netlify dashboard; the matching webhook is in sanity.io/manage → API → Webhooks.
+- **Analytics:** Cloudflare Web Analytics. Cloudflare proxies pastenes.dev and injects its beacon at the edge (reporting to `/cdn-cgi/rum`), so there's no analytics code in the repo. It sets no cookies, so there's no consent banner. If you ever add a Content-Security-Policy, keep `connect-src 'self'` so the beacon can report.
 - **Studio:** deployed separately to Sanity hosting (https://richard-dev.sanity.studio/) with `cd studio && npm run deploy`. `pastenes.dev/studio` is a 302 to it, set in the root `_redirects` file; adapter-netlify requires that file at the project root, not in `static/`, and copies it into `build/`.
