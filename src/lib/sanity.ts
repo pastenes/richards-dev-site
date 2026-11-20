@@ -27,12 +27,24 @@ export function urlFor(source: unknown) {
 /**
  * A WebP image at several widths, for `<img src srcset sizes>`. `src` is the largest width
  * (the fallback); the component supplies `sizes` so the browser picks the smallest that fits.
+ *
+ * When the asset comes with `metadata.dimensions` (project it in the query), widths wider than the
+ * source are replaced by the source width (no upscaled copies), and `width`/`height` give the
+ * `<img>` its real aspect ratio.
  */
 export function responsiveImage(source: unknown, widths: number[]) {
+	const dimensions = (source as { metadata?: { dimensions?: { width?: number; height?: number } } })
+		?.metadata?.dimensions;
+	const max = dimensions?.width;
+	const capped = max
+		? [...new Set(widths.map((width) => Math.min(width, max)))].sort((a, b) => a - b)
+		: widths;
 	const at = (width: number) => urlFor(source).width(width).format('webp').url();
 	return {
-		url: at(Math.max(...widths)),
-		srcset: widths.map((width) => `${at(width)} ${width}w`).join(', ')
+		url: at(Math.max(...capped)),
+		srcset: capped.map((width) => `${at(width)} ${width}w`).join(', '),
+		width: dimensions?.width ?? null,
+		height: dimensions?.height ?? null
 	};
 }
 

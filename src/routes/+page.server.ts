@@ -1,40 +1,50 @@
+import { cdnCache } from '#lib/cache.ts';
 import { client, responsiveImage, tagNames } from '#lib/sanity.ts';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async () => {
-	const [hero, about, projects, skills, certifications] = await Promise.all([
-		client.fetch(`*[_type == "hero"][0]{
-			title,
-			intro[]{children[]{text}},
-			headshot{alt, asset->{_id, url}}
-		}`),
-		client.fetch(`*[_type == "about"][0]{
-			_id,
-			content[]{..., _type == "image" => {asset->{_id, url}}}
-		}`),
-		client.fetch(`*[_type == "project"] | order(orderRank asc){
-			_id,
-			title,
-			orderRank,
-			projectUrl,
-			tags,
-			description[]{...},
-			screenshot{alt, asset->{_id, url}},
-			"previewVideo": previewVideo.asset->url
-		}`),
-		client.fetch(`*[_id == "skills"][0]{
-			groups[]{_key, title, skills[]{_key, name, core}}
-		}`),
-		client.fetch(`*[_type == "certification"] | order(orderRank asc){
-			_id,
-			title,
-			issuer,
-			inProgress,
-			issued,
-			credentialId,
-			credentialUrl
-		}`)
-	]);
+// Images come with their pixel size, so `responsiveImage` can size them (and skip widths the source
+// doesn't have).
+const image = '{alt, asset->{_id, url, metadata{dimensions{width, height}}}}';
+
+// Everything for the landing page in one GROQ query (one Sanity API request).
+const query = `{
+	"hero": *[_type == "hero"][0]{
+		title,
+		intro[]{children[]{text}},
+		headshot${image}
+	},
+	"about": *[_type == "about"][0]{
+		_id,
+		content[]{..., _type == "image" => {asset->{_id, url}}}
+	},
+	"projects": *[_type == "project"] | order(orderRank asc){
+		_id,
+		title,
+		orderRank,
+		projectUrl,
+		tags,
+		description[]{...},
+		screenshot${image},
+		"previewVideo": previewVideo.asset->url
+	},
+	"skills": *[_id == "skills"][0]{
+		groups[]{_key, title, skills[]{_key, name, core}}
+	},
+	"certifications": *[_type == "certification"] | order(orderRank asc){
+		_id,
+		title,
+		issuer,
+		inProgress,
+		issued,
+		credentialId,
+		credentialUrl
+	}
+}`;
+
+export const load: PageServerLoad = async ({ setHeaders }) => {
+	const { hero, about, projects, skills, certifications } = await client.fetch(query);
+	// Cached on the CDN, purged on publish (see #lib/cache.ts).
+	setHeaders(cdnCache);
 
 	return {
 		hero: {

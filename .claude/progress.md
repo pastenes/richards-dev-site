@@ -140,6 +140,12 @@ Refresh the visual design of the portfolio site.
 - [x] Hero birds: `HeroBirds.svelte` canvas boids flock over the lake, behind the nearest trees, scattering from the pointer (replaces the Vanta birds without a library)
 - [x] Styled rich-text links (`RichTextLink.svelte`: accent underline, external links in a new tab)
 - [x] Performance optimization (Core Web Vitals) (Lighthouse mobile 92→95, SEO 92→100: inlined CSS, CDN preconnect, responsive `srcset`, no empty links)
+- [x] Performance pass (Nov 2026):
+  - Pages and the stored resume PDF are cached on Netlify's durable CDN (`#lib/cache.ts`) and purged on publish by a signed Sanity webhook (`netlify/functions/purge-cache.mts`).
+  - The landing page uses one Sanity query instead of five.
+  - Responsive images are capped at the source width and get their real width and height (headshot CLS 0.01 → 0).
+  - Caveat subsetting was tried and dropped (only 8 KB saved).
+- [ ] After deploying the performance pass: set `SANITY_WEBHOOK_SECRET` in Netlify, create the Sanity webhook, and check `cache-status: "Netlify Durable"; hit` on a repeat request
 - [x] Accessibility pass (Nov 2026):
   - The hero grows at 400% zoom instead of clipping its copy.
   - A pause button for the hero birds, and the 404 cursor stops blinking after 5 s.

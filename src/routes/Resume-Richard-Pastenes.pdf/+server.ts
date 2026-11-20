@@ -1,3 +1,4 @@
+import { cdnCache } from '#lib/cache.ts';
 import { client, siteResumeQuery } from '#lib/sanity.ts';
 import type { RequestHandler } from './$types';
 
@@ -43,8 +44,9 @@ export const GET: RequestHandler = async ({ url }) => {
 		headers: {
 			'content-type': 'application/pdf',
 			'content-disposition': `inline; filename="${fileName}.pdf"`,
-			// A stored PDF can be cached briefly; a live print shouldn't stick once one is generated.
-			'cache-control': resume?.url ? 'public, max-age=300' : 'no-store'
+			// A stored PDF is cached on the CDN (purged when a resume is published or a PDF generated);
+			// a live print shouldn't stick once one is generated.
+			...(resume?.url ? cdnCache : { 'cache-control': 'no-store' })
 		}
 	});
 };

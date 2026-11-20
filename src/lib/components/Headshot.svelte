@@ -1,7 +1,13 @@
 <script lang="ts">
 	import { MediaQuery } from 'svelte/reactivity';
 
-	type Headshot = { alt?: string; url?: string | null; srcset?: string } | null;
+	type Headshot = {
+		alt?: string;
+		url?: string | null;
+		srcset?: string;
+		width?: number | null;
+		height?: number | null;
+	} | null;
 
 	let {
 		headshot,
@@ -46,8 +52,8 @@
 				srcset={headshot.srcset}
 				sizes="(min-width: 1024px) min(20vw, 448px), (min-width: 768px) min(33vw, 448px), min(50vw, 448px)"
 				alt={headshot.alt ?? ''}
-				width="700"
-				height="758"
+				width={headshot.width ?? 700}
+				height={headshot.height ?? 758}
 				fetchpriority="high"
 				style:translate="{-pointer.x * 10 - glide}px 0"
 				class="-mr-3 w-1/2 max-w-md md:w-1/3 lg:w-1/5 lg:mask-b-from-75%"

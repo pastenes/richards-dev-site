@@ -44,6 +44,7 @@ There are **no lint, format, typecheck, or test scripts**. To check your work, r
 | @sanity/image-url | ^2 | 2.1 |
 | @portabletext/svelte | ^4 | 4.0 |
 | puppeteer-core / @sparticuz/chromium | ^25.17 / ^153 | 25.17 / 153 (only in the `resume-pdf` Netlify function) |
+| @netlify/cache / @sanity/webhook | ^4.2 / ^4.0 | 4.2 / 4.0 (only in the `purge-cache` Netlify function) |
 | **studio:** sanity | ^6.23 | 6.23 (needs Node ≥22.12; React strict mode is on in dev) |
 | **studio:** react / react-dom | ^19.3 | 19.3 |
 | **studio:** @sanity/vision | ^6.23 | 6.23 (keep it in step with `sanity`) |
@@ -75,6 +76,7 @@ src/
     components/            # BlockContent (PortableText) + RichTextLink/List/ListItem, Footer, SocialLinks (hero + footer), Nav (floating pill), SectionHeading, Reveal, HeroLandscape + HeroBirds, Headshot, ResumeHeading
     actions/reveal.ts      # scroll-reveal action used by Reveal.svelte
     actions/hoverVideo.ts  # project card hover preview (lazy video over the screenshot)
+    cache.ts               # `cdnCache` headers: pages cached on Netlify's CDN, purged on publish
   routes/
     +layout.server.ts      # GROQ: Site settings (SEO/sharing defaults, social handles), for every page
     +layout.svelte         # app.css, fonts, all SEO/OG/Twitter head tags, skip link, the shared Nav (PDF button on /resume), page transitions
@@ -85,6 +87,7 @@ src/
     Resume-Richard-Pastenes.pdf/+server.ts # the PDF button: streams the site resume's generated PDF
     +error.svelte          # 404/error page ("> go back home": pressing return anywhere goes home)
 netlify/functions/resume-pdf.mts # headless Chrome prints /resume?id=… to PDF (Studio's Generate Resume PDF)
+netlify/functions/purge-cache.mts # Sanity webhook (signed) → purges the CDN-cached pages
 netlify/tsconfig.json      # Node types for the functions (the root tsconfig only covers src/); check with `npx tsc -p netlify`
 vite.config.ts             # tailwindcss() plugin + sveltekit({...}) with adapter and preprocess (no svelte.config.js)
 static/                    # icon.png, meta.png (fallback share image)
@@ -97,12 +100,12 @@ studio/
 ```
 
 ### Data flow
-- All content is fetched **on the server** in `+page.server.ts` load functions, using GROQ through `client.fetch`. Nothing is fetched on the client.
+- All content is fetched **on the server** in `+page.server.ts` load functions, using GROQ through `client.fetch`. Nothing is fetched on the client. The landing page fetches everything in one GROQ object query (one API request).
 - Env vars are declared in `src/env.ts` with `defineEnvVars` (SvelteKit 3). All three are `static: true`, so they're inlined at build time. To add a variable, declare it there first. `src/lib/sanity.ts` imports `SANITY_PROJECT_ID`, `SANITY_DATASET`, and `SANITY_TOKEN` from `$app/env/private` (`$env/*` is deprecated in Kit 3). That means:
   - It can only be imported from server modules (`*.server.ts`). Importing it from a component will fail the build.
   - The vars have to exist **at build time**: locally in `.env.development` / `.env.production` (both gitignored), and in the Netlify dashboard for deploys.
 - The client uses `useCdn: true` and `apiVersion: '2024-01-01'`.
-- Image URLs are resolved on the server with `responsiveImage(asset, widths)` from `#lib/sanity.ts` (WebP `url` + `srcset`); components add `sizes`. Headshot 350/525/700, project screenshots 400/700/1000/1400. Components only ever get `{ alt, url, srcset }`. `+page.svelte` preconnects to `cdn.sanity.io` because the headshot is the largest paint.
+- Image URLs are resolved on the server with `responsiveImage(asset, widths)` from `#lib/sanity.ts` (WebP `url` + `srcset`); components add `sizes`. Headshot 350/525/700, project screenshots 400/700/1000/1400. When the query projects `asset->{…, metadata{dimensions{width, height}}}`, widths wider than the source become the source width (no upscaled copies) and it also returns `width`/`height` (the headshot's `<img>` uses them for its aspect ratio). Components get `{ alt, url, srcset, width, height }`. `+page.svelte` preconnects to `cdn.sanity.io` because the headshot is the largest paint.
 - From lg, Work's grid has six columns and shows the first four projects: the featured card (four columns) beside one card (two), then two wide cards (three each). A "Load more" button adds six at a time, in rows of three (two columns each). The extra cards are hidden with `lg:hidden`, not left out of the markup, so smaller screens and no-JS pages list every project.
 - Projects and certifications are sorted by `orderRank`, which comes from `@sanity/orderable-document-list` (editors drag to reorder them in the studio).
 - Tag fields (`project.tags`, each `resume.skillGroups[].skills`) are native tag arrays (`string[]`, `options.layout: 'tags'`; there's no tags plugin). The loaders pass them through `tagNames()` from `#lib/sanity.ts`. The old plugin data was converted once with a migration (Nov 2026).
@@ -150,7 +153,8 @@ studio/
     - Run axe with reduced motion emulated, or it skips the below-the-fold content that `Reveal` hides.
 - **Page transitions:** `onNavigate` in `+layout.svelte` wraps cross-page navigations in `document.startViewTransition` (the browser's default cross-fade). It skips same-page anchor jumps and reduced motion; browsers without the API navigate normally.
 - **SEO and share tags** all render in `+layout.svelte`, from `data.site` (`+layout.server.ts`, Site settings with built-in defaults; a failed fetch also uses the defaults) refined by the page's own `meta` (`{ title, description, noindex }`, returned from its load). `/resume` returns `Resume | <name>`, its summary cut to 160 characters, and `noindex` for `?id=` views. Error pages get `Not Found | <site name>` and `noindex`. Don't add `<title>` or meta tags in pages: they'd duplicate the layout's. The Twitter handle (`twitter:site`) comes from `siteSettings.social.twitter`.
-- **Performance:** `inlineStyleThreshold` in `vite.config.ts` inlines the CSS into the HTML (no render-blocking stylesheet). If the CSS grows past the threshold it silently goes back to a `<link>`. Lighthouse mobile: performance 95, accessibility/best practices/SEO 100, CLS ~0.
+- **Performance:** `inlineStyleThreshold` in `vite.config.ts` inlines the CSS into the HTML (no render-blocking stylesheet). If the CSS grows past the threshold it silently goes back to a `<link>`. Lighthouse mobile: performance 95, accessibility/best practices/SEO 100, CLS ~0. Fonts are about 127 KB on first view; Caveat is 49 KB of that, mostly its handwriting alternates (subsetting to basic Latin only saved 8 KB, so it stays the Fontsource file).
+- **CDN caching:** `/`, `/resume` (not `/resume?id=…`), their `__data.json`, and a stored resume PDF send `cdnCache` from `#lib/cache.ts` via `setHeaders`: browsers revalidate (`max-age=0`), and Netlify's durable CDN cache keeps the page (`s-maxage=3600`, `stale-while-revalidate`, tag `content`), so the SvelteKit function and its Sanity queries run about once an hour per page instead of on every visit. Publishing in Sanity purges the tag at once: a Sanity webhook (signed with a secret that matches `SANITY_WEBHOOK_SECRET` in Netlify) calls `netlify/functions/purge-cache.mts`, which runs `purgeCache({ tags: ['content'] })`. Deploys also invalidate it. Set headers in page loads, not the layout (a header can only be set once). Never cache `?id=` views or anything per-visitor: the studio prints the latest published resume through `?id=`.
 - **Scroll reveal:** wrap an element in `<Reveal>` (`as` for the tag, `step` to stagger siblings, `class` for its own classes) instead of repeating the animation classes. The action adds `data-hidden` only to elements that start below the fold and removes it on first view, so server-rendered and no-JS pages show everything, and reduced motion skips it. Don't put `Reveal`'s classes on an element that has its own `transition`/`duration` (wrap it instead, as the Work cards do).
 - **Project preview videos:** a card whose project has `previewVideo` overlays a `<video muted loop playsinline preload="none">` on its screenshot, with no `src`. `use:hoverVideo` on the `<article>` sets the `src` on the first hover or keyboard focus, plays from the start, and adds `data-playing` once frames show (the video fades in with `data-playing:opacity-100`); leaving pauses it. Touch devices (no `(hover: hover) and (pointer: fine)`) and reduced motion keep the screenshot and never download the clip. Clips are recorded by hand and uploaded in the Studio: 16:9, about 1000px wide (1400px for the first project), 6–10 s, no audio, under 1 MB. Encode with `ffmpeg -i raw.mov -vf "scale=1000:-2,fps=30" -an -c:v libx264 -crf 28 -preset slow -pix_fmt yuv420p -movflags +faststart preview.mp4` (`+faststart` lets playback start before the file finishes downloading).
 - **Cascade layers:** Tailwind 4 puts utilities in `@layer utilities`, and CSS outside a layer beats every layer. Element rules (`h1`–`h6`, `p`) must stay inside `@layer base`, or they'll override utility classes like `mb-0` or `text-5xl` on those elements.
@@ -180,5 +184,5 @@ studio/
 
 ## Deployment
 
-- **Site:** Netlify builds on every push to `main` with `npm ci && npm run build` and publishes `build/`. It renders on the server through Netlify functions (adapter-netlify). The Sanity env vars are set in the Netlify dashboard.
+- **Site:** Netlify builds on every push to `main` with `npm ci && npm run build` and publishes `build/`. It renders on the server through Netlify functions (adapter-netlify), and pages are cached on Netlify's CDN (see the CDN caching gotcha). The Sanity env vars and `SANITY_WEBHOOK_SECRET` are set in the Netlify dashboard; the matching webhook is in sanity.io/manage → API → Webhooks.
 - **Studio:** deployed separately to Sanity hosting (https://richard-dev.sanity.studio/) with `cd studio && npm run deploy`. `pastenes.dev/studio` is a 302 to it, set in the root `_redirects` file; adapter-netlify requires that file at the project root, not in `static/`, and copies it into `build/`.

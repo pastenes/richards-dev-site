@@ -1,4 +1,5 @@
 import { error } from '@sveltejs/kit';
+import { cdnCache } from '#lib/cache.ts';
 import { client, siteResumeQuery, tagNames } from '#lib/sanity.ts';
 import type { PageServerLoad } from './$types';
 
@@ -7,7 +8,7 @@ import type { PageServerLoad } from './$types';
  * "Generate Resume PDF" prints it that way (netlify/functions/resume-pdf.mts). Tailored resumes are
  * only reachable by their random ID, and that view is noindexed.
  */
-export const load: PageServerLoad = async ({ url }) => {
+export const load: PageServerLoad = async ({ url, setHeaders }) => {
 	const id = url.searchParams.get('id');
 	const resume = await (id ? client.withConfig({ useCdn: false }) : client).fetch(
 		`${id ? '*[_type == "resume" && _id == $id][0]' : siteResumeQuery}{
@@ -55,6 +56,8 @@ export const load: PageServerLoad = async ({ url }) => {
 		{ perspective: 'published' }
 	);
 	if (!resume) error(404, 'Resume not found');
+	// The site resume is cached on the CDN (purged on publish); `?id=` views never are.
+	if (!id) setHeaders(cdnCache);
 
 	// Groups and skills keep their Studio order (by relevance). A resume still on the old flat list
 	// shows it as one untitled, alphabetical group.
