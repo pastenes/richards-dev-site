@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Letterhead from '#lib/components/Letterhead.svelte';
 	import ResumeHeading from '#lib/components/ResumeHeading.svelte';
 
 	let { data } = $props();
@@ -11,19 +12,7 @@
 -->
 <main id="main">
 	<article class="mx-auto px-6 pt-32 pb-24 text-sm text-muted sm:max-w-narrow md:px-0 lg:max-w-wide print:max-w-none print:px-12 print:py-0">
-		<header class="mb-2 border-b border-border pb-8 print:mb-0 print:pb-6">
-			<h1 class="mb-2 text-display-lg text-foreground">{resume.name}</h1>
-			<p class="mb-4 font-mono text-base text-accent">{resume.jobTitle}</p>
-			<ul class="flex flex-wrap gap-x-6 gap-y-1 font-mono text-xs">
-				<li><a href="tel:{resume.phone}" class="hover:text-accent">{resume.phone}</a></li>
-				<li><a href="mailto:{resume.email}" class="hover:text-accent">{resume.email}</a></li>
-				<li>
-					<a href={resume.portfolioUrl} class="hover:text-accent">
-						{resume.portfolioUrl?.replace(/^https?:\/\//, '')}
-					</a>
-				</li>
-			</ul>
-		</header>
+		<Letterhead {...resume} />
 
 		<!--
 			Read order. On screen: Experience and Skills come first in the HTML, and grid placement keeps

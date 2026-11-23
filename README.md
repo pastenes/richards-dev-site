@@ -27,6 +27,7 @@
 - 🧰 **Skills and certifications** sections managed in the CMS (core skills highlighted; certifications can be marked "In progress").
 - 📄 **Multiple resumes:** duplicate a resume in the Studio to tailor it to a job posting, then pick which one the site shows.
 - 🖨️ **Generated resume PDFs:** a Studio button prints a resume in headless Chrome. The output is a tagged PDF with selectable text and ATS-friendly read order, and the site's PDF link always serves the current site resume.
+- ✉️ **Cover letters:** one per job application, headed like the resume and printed to a one-page PDF named after the job and employer, ready to download from the Studio.
 - 🔎 **SEO and sharing:** titles, descriptions, canonical URL and the Open Graph / Twitter share image come from a Site settings document in the CMS.
 - 🌙 **Always-dark design** on screen, with light "paper" colors in print.
 - ✨ **Scroll reveals and page transitions** (View Transitions). All motion is skipped under reduced motion.
@@ -60,6 +61,7 @@
 │   │   ├── +layout.*                    # SEO/share tags from Site settings, nav, page transitions
 │   │   ├── +page.*                      # Landing page (hero, about, work, skills, certifications)
 │   │   ├── resume/                      # Printable resume (site resume, or any resume by ?id=)
+│   │   ├── cover-letter/                # A cover letter by ?id= (noindexed)
 │   │   └── Resume-Richard-Pastenes.pdf/ # Streams the site resume's generated PDF
 │   ├── lib/
 │   │   ├── sections/                    # Header, About, Work, Skills, Certifications
@@ -75,7 +77,7 @@
 ├── studio/
 │   ├── sanity.config.ts                 # Studio structure (singletons, orderable lists)
 │   ├── schemas/                         # Document and object types
-│   ├── actions/                         # Resume actions: Show on site, Generate Resume PDF
+│   ├── actions/                         # Show on site; Generate Resume / Cover Letter PDF, Download and Open PDF
 │   └── migrations/                      # One-time content migrations (deleted once they've run)
 ├── static/                              # icon.png, meta.png (fallback share image)
 ├── _redirects                           # /studio → hosted Studio
@@ -141,6 +143,7 @@ The Studio runs at [http://localhost:3333](http://localhost:3333).
 | Skills | Skill groups for the landing page, with core skills highlighted |
 | Certifications | Orderable list, shared by the landing page and the resumes |
 | Resumes | One document per resume version, with skills grouped by relevance |
+| Cover Letters | One per job application: job title, employer, job link and the letter |
 | Site settings | SEO and sharing defaults, social links (hero and footer), and which resume the site shows |
 
 ### Resume workflow
@@ -149,6 +152,13 @@ The Studio runs at [http://localhost:3333](http://localhost:3333).
 2. Edit and publish it.
 3. Click **Generate Resume PDF** (in the document's "⋯" menu, or as the main button when everything is published). The PDF is saved on the resume.
 4. Click **Show on site** to make it the resume at `/resume` and behind the PDF link.
+
+### Cover letter workflow
+
+1. Create a cover letter with the job title, employer, job link and the letter itself (greeting to sign-off). Optionally pick which resume heads it; empty uses the site resume.
+2. Publish it.
+3. Click **Generate Cover Letter PDF**. The file is named `Richard Pastenes Cover Letter - <job title> - <employer>.pdf`.
+4. Use **Download PDF** or **Open PDF** (in the "⋯" menus). Regenerate after publishing changes.
 
 ### Studio scripts
 

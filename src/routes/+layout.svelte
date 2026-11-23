@@ -27,11 +27,14 @@
 		};
 	});
 
-	// The nav's accent button: the PDF on the resume page, the resume link everywhere else.
+	// The nav's accent button: a page's own `navAction` (a cover letter's PDF), the PDF on the resume
+	// page, and the resume link everywhere else.
+	type NavAction = { label: string; href: string };
 	const action = $derived(
-		page.url.pathname.startsWith('/resume')
-			? { label: 'PDF', href: '/Resume-Richard-Pastenes.pdf' }
-			: undefined
+		(page.error ? undefined : (page.data.navAction as NavAction | undefined)) ??
+			(page.url.pathname.startsWith('/resume')
+				? { label: 'PDF', href: '/Resume-Richard-Pastenes.pdf' }
+				: undefined)
 	);
 
 	// Page transitions: cross-fade between pages with the View Transitions API. Skipped for
