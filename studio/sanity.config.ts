@@ -4,7 +4,7 @@ import {visionTool} from '@sanity/vision'
 import {orderableDocumentListDeskItem} from '@sanity/orderable-document-list'
 import {AiFillCode} from 'react-icons/ai'
 import {GrDocumentUser} from 'react-icons/gr'
-import {FaCertificate, FaCog, FaTools} from 'react-icons/fa'
+import {FaCertificate, FaCog, FaEnvelopeOpenText, FaTools} from 'react-icons/fa'
 
 import hero from './schemas/documents/hero'
 import about from './schemas/documents/about'
@@ -13,6 +13,7 @@ import resume from './schemas/documents/resume'
 import skills from './schemas/documents/skills'
 import certification from './schemas/documents/certification'
 import siteSettings from './schemas/documents/siteSettings'
+import coverLetter from './schemas/documents/coverLetter'
 import blockContent from './schemas/objects/blockContent'
 import imageFile from './schemas/objects/image'
 import links from './schemas/objects/links'
@@ -20,7 +21,12 @@ import education from './schemas/objects/education'
 import experience from './schemas/objects/experience'
 import achievment from './schemas/objects/achievment'
 import {ShowOnSiteAction, SiteResumeBadge} from './actions/siteResume'
-import {GenerateResumePdfAction} from './actions/generateResumePdf'
+import {
+  DownloadPdfAction,
+  GenerateCoverLetterPdfAction,
+  GenerateResumePdfAction,
+  OpenPdfAction,
+} from './actions/generatePdf'
 import {alsoInHeaderMenu} from './actions/alsoInHeaderMenu'
 
 export default defineConfig({
@@ -70,6 +76,7 @@ export default defineConfig({
             S.divider(),
             // One resume per version (duplicate one to tailor it); Site settings picks the site's.
             S.documentTypeListItem('resume').title('Resumes').icon(GrDocumentUser),
+            S.documentTypeListItem('coverLetter').title('Cover Letters').icon(FaEnvelopeOpenText),
           ]),
     }),
     visionTool(),
@@ -94,6 +101,14 @@ export default defineConfig({
           ...prev.map((action) => (action.action === 'duplicate' ? alsoInHeaderMenu(action) : action)),
           alsoInHeaderMenu(ShowOnSiteAction),
         ]
+      // Same pattern for cover letters, plus Download and Open for the stored PDF.
+      if (schemaType === 'coverLetter')
+        return [
+          alsoInHeaderMenu(GenerateCoverLetterPdfAction),
+          ...prev.map((action) => (action.action === 'duplicate' ? alsoInHeaderMenu(action) : action)),
+          alsoInHeaderMenu(DownloadPdfAction),
+          alsoInHeaderMenu(OpenPdfAction),
+        ]
       if (schemaType === 'siteSettings')
         return prev.filter(({action}) => action === 'publish' || action === 'discardChanges')
       return prev
@@ -110,6 +125,7 @@ export default defineConfig({
       skills,
       certification,
       siteSettings,
+      coverLetter,
       blockContent,
       imageFile,
       links,

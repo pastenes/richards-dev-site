@@ -179,6 +179,8 @@ Move the redesign's hard-coded content into Sanity and map it to the front end.
 - [ ] Deploy the site, run the `social-to-site-settings` migration on production, deploy the studio; then remove the `hero.links` fallback in `+layout.server.ts` and the migration folder
 - [ ] Remove the `resumeSettings` fallbacks (`siteResumeQuery`, the Studio's `useSiteResumeId`); fill in Site settings (site URL, share image)
 - [ ] Label the existing resume, click "Show on site" and "Generate Resume PDF" after the site and studio deploys
+- [x] Cover letters (`coverLetter`: job title, employer, job link, letterhead resume, letter): `/cover-letter?id=` prints under the resume's header; Generate Cover Letter PDF (one page, `Richard Pastenes Cover Letter - <job title> - <employer>.pdf`), Download PDF and Open PDF in the Studio
+- [ ] Deploy the site, then the studio (the cover letter Generate button needs the site's updated `resume-pdf` function)
 
 ---
 
